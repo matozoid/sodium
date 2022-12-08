@@ -18,8 +18,7 @@ public class PauseExample {
                 });
         return pauseTime.lift(clock, lostTime,
                 (otPause, tClk, tLost) ->
-                        (otPause.isPresent() ? otPause.get()
-                                : tClk)
+                        (otPause.orElse(tClk))
                                 - tLost);
     }
 
@@ -30,7 +29,7 @@ public class PauseExample {
         Cell<Double> gameClock = pausableClock(sPause, sResume, mainClock);
         Listener l = mainClock.lift(gameClock,
                         (m, g) -> "main=" + m + " game=" + g)
-                .listen(txt -> System.out.println(txt));
+                .listen(System.out::println);
         mainClock.send(1.0);
         mainClock.send(2.0);
         mainClock.send(3.0);

@@ -7,7 +7,7 @@ import java.util.Optional;
 public class Promise<A> {
     public Promise(Stream<A> sDeliver) {
         this.sDeliver = sDeliver.once();
-        this.oValue = this.sDeliver.map(a -> Optional.of(a))
+        this.oValue = this.sDeliver.map(Optional::of)
                 .hold(Optional.empty());
     }
 
@@ -32,7 +32,7 @@ public class Promise<A> {
 
     public <B, C> Promise<C> lift(Promise<B> pb,
                                   final Lambda2<A, B, C> f) {
-        return Transaction.run(() -> new Promise<C>(
+        return Transaction.run(() -> new Promise<>(
                 this.oValue.lift(pb.oValue,
                         (oa, ob) ->
                                 oa.isPresent() && ob.isPresent()

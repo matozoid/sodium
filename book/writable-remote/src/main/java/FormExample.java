@@ -10,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Optional;
 
 class Date {
     public Date(int year, int month, int day) {
@@ -39,7 +40,7 @@ class Date {
 
 class VTextField extends STextField {
     public VTextField(Value<String> v, int width) {
-        this(new StreamLoop<String>(), v, width);
+        this(new StreamLoop<>(), v, width);
     }
 
     private VTextField(StreamLoop<String> sRemoteWrite, Value<String> v,
@@ -53,7 +54,7 @@ class VTextField extends STextField {
                 Stream.filterOptional(Operational.value(outRemote.value)),
                 "",
                 width,
-                outRemote.value.map(oV -> oV.isPresent())
+                outRemote.value.map(Optional::isPresent)
         );
         sRemoteWrite.loop(sUserChanges);
         this.cleanup = outRemote.cleanup;

@@ -15,7 +15,7 @@ public class FrFlow extends Fridget {
         super((size, sMouse, sKey, focus, idSupply) -> {
             Cell<Dimension> desiredSize = new Cell<>(new Dimension(0, 0));
             Cell<Drawable> drawable = new Cell<>(new Drawable());
-            Stream<Long> sChangeFocus = new Stream<Long>();
+            Stream<Long> sChangeFocus = new Stream<>();
             for (Fridget fridget : fridgets) {
                 CellLoop<Optional<Dimension>> childSz = new CellLoop<>();
                 Fridget.Output fo = new FrTranslate(fridget,

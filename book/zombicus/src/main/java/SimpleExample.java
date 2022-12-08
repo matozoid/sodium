@@ -12,11 +12,11 @@ import java.util.List;
 
 public class SimpleExample {
     static <A> Cell<List<A>> sequence(Collection<Cell<A>> in) {
-        Cell<List<A>> out = new Cell<>(new ArrayList<A>());
+        Cell<List<A>> out = new Cell<>(new ArrayList<>());
         for (Cell<A> c : in)
             out = out.lift(c,
                     (list0, a) -> {
-                        List<A> list = new ArrayList<A>(list0);
+                        List<A> list = new ArrayList<>(list0);
                         list.add(a);
                         return list;
                     });

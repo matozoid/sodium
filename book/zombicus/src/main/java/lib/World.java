@@ -6,7 +6,7 @@ import java.util.List;
 
 public class World {
     public World(Dimension windowSize) {
-        this(windowSize, new ArrayList<Polygon>());
+        this(windowSize, new ArrayList<>());
     }
 
     public World(Dimension windowSize, List<Polygon> holes) {

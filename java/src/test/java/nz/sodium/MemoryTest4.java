@@ -15,13 +15,11 @@ public class MemoryTest4 {
             }
         }.start();
 
-        StreamSink<Integer> et = new StreamSink<Integer>();
-        StreamSink<Integer> eChange = new StreamSink<Integer>();
+        StreamSink<Integer> et = new StreamSink<>();
+        StreamSink<Integer> eChange = new StreamSink<>();
         Cell<Stream<Integer>> oout = eChange.map(x -> (Stream<Integer>) et).hold(et);
         Stream<Integer> out = Cell.switchS(oout);
-        Listener l = out.listen(tt -> {
-            System.out.println(tt);
-        });
+        Listener l = out.listen(System.out::println);
         int i = 0;
         while (i < 1000000000) {
             eChange.send(i);

@@ -22,7 +22,7 @@ public class BackEnd {
             }).start();
         });
         Cell<A> c = s0.addCleanup(l).hold(initA);
-        return new Value<A>() {
+        return new Value<>() {
             public ValueOutput<A> construct(Stream<A> sWrite) {
                 CellSink<Optional<A>> recvd =
                         new CellSink<>(Optional.empty());
@@ -41,7 +41,7 @@ public class BackEnd {
                                             }).start();
                                         })
                                 );
-                return new ValueOutput<A>(recvd, l);
+                return new ValueOutput<>(recvd, l);
             }
         };
     }

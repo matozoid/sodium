@@ -9,10 +9,10 @@ public abstract class Value<A> {
 
     public final <B> Value<B> map(Bijection<A, B> bij) {
         Value<A> va = this;
-        return new Value<B>() {
+        return new Value<>() {
             public ValueOutput<B> construct(Stream<B> sWriteB) {
                 ValueOutput<A> out = va.construct(sWriteB.map(bij.fInv));
-                return new ValueOutput<B>(
+                return new ValueOutput<>(
                         out.value.map(oa ->
                                 oa.isPresent() ? Optional.of(bij.f.apply(oa.get()))
                                         : Optional.empty()),
@@ -25,7 +25,7 @@ public abstract class Value<A> {
             Lambda1<A, B> getter,
             Lambda2<A, B, A> setter) {
         Value<A> va = this;
-        return new Value<B>() {
+        return new Value<>() {
             public ValueOutput<B> construct(Stream<B> sWriteB) {
                 return Transaction.run(() -> {
                     StreamLoop<A> sWriteA = new StreamLoop<>();
@@ -38,7 +38,7 @@ public abstract class Value<A> {
                                             : Optional.empty()
                             )
                     ));
-                    return new ValueOutput<B>(
+                    return new ValueOutput<>(
                             oa.map(oa_ ->
                                     oa_.isPresent()
                                             ? Optional.of(getter.apply(oa_.get()))

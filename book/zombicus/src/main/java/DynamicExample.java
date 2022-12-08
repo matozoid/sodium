@@ -8,11 +8,11 @@ import java.util.*;
 
 public class DynamicExample {
     static <A> Cell<List<A>> sequence(Collection<Cell<A>> in) {
-        Cell<List<A>> out = new Cell<>(new ArrayList<A>());
+        Cell<List<A>> out = new Cell<>(new ArrayList<>());
         for (Cell<A> c : in)
             out = out.lift(c,
                     (list0, a) -> {
-                        List<A> list = new ArrayList<A>(list0);
+                        List<A> list = new ArrayList<>(list0);
                         list.add(a);
                         return list;
                     });
@@ -123,7 +123,7 @@ public class DynamicExample {
                     = sDestroy.map(ids -> st -> st.remove(ids));
             Stream<Lambda1<State, State>> sChange = sAdd.merge(sRemove,
                     (f1, f2) -> a -> f1.apply(f2.apply(a)));
-            state.loop(sChange.snapshot(state, (f, st) -> f.apply(st))
+            state.loop(sChange.snapshot(state, Lambda1::apply)
                     .hold(initState));
             Cell<Cell<List<Character>>> cchars = state.map(st ->
                     sequence(st.chars.values()));

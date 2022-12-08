@@ -7,7 +7,7 @@ import java.util.Optional;
 public class PromiseWithoutUpdates<A> {
     public PromiseWithoutUpdates(Stream<A> sDeliver) {
         this.sDeliver = sDeliver.once();
-        this.oValue = this.sDeliver.map(a -> Optional.of(a))
+        this.oValue = this.sDeliver.map(Optional::of)
                 .hold(Optional.empty());
     }
 
@@ -60,7 +60,7 @@ public class PromiseWithoutUpdates<A> {
             ).once();
             Cell<Optional<C>> oValue = vA.lift(vB,
                     combine).map(result);
-            return new PromiseWithoutUpdates<C>(sDeliver, oValue);
+            return new PromiseWithoutUpdates<>(sDeliver, oValue);
         });
     }
 }

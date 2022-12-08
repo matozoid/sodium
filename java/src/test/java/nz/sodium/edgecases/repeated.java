@@ -12,7 +12,7 @@ public class repeated {
             StreamLoop<Integer> sB = new StreamLoop<>();
             Stream<Integer> sC = sA_.orElse(sB);
             sB.loop(sC.map(x -> x + 1).filter(x -> x < 10));
-            sC.listen(c -> System.out.println(c));
+            sC.listen(System.out::println);
             return sA_;
         });
         System.out.println("send 5");

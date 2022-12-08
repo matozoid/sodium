@@ -82,7 +82,7 @@ public class HomoZombicus {
                                     : Optional.empty();
                         }
                 ));
-        List<Character> emptyScene = new ArrayList<Character>(0);
+        List<Character> emptyScene = new ArrayList<>(0);
         state.loop(sChange.hold(
                 new State(time.sample(), posInit, self, emptyScene)
         ));

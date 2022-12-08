@@ -9,7 +9,7 @@ import pump.Pump;
 
 public class KeypadPump implements Pump {
     public Outputs create(Inputs inputs) {
-        Keypad ke = new Keypad(inputs.sKeypad, new Stream<Unit>());
+        Keypad ke = new Keypad(inputs.sKeypad, new Stream<>());
         return new Outputs()
                 .setPresetLCD(ke.value.map(v ->
                         Formatters.formatSaleCost((double) v)))

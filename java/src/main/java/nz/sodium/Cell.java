@@ -233,7 +233,7 @@ public class Cell<A> {
         return Transaction.apply(trans0 -> {
             Lazy<A> za = bba.sampleLazy().map(Cell::sample);
             final StreamWithSend<A> out = new StreamWithSend<>();
-            TransactionHandler<Cell<A>> h = new TransactionHandler<Cell<A>>() {
+            TransactionHandler<Cell<A>> h = new TransactionHandler<>() {
                 private Listener currentListener;
 
                 @Override

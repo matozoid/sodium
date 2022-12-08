@@ -17,14 +17,14 @@ public class MemoryTest1 {
             }
         }.start();
 
-        StreamSink<Integer> et = new StreamSink<Integer>();
+        StreamSink<Integer> et = new StreamSink<>();
         Cell<Integer> t = et.hold(0);
         Stream<Integer> etens = et.map(x -> x / 10);
         Stream<Integer> changeTens = Stream.filterOptional(et.snapshot(t, (neu, old) ->
                 neu.equals(old) ? Optional.empty() : Optional.of(neu)));
         Cell<Cell<Tuple2<Integer, Integer>>> oout =
-                changeTens.map(tens -> t.map(tt -> new Tuple2<Integer, Integer>(tens, tt))).
-                        hold(t.map(tt -> new Tuple2<Integer, Integer>(0, tt)));
+                changeTens.map(tens -> t.map(tt -> new Tuple2<>(tens, tt))).
+                        hold(t.map(tt -> new Tuple2<>(0, tt)));
         Cell<Tuple2<Integer, Integer>> out = Cell.switchC(oout);
         Listener l = out.listen(tu -> {
             //System.out.println(tu.a+","+tu.b);

@@ -50,7 +50,7 @@ public class LifeCycle {
                         whenSetDown(sNozzle3, Fuel.THREE, fillActive)));
         fillActive.loop(
                 sEnd.map(e -> Optional.<Fuel>empty())
-                        .orElse(sStart.map(f -> Optional.of(f)))
+                        .orElse(sStart.map(Optional::of))
                         .hold(Optional.empty())
         );
     }

@@ -6,7 +6,7 @@ import java.awt.*;
 
 public class Shapes {
     public static Cell<Drawable> circle(Color color) {
-        return new Cell<Drawable>(new Drawable() {
+        return new Cell<>(new Drawable() {
             public void draw(Graphics g, int ht, Point offset, double sc) {
                 int rad = (int) sc;
                 int x = (int) offset.x;

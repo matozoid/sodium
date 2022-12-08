@@ -12,7 +12,7 @@ public class SComboBox<A> extends JComboBox {
     public SComboBox(ComboBoxModel<A> aModel) {
         super(aModel);
 
-        CellSink<A> selectedItem = new CellSink<A>((A) getSelectedItem());
+        CellSink<A> selectedItem = new CellSink<>((A) getSelectedItem());
         addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED)

@@ -184,7 +184,7 @@ class FRP implements Paradigm {
                     sStartDrag.orElse(sEndDrag).hold(sIdle)
             );
             doc.loop(sDocUpdate.hold(initDoc));
-            return sDocUpdate.listen(doc_ -> dl.documentUpdated(doc_));
+            return sDocUpdate.listen(dl::documentUpdated);
         });
     }
 
@@ -328,7 +328,7 @@ public class BattleOfTheParadigms {
     }
 
     public static void main(String[] args) {
-        HashMap<String, Element> elements = new HashMap<String, Element>();
+        HashMap<String, Element> elements = new HashMap<>();
 
         elements.put("triangle", shape(50, 50, 3, 0.0));
         elements.put("square", shape(125, 50, 4, 45.0));
@@ -356,21 +356,21 @@ public class BattleOfTheParadigms {
         c.gridx = 0;
         c.gridy = 1;
         view.add(new ParadigmView(doc,
-                (initDoc, dl) -> new Classic(initDoc, dl)), c);
+                Classic::new), c);
         c.gridx = 0;
         c.gridy = 2;
         view.add(new JLabel("classic state machine"), c);
         c.gridx = 1;
         c.gridy = 1;
         view.add(new ParadigmView(doc,
-                (initDoc, dl) -> new FRP(initDoc, dl)), c);
+                FRP::new), c);
         c.gridx = 1;
         c.gridy = 2;
         view.add(new JLabel("FRP"), c);
         c.gridx = 2;
         c.gridy = 1;
         view.add(new ParadigmView(doc,
-                (initDoc, dl) -> new Actor(initDoc, dl)), c);
+                Actor::new), c);
         c.gridx = 2;
         c.gridy = 2;
         view.add(new JLabel("actor model"), c);

@@ -257,7 +257,7 @@ public class PetrolPump extends JFrame {
                 topTwoPanels.add(secondPanel);
                 firstPanel.add(new JLabel("Logic"));
 
-                SComboBox<Pump> logic = new SComboBox<>(new DefaultComboBoxModel<Pump>(new Pump[]{
+                SComboBox<Pump> logic = new SComboBox<>(new DefaultComboBoxModel<>(new Pump[]{
                         new chapter4.section4.LifeCyclePump(),
                         new chapter4.section6.AccumulatePulsesPump(),
                         new chapter4.section7.ShowDollarsPump(),
@@ -286,7 +286,7 @@ public class PetrolPump extends JFrame {
                 };
 
                 // An event of mouse presses
-                StreamSink<Point> sClick = new StreamSink<Point>();
+                StreamSink<Point> sClick = new StreamSink<>();
 
                 /*
                 l = l.append(sClick.listen(pt -> {
@@ -309,13 +309,13 @@ public class PetrolPump extends JFrame {
                 @SuppressWarnings("unchecked")
                 CellLoop<UpDown>[] nozzles = new CellLoop[3];
                 for (int i = 0; i < 3; i++)
-                    nozzles[i] = new CellLoop<UpDown>();
+                    nozzles[i] = new CellLoop<>();
 
                 Cell<Double> calibration = new Cell<>(0.001);
                 Cell<Double> price1 = textPrice1.text.map(parseDbl);
                 Cell<Double> price2 = textPrice2.text.map(parseDbl);
                 Cell<Double> price3 = textPrice3.text.map(parseDbl);
-                CellSink<Stream<Unit>> csClearSale = new CellSink<>(new Stream<Unit>());
+                CellSink<Stream<Unit>> csClearSale = new CellSink<>(new Stream<>());
                 Stream<Unit> sClearSale = Cell.switchS(csClearSale);
 
                 Cell<Outputs> outputs = logic.selectedItem.map(
@@ -391,7 +391,7 @@ public class PetrolPump extends JFrame {
                 for (int i = 0; i < 3; i++) {
                     final Cell<Tuple2<Rectangle, UpDown>> rect_state =
                             face.nozzleRects[i].lift(nozzles[i],
-                                    (rect, state) -> new Tuple2<Rectangle, UpDown>(rect, state));
+                                    Tuple2::new);
                     nozzles[i].loop(
                             Stream.filterOptional(
                                     sClick.snapshot(rect_state,

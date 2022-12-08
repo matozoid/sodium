@@ -10,6 +10,8 @@ import nz.sodium.StreamLoop;
 import nz.sodium.Unit;
 import pump.*;
 
+import java.util.Optional;
+
 public class PresetAmountPump implements Pump {
     public Outputs create(Inputs inputs) {
         StreamLoop<Fuel> sStart = new StreamLoop<>();
@@ -31,14 +33,14 @@ public class PresetAmountPump implements Pump {
         Preset pr = new Preset(ke.value,
                 fi,
                 np.fuelFlowing,
-                np.fillActive.map(o -> o.isPresent()));
+                np.fillActive.map(Optional::isPresent));
         keypadActive.loop(pr.keypadActive);
         return new Outputs()
                 .setDelivery(pr.delivery)
                 .setSaleCostLCD(fi.dollarsDelivered.map(
-                        q -> Formatters.formatSaleCost(q)))
+                        Formatters::formatSaleCost))
                 .setSaleQuantityLCD(fi.litersDelivered.map(
-                        q -> Formatters.formatSaleQuantity(q)))
+                        Formatters::formatSaleQuantity))
                 .setPriceLCD1(ShowDollarsPump.priceLCD(np.fillActive, fi.price,
                         Fuel.ONE, inputs))
                 .setPriceLCD2(ShowDollarsPump.priceLCD(np.fillActive, fi.price,

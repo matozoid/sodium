@@ -10,7 +10,7 @@ import javax.swing.event.DocumentListener;
 public class STextField extends JTextField {
     public STextField(String initText, int width) {
         super(initText, width);
-        CellSink<String> text = new CellSink<String>(initText);
+        CellSink<String> text = new CellSink<>(initText);
         this.text = text;
 
         getDocument().addDocumentListener(new DocumentListener() {
