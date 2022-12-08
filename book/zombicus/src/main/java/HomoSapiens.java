@@ -1,3 +1,4 @@
+import io.vavr.control.Option;
 import nz.sodium.Cell;
 import nz.sodium.CellLoop;
 import nz.sodium.Stream;
@@ -6,6 +7,8 @@ import nz.sodium.Unit;
 import java.awt.*;
 import java.util.Optional;
 import java.util.Random;
+
+import static nz.sodium.Unit.*;
 
 public class HomoSapiens {
     public HomoSapiens(
@@ -48,8 +51,8 @@ public class HomoSapiens {
                             double t = time.sample();
                             return world.hitsObstacle(traj_.positionAt(t + step))
                                     || t - traj_.t0 >= traj_.period
-                                    ? Optional.of(Unit.UNIT)
-                                    : Optional.<Unit>empty();
+                                    ? Option.some(UNIT)
+                                    : Option.none();
                         }));
         traj.loop(
                 sChange.snapshot(traj, (u, traj_) ->

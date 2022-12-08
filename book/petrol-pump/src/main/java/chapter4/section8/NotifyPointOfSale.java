@@ -3,6 +3,7 @@ package chapter4.section8;
 import chapter4.section4.LifeCycle;
 import chapter4.section4.LifeCycle.End;
 import chapter4.section7.Fill;
+import io.vavr.control.Option;
 import nz.sodium.Cell;
 import nz.sodium.CellLoop;
 import nz.sodium.Stream;
@@ -14,8 +15,8 @@ import java.util.Optional;
 
 public class NotifyPointOfSale {
     public final Stream<Fuel> sStart;
-    public final Cell<Optional<Fuel>> fillActive;
-    public final Cell<Optional<Fuel>> fuelFlowing;
+    public final Cell<Option<Fuel>> fillActive;
+    public final Cell<Option<Fuel>> fuelFlowing;
     public final Stream<End> sEnd;
     public final Stream<Unit> sBeep;
     public final Stream<Sale> sSaleComplete;
@@ -37,19 +38,19 @@ public class NotifyPointOfSale {
                         .orElse(sClearSale.map(u -> Phase.IDLE))
                         .hold(Phase.IDLE));
         fuelFlowing =
-                sStart.map(f -> Optional.of(f)).orElse(
-                        sEnd.map(f -> Optional.empty())).hold(Optional.empty());
+                sStart.map(f -> Option.some(f)).orElse(
+                        sEnd.map(f -> Option.none())).hold(Option.none());
         fillActive =
-                sStart.map(f -> Optional.of(f)).orElse(
-                        sClearSale.map(f -> Optional.empty())).hold(Optional.empty());
+                sStart.map(f -> Option.some(f)).orElse(
+                        sClearSale.map(f -> Option.none())).hold(Option.none());
         sBeep = sClearSale;
         sSaleComplete = Stream.filterOptional(sEnd.snapshot(
                 fuelFlowing.lift(fi.price, fi.dollarsDelivered,
                         fi.litersDelivered,
                         (oFuel, price_, dollars, liters) ->
-                                oFuel.isPresent() ? Optional.of(
+                                oFuel.isDefined() ? Option.some(
                                         new Sale(oFuel.get(), price_, dollars, liters))
-                                        : Optional.empty())
+                                        : Option.none())
         ));
     }
 }

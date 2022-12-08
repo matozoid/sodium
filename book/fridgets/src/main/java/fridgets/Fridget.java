@@ -1,6 +1,7 @@
 package fridgets;
 
 import io.vavr.Function5;
+import io.vavr.control.Option;
 import nz.sodium.Cell;
 import nz.sodium.Stream;
 
@@ -26,17 +27,17 @@ public abstract class Fridget {
     }
 
     public Fridget(Function5<
-                Cell<Optional<Dimension>>, Stream<MouseEvent>,
+                Cell<Option<Dimension>>, Stream<MouseEvent>,
                 Stream<KeyEvent>, Cell<Long>, Supply, Output> reify_) {
         this.reify_ = reify_;
     }
 
     private final Function5<
-            Cell<Optional<Dimension>>, Stream<MouseEvent>,
+            Cell<Option<Dimension>>, Stream<MouseEvent>,
             Stream<KeyEvent>, Cell<Long>, Supply, Output> reify_;
 
     public final Output reify(
-            Cell<Optional<Dimension>> size,
+            Cell<Option<Dimension>> size,
             Stream<MouseEvent> sMouse, Stream<KeyEvent> sKey,
             Cell<Long> focus, Supply idSupply) {
         return reify_.apply(size, sMouse, sKey, focus, idSupply);

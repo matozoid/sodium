@@ -1,5 +1,6 @@
 package nz.sodium.time;
 
+import io.vavr.control.Option;
 import nz.sodium.*;
 
 import java.util.LinkedList;
@@ -52,17 +53,17 @@ public class TimerSystem<T extends Comparable<T>> {
     private final LinkedList<Event> eventQueue = new LinkedList<>();
 
     private static class CurrentTimer {
-        Optional<Timer> oTimer = Optional.empty();
+        Option<Timer> oTimer = Option.none();
     }
 
     /**
      * A timer that fires at the specified time.
      */
-    public Stream<T> at(Cell<Optional<T>> tAlarm) {
+    public Stream<T> at(Cell<Option<T>> tAlarm) {
         final StreamSink<T> sAlarm = new StreamSink<>();
         final CurrentTimer current = new CurrentTimer();
         Listener l = tAlarm.listen(oAlarm -> {
-            current.oTimer.ifPresent(Timer::cancel);
+            current.oTimer.forEach(Timer::cancel);
             current.oTimer = oAlarm.map(t -> impl.setTimer(t, () -> {
                 synchronized (eventQueue) {
                     eventQueue.add(new Event(t, sAlarm));

@@ -1,5 +1,6 @@
 package fridgets;
 
+import io.vavr.control.Option;
 import nz.sodium.Cell;
 import nz.sodium.CellLoop;
 import nz.sodium.Stream;
@@ -27,12 +28,12 @@ public class FrTextField extends Fridget {
         super((size, sMouse, sKey, focus, idSupply) -> {
             Stream<Integer> sPressed = Stream.filterOptional(
                     sMouse.snapshot(size, (e, osz) ->
-                            osz.isPresent() &&
+                            osz.isDefined() &&
                                     e.getID() == MouseEvent.MOUSE_PRESSED
                                     && e.getX() >= 2 && e.getX() < osz.get().width - 2
                                     && e.getY() >= 2 && e.getY() < osz.get().height - 2
-                                    ? Optional.of(e.getX() - 2)
-                                    : Optional.empty()
+                                    ? Option.some(e.getX() - 2)
+                                    : Option.none()
                     )
             );
             CellLoop<Integer> x = new CellLoop<>();
@@ -47,16 +48,16 @@ public class FrTextField extends Fridget {
                                 int x_ = x.sample();
                                 if (key.getKeyChar() == (char) 8) {
                                     if (x_ > 0)
-                                        return Optional.of(new TextUpdate(
+                                        return Option.some(new TextUpdate(
                                                 txt.substring(0, x_ - 1) +
                                                         txt.substring(x_),
                                                 x_ - 1));
                                     else
-                                        return Optional.empty();
+                                        return Option.none();
                                 } else {
                                     char[] keyChs = new char[1];
                                     keyChs[0] = key.getKeyChar();
-                                    return Optional.of(new TextUpdate(
+                                    return Option.some(new TextUpdate(
                                             txt.substring(0, x_) +
                                                     new String(keyChs) +
                                                     txt.substring(x_),
@@ -82,7 +83,7 @@ public class FrTextField extends Fridget {
                     text.lift(x, haveFocus, size,
                             (txt, x_, haveFocus_, osz) -> new Drawable() {
                                 public void draw(Graphics g) {
-                                    if (osz.isPresent()) {
+                                    if (osz.isDefined()) {
                                         Dimension sz = osz.get();
                                         g.setColor(Color.white);
                                         g.fillRect(3, 3, sz.width - 6, sz.height - 6);

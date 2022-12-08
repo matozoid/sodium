@@ -1,3 +1,4 @@
+import io.vavr.control.Option;
 import nz.sodium.*;
 
 import java.util.Optional;
@@ -22,8 +23,7 @@ public class BackEnd {
         Cell<A> c = s0.addCleanup(l).hold(initA);
         return new Value<>() {
             public ValueOutput<A> construct(Stream<A> sWrite) {
-                CellSink<Optional<A>> recvd =
-                        new CellSink<>(Optional.empty());
+                CellSink<Option<A>> recvd = new CellSink<>(Option.none());
                 Listener l =
                         j.add(sWrite)
                                 .append(
@@ -35,7 +35,7 @@ public class BackEnd {
                                                 }
                                                 System.out.println("BackEnd: "
                                                         + name + " -> " + a);
-                                                recvd.send(Optional.of(a));
+                                                recvd.send(Option.of(a));
                                             }).start();
                                         })
                                 );

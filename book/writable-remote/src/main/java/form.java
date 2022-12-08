@@ -49,7 +49,7 @@ class VTextField extends STextField {
                 Stream.filterOptional(Operational.value(outRemote.value)),
                 "",
                 width,
-                outRemote.value.map(oV -> oV.isPresent())
+                outRemote.value.map(oV -> oV.isDefined())
         );
         sRemoteWrite.loop(sUserChanges);
         this.cleanup = outRemote.cleanup;

@@ -2,6 +2,7 @@ package pump;
 
 import io.vavr.Function1;
 import io.vavr.Tuple2;
+import io.vavr.control.Option;
 import nz.sodium.*;
 
 import javax.imageio.ImageIO;
@@ -18,7 +19,6 @@ import java.net.MalformedURLException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 
 
 class PumpFace extends Component {
@@ -237,7 +237,7 @@ public class PetrolPump extends JFrame {
     public static <A> Stream<A> changes(Cell<A> b) {
         return Stream.filterOptional(
                 Operational.value(b).snapshot(b, (neu, old) ->
-                        old.equals(neu) ? Optional.empty() : Optional.of(neu)));
+                        old.equals(neu) ? Option.none() : Option.some(neu)));
     }
 
     @SuppressWarnings("unchecked")
@@ -396,8 +396,8 @@ public class PetrolPump extends JFrame {
                     ((CellLoop<UpDown>) nozzles[i]).loop(
                             Stream.<UpDown>filterOptional(
                                     sClick.snapshot(rect_state,
-                                            (pt, rs) -> rs._1.contains(pt) ? Optional.of(invert(rs._2))
-                                                    : Optional.empty()
+                                            (pt, rs) -> rs._1.contains(pt) ? Option.some(invert(rs._2))
+                                                    : Option.none()
                                     )
                             ).hold(UpDown.DOWN)
                     );
@@ -462,7 +462,7 @@ public class PetrolPump extends JFrame {
                             y >= 0 && y % 50 < 40 &&
                             col < 3 && row < 4;
             Key key = valid ? keys.get(new Tuple2<>(col, row)) : null;
-            return Optional.ofNullable(key);
+            return Option.of(key);
         }));
     }
 

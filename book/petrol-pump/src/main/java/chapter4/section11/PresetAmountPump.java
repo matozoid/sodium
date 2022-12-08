@@ -31,7 +31,7 @@ public class PresetAmountPump implements Pump {
         Preset pr = new Preset(ke.value,
                 fi,
                 np.fuelFlowing,
-                np.fillActive.map(o -> o.isPresent()));
+                np.fillActive.map(o -> o.isDefined()));
         keypadActive.loop(pr.keypadActive);
         return new Outputs()
                 .setDelivery(pr.delivery)

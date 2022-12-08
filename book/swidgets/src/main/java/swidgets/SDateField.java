@@ -1,5 +1,6 @@
 package swidgets;
 
+import io.vavr.control.Option;
 import nz.sodium.Cell;
 
 import javax.swing.*;
@@ -37,17 +38,17 @@ public class SDateField extends JComponent {
         add(year);
         add(month);
         add(day);
-        Cell<Optional<Integer>> monthIndex = month.selectedItem.map(
+        Cell<Option<Integer>> monthIndex = month.selectedItem.map(
                 ostr -> {
-                    if (ostr.isPresent()) {
+                    if (ostr.isDefined()) {
                         for (int i = 0; i < months.length; i++)
                             if (months[i].equals(ostr.get()))
-                                return Optional.of(i);
+                                return Option.some(i);
                     }
-                    return Optional.empty();
+                    return Option.none();
                 });
         date = year.selectedItem.lift(monthIndex, day.selectedItem,
-                (oy, om, od) -> oy.isPresent() && om.isPresent() && od.isPresent()
+                (oy, om, od) -> oy.isDefined() && om.isDefined() && od.isDefined()
                         ? new GregorianCalendar(oy.get(), om.get(), od.get())
                         : new GregorianCalendar());
     }

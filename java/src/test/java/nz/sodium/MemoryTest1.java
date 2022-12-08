@@ -1,6 +1,7 @@
 package nz.sodium;
 
 import io.vavr.Tuple2;
+import io.vavr.control.Option;
 
 import java.util.Optional;
 
@@ -21,7 +22,7 @@ public class MemoryTest1 {
         Cell<Integer> t = et.hold(0);
         Stream<Integer> etens = et.map(x -> x / 10);
         Stream<Integer> changeTens = Stream.filterOptional(et.snapshot(t, (neu, old) ->
-                neu.equals(old) ? Optional.empty() : Optional.of(neu)));
+                neu.equals(old) ? Option.none() : Option.some(neu)));
         Cell<Cell<Tuple2<Integer, Integer>>> oout =
                 changeTens.map(tens -> t.map(tt -> new Tuple2<>(tens, tt))).
                         hold(t.map(tt -> new Tuple2<>(0, tt)));

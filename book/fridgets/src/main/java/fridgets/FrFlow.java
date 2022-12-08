@@ -1,5 +1,6 @@
 package fridgets;
 
+import io.vavr.control.Option;
 import nz.sodium.Cell;
 import nz.sodium.CellLoop;
 import nz.sodium.Stream;
@@ -19,7 +20,7 @@ public class FrFlow extends Fridget {
             Cell<Drawable> drawable = new Cell<>(new Drawable());
             Stream<Long> sChangeFocus = new Stream<>();
             for (Fridget fridget : fridgets) {
-                CellLoop<Optional<Dimension>> childSz = new CellLoop<>();
+                CellLoop<Option<Dimension>> childSz = new CellLoop<>();
                 Fridget.Output fo = new FrTranslate(fridget,
                         dir == Direction.HORIZONTAL
                                 ? desiredSize.map(dsz -> new Dimension(dsz.width, 0))
@@ -29,13 +30,13 @@ public class FrFlow extends Fridget {
                 idSupply = idSupply.child2();
                 childSz.loop(
                         size.lift(fo.desiredSize, (osz, foDsz) ->
-                                osz.isPresent()
-                                        ? Optional.of(dir == Direction.HORIZONTAL
+                                osz.isDefined()
+                                        ? Option.some(dir == Direction.HORIZONTAL
                                         ? new Dimension(foDsz.width,
                                         osz.get().height)
                                         : new Dimension(osz.get().width,
                                         foDsz.height))
-                                        : Optional.empty()
+                                        : Option.none()
                         )
                 );
                 desiredSize = desiredSize.lift(fo.desiredSize,

@@ -1,5 +1,6 @@
 package swidgets;
 
+import io.vavr.control.Option;
 import nz.sodium.Cell;
 import nz.sodium.CellSink;
 
@@ -29,17 +30,17 @@ public class SComboBox<E> extends JComboBox<E> {
     }
 
     @SuppressWarnings("unchecked")
-    private static <E> Cell<Optional<E>> mkSelectedItem(JComboBox<E> box) {
+    private static <E> Cell<Option<E>> mkSelectedItem(JComboBox<E> box) {
         E sel = (E) box.getSelectedItem();
-        CellSink<Optional<E>> selectedItem = new CellSink<>(
-                sel == null ? Optional.empty() : Optional.of(sel));
+        CellSink<Option<E>> selectedItem = new CellSink<>(
+                sel == null ? Option.none() : Option.some(sel));
         box.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED)
-                selectedItem.send(Optional.of((E) e.getItem()));
+                selectedItem.send(Option.some((E) e.getItem()));
         });
         return selectedItem;
     }
 
-    public final Cell<Optional<E>> selectedItem;
+    public final Cell<Option<E>> selectedItem;
 }
 

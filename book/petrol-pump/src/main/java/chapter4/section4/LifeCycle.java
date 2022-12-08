@@ -1,16 +1,15 @@
 package chapter4.section4;
 
+import io.vavr.control.Option;
 import nz.sodium.Cell;
 import nz.sodium.CellLoop;
 import nz.sodium.Stream;
 import pump.Fuel;
 import pump.UpDown;
 
-import java.util.Optional;
-
 public class LifeCycle {
     public final Stream<Fuel> sStart;
-    public final Cell<Optional<Fuel>> fillActive;
+    public final Cell<Option<Fuel>> fillActive;
     public final Stream<End> sEnd;
 
     public enum End {END}
@@ -23,13 +22,13 @@ public class LifeCycle {
 
     private static Stream<End> whenSetDown(Stream<UpDown> sNozzle,
                                            Fuel nozzleFuel,
-                                           Cell<Optional<Fuel>> fillActive) {
-        return Stream.<End>filterOptional(
+                                           Cell<Option<Fuel>> fillActive) {
+        return Stream.filterOptional(
                 sNozzle.snapshot(fillActive,
                         (u, f) -> u == UpDown.DOWN &&
-                                f.equals(Optional.of(nozzleFuel))
-                                ? Optional.of(End.END)
-                                : Optional.empty()));
+                                f.equals(Option.some(nozzleFuel))
+                                ? Option.some(End.END)
+                                : Option.none()));
     }
 
     public LifeCycle(Stream<UpDown> sNozzle1,
@@ -39,19 +38,19 @@ public class LifeCycle {
                 whenLifted(sNozzle1, Fuel.ONE).orElse(
                         whenLifted(sNozzle2, Fuel.TWO).orElse(
                                 whenLifted(sNozzle3, Fuel.THREE)));
-        CellLoop<Optional<Fuel>> fillActive = new CellLoop<>();
+        CellLoop<Option<Fuel>> fillActive = new CellLoop<>();
         this.fillActive = fillActive;
         this.sStart = Stream.filterOptional(
                 sLiftNozzle.snapshot(fillActive, (newFuel, fillActive_) ->
-                        fillActive_.isPresent() ? Optional.empty()
-                                : Optional.of(newFuel)));
+                        fillActive_.isDefined() ? Option.none()
+                                : Option.some(newFuel)));
         this.sEnd = whenSetDown(sNozzle1, Fuel.ONE, fillActive).orElse(
                 whenSetDown(sNozzle2, Fuel.TWO, fillActive).orElse(
                         whenSetDown(sNozzle3, Fuel.THREE, fillActive)));
         fillActive.loop(
-                sEnd.map(e -> Optional.<Fuel>empty())
-                        .orElse(sStart.map(f -> Optional.of(f)))
-                        .hold(Optional.empty())
+                sEnd.map(e -> Option.<Fuel>none())
+                        .orElse(sStart.map(Option::some))
+                        .hold(Option.none())
         );
     }
 }

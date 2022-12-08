@@ -3,6 +3,7 @@ package chapter4.section8;
 import chapter4.section4.LifeCycle;
 import chapter4.section7.Fill;
 import chapter4.section7.ShowDollarsPump;
+import io.vavr.control.Option;
 import nz.sodium.StreamLoop;
 import nz.sodium.Unit;
 import pump.*;
@@ -27,9 +28,9 @@ public class ClearSalePump implements Pump {
         return new Outputs()
                 .setDelivery(np.fuelFlowing.map(
                         of ->
-                                of.equals(Optional.of(Fuel.ONE)) ? Delivery.FAST1 :
-                                        of.equals(Optional.of(Fuel.TWO)) ? Delivery.FAST2 :
-                                                of.equals(Optional.of(Fuel.THREE)) ? Delivery.FAST3 :
+                                of.equals(Option.some(Fuel.ONE)) ? Delivery.FAST1 :
+                                        of.equals(Option.some(Fuel.TWO)) ? Delivery.FAST2 :
+                                                of.equals(Option.some(Fuel.THREE)) ? Delivery.FAST3 :
                                                         Delivery.OFF))
                 .setSaleCostLCD(fi.dollarsDelivered.map(
                         q -> Formatters.formatSaleCost(q)))

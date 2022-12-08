@@ -1,6 +1,7 @@
 package chapter4.section6;
 
 import chapter4.section4.LifeCycle;
+import io.vavr.control.Option;
 import nz.sodium.Cell;
 import nz.sodium.CellLoop;
 import nz.sodium.Stream;
@@ -21,9 +22,9 @@ public class AccumulatePulsesPump implements Pump {
         return new Outputs()
                 .setDelivery(lc.fillActive.map(
                         of ->
-                                of.equals(Optional.of(Fuel.ONE)) ? Delivery.FAST1 :
-                                        of.equals(Optional.of(Fuel.TWO)) ? Delivery.FAST2 :
-                                                of.equals(Optional.of(Fuel.THREE)) ? Delivery.FAST3 :
+                                of.equals(Option.some(Fuel.ONE)) ? Delivery.FAST1 :
+                                        of.equals(Option.some(Fuel.TWO)) ? Delivery.FAST2 :
+                                                of.equals(Option.some(Fuel.THREE)) ? Delivery.FAST3 :
                                                         Delivery.OFF))
                 .setSaleQuantityLCD(litersDelivered.map(
                         q -> Formatters.formatSaleQuantity(q)));

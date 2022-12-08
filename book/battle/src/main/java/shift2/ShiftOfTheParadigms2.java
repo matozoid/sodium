@@ -1,5 +1,6 @@
 package shift2;
 
+import io.vavr.control.Option;
 import nz.sodium.*;
 
 import javax.swing.*;
@@ -63,11 +64,11 @@ class Document {
 
     private final Map<String, Element> elements;
 
-    public Optional<Entry> getByPoint(Point pt) {
-        Optional<Entry> oe = Optional.empty();
+    public Option<Entry> getByPoint(Point pt) {
+        Option<Entry> oe = Option.none();
         for (Map.Entry<String, Element> e : elements.entrySet()) {
             if (e.getValue().contains(pt))
-                oe = Optional.of(new Entry(e.getKey(), e.getValue()));
+                oe = Option.some(new Entry(e.getKey(), e.getValue()));
         }
         return oe;
     }
@@ -132,16 +133,16 @@ class Classic implements Paradigm {
 
     private Document doc;
     private Point move;
-    private Optional<Dragging> oDragging = Optional.empty();
+    private Option<Dragging> oDragging = Option.none();
     private boolean axisLock;
 
     public void mouseEvent(MouseEvt me) {
         switch (me.type) {
             case DOWN:
-                Optional<Entry> oe = doc.getByPoint(me.pt);
-                if (oe.isPresent()) {
+                Option<Entry> oe = doc.getByPoint(me.pt);
+                if (oe.isDefined()) {
                     System.out.println("classic dragging " + oe.get().id);
-                    oDragging = Optional.of(new Dragging(me, oe.get()));
+                    oDragging = Option.some(new Dragging(me, oe.get()));
                     move = me.pt;
                 }
                 break;
@@ -150,7 +151,7 @@ class Classic implements Paradigm {
                 updateMove();
                 break;
             case UP:
-                oDragging = Optional.empty();
+                oDragging = Option.none();
                 break;
         }
     }
@@ -161,7 +162,7 @@ class Classic implements Paradigm {
     }
 
     private void updateMove() {
-        if (oDragging.isPresent()) {
+        if (oDragging.isDefined()) {
             Dragging dr = oDragging.get();
             doc = doc.insert(dr.ent.id,
                     dr.ent.element.translate(dr.me1.pt, move, axisLock));
@@ -182,8 +183,8 @@ class FRP1 implements Paradigm {
             Stream<Stream<Document>> sStartDrag = Stream.filterOptional(
                     sMouse.snapshot(doc, (me1, doc1) -> {
                         if (me1.type == Type.DOWN) {
-                            Optional<Entry> oe = doc1.getByPoint(me1.pt);
-                            if (oe.isPresent()) {
+                            Option<Entry> oe = doc1.getByPoint(me1.pt);
+                            if (oe.isDefined()) {
                                 String id = oe.get().id;
                                 Element elt = oe.get().element;
                                 System.out.println("FRP1 dragging " + id);
@@ -197,10 +198,10 @@ class FRP1 implements Paradigm {
                                         )
                                         .snapshot(doc, (newElt, doc2) ->
                                                 doc2.insert(id, newElt));
-                                return Optional.of(sMoves);
+                                return Option.some(sMoves);
                             }
                         }
-                        return Optional.empty();
+                        return Option.none();
                     }));
             Stream<Document> sIdle = new Stream<>();
             Stream<Stream<Document>> sEndDrag =
@@ -241,8 +242,8 @@ class FRP2 implements Paradigm {
             Stream<Stream<Document>> sStartDrag = Stream.filterOptional(
                     sMouse.snapshot(doc, (me1, doc1) -> {
                         if (me1.type == Type.DOWN) {
-                            Optional<Entry> oe = doc1.getByPoint(me1.pt);
-                            if (oe.isPresent()) {
+                            Option<Entry> oe = doc1.getByPoint(me1.pt);
+                            if (oe.isDefined()) {
                                 String id = oe.get().id;
                                 Element elt = oe.get().element;
                                 System.out.println("FRP2 dragging " + id);
@@ -266,10 +267,10 @@ class FRP2 implements Paradigm {
                                 Stream<Document> sMoves = sPair.snapshot(doc,
                                         (p, doc2) -> doc2.insert(id,
                                                 elt.translate(me1.pt, p.move, p.lock)));
-                                return Optional.of(sMoves);
+                                return Option.some(sMoves);
                             }
                         }
-                        return Optional.empty();
+                        return Option.none();
                     }));
             Stream<Document> sIdle = new Stream<>();
             Stream<Stream<Document>> sEndDrag =
@@ -316,8 +317,8 @@ class Actor implements Paradigm {
                         if (o instanceof MouseEvt) {
                             MouseEvt me = (MouseEvt) o;
                             if (me.type == Type.DOWN) {
-                                Optional<Entry> oe = doc.getByPoint(me.pt);
-                                if (oe.isPresent()) {
+                                Option<Entry> oe = doc.getByPoint(me.pt);
+                                if (oe.isDefined()) {
                                     me1 = me;
                                     ent = oe.get();
                                     break;

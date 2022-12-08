@@ -1,6 +1,7 @@
 package nz.sodium;
 
 import io.vavr.*;
+import io.vavr.control.Option;
 
 import java.util.*;
 
@@ -360,9 +361,9 @@ public class Stream<A> {
      * Return a stream that only outputs events that have present
      * values, removing the {@link java.util.Optional} wrapper, discarding empty values.
      */
-    public static <A> Stream<A> filterOptional(final Stream<Optional<A>> ev) {
+    public static <A> Stream<A> filterOptional(final Stream<Option<A>> ev) {
         final StreamWithSend<A> out = new StreamWithSend<>();
-        Listener l = ev.listen_(out.node, (trans2, oa) -> oa.ifPresent(a -> out.send(trans2, a)));
+        Listener l = ev.listen_(out.node, (trans2, oa) -> oa.forEach(a -> out.send(trans2, a)));
         return out.unsafeAddCleanup(l);
     }
 
@@ -372,7 +373,7 @@ public class Stream<A> {
      */
     public final Stream<A> gate(Cell<Boolean> c) {
         return Stream.filterOptional(
-                snapshot(c, (a, pred) -> pred ? Optional.of(a) : Optional.empty())
+                snapshot(c, (a, pred) -> pred ? Option.some(a) : Option.none())
         );
     }
 

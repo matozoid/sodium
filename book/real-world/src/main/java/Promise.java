@@ -1,4 +1,5 @@
 import io.vavr.Function2;
+import io.vavr.control.Option;
 import nz.sodium.*;
 
 import java.util.Optional;
@@ -6,17 +7,17 @@ import java.util.Optional;
 public class Promise<A> {
     public Promise(Stream<A> sDeliver) {
         this.sDeliver = sDeliver.once();
-        this.oValue = this.sDeliver.map(a -> Optional.of(a))
-                .hold(Optional.empty());
+        this.oValue = this.sDeliver.map(a -> Option.some(a))
+                .hold(Option.none());
     }
 
-    private Promise(Cell<Optional<A>> oValue) {
+    private Promise(Cell<Option<A>> oValue) {
         this.sDeliver = Stream.filterOptional(Operational.updates(oValue));
         this.oValue = oValue;
     }
 
     public final Stream<A> sDeliver;
-    public final Cell<Optional<A>> oValue;
+    public final Cell<Option<A>> oValue;
 
     public final Stream<A> then() {
         return Stream.filterOptional(Operational.value(oValue))
@@ -34,9 +35,9 @@ public class Promise<A> {
         return Transaction.run(() -> new Promise<C>(
                 this.oValue.lift(pb.oValue,
                         (oa, ob) ->
-                                oa.isPresent() && ob.isPresent()
-                                        ? Optional.of(f.apply(oa.get(), ob.get()))
-                                        : Optional.empty()
+                                oa.isDefined() && ob.isDefined()
+                                        ? Option.some(f.apply(oa.get(), ob.get()))
+                                        : Option.none()
                 )));
     }
 }

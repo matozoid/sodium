@@ -1,4 +1,5 @@
 import io.vavr.Function1;
+import io.vavr.control.Option;
 import nz.sodium.*;
 
 import java.awt.*;
@@ -24,8 +25,8 @@ public class dynamic {
         Stream<Double> sAlarm = Stream.filterOptional(
                 sTick.snapshot(tAlarm,
                         (u, alarm) -> time.sample() >= alarm
-                                ? Optional.of(time.sample() + period)
-                                : Optional.<Double>empty())
+                                ? Option.some(time.sample() + period)
+                                : Option.none())
         );
         double t0 = time.sample() + period;
         tAlarm.loop(sAlarm.hold(t0));
@@ -88,8 +89,8 @@ public class dynamic {
                                         Cell<Character> character, World world) {
         return Stream.filterOptional(
                 sTick.snapshot(character, (u, ch) ->
-                        world.hitsHole(ch.pos) ? Optional.of(self)
-                                : Optional.<Integer>empty()
+                        world.hitsHole(ch.pos) ? Option.some(self)
+                                : Option.none()
                 ));
     }
 
@@ -122,7 +123,7 @@ public class dynamic {
                     = sDestroy.map(ids -> st -> st.remove(ids));
             Stream<Function1<State, State>> sChange = sAdd.merge(sRemove,
                     (f1, f2) -> a -> f1.apply(f2.apply(a)));
-            state.loop(sChange.snapshot(state, (f, st) -> f.apply(st))
+            state.loop(sChange.snapshot(state, Function1::apply)
                     .hold(initState));
             Cell<Cell<List<Character>>> cchars = state.map(st ->
                     sequence(st.chars.values()));

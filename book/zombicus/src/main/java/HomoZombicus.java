@@ -1,3 +1,4 @@
+import io.vavr.control.Option;
 import nz.sodium.Cell;
 import nz.sodium.CellLoop;
 import nz.sodium.Stream;
@@ -6,7 +7,6 @@ import nz.sodium.Unit;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class HomoZombicus {
     public HomoZombicus(
@@ -21,9 +21,8 @@ public class HomoZombicus {
                   List<Character> scene) {
                 this.t0 = t0;
                 this.orig = orig;
-                double bestDist = 0.0;
-                Optional<Character> oOther = nearest(self, scene);
-                if (oOther.isPresent()) {
+                Option<Character> oOther = nearest(self, scene);
+                if (oOther.isDefined()) {
                     Character other = oOther.get();
                     this.velocity = Vector.subtract(other.pos, orig)
                             .normalize().mult(
@@ -34,23 +33,23 @@ public class HomoZombicus {
                     this.velocity = new Vector(0, 0);
             }
 
-            Optional<Character> nearest(int self, List<Character> scene) {
+            Option<Character> nearest(int self, List<Character> scene) {
                 double bestDist = 0.0;
-                Optional<Character> best = Optional.empty();
+                Option<Character> best = Option.none();
                 for (Character ch : scene)
                     if (ch.id != self) {
                         double dist = Vector.distance(ch.pos, orig);
                         if (ch.type == CharacterType.ZOMBICUS && dist > 60)
                             ;
-                        else if (!best.isPresent() || dist < bestDist) {
+                        else if (!best.isDefined() || dist < bestDist) {
                             bestDist = dist;
-                            best = Optional.of(ch);
+                            best = Option.some(ch);
                         }
                     }
                 return best;
             }
 
-            Optional<Character> nearestSapiens(int self,
+            Option<Character> nearestSapiens(int self,
                                                List<Character> scene) {
                 List<Character> sapiens = new ArrayList<>();
                 for (Character ch : scene) {
@@ -75,9 +74,9 @@ public class HomoZombicus {
                         (u, st) -> {
                             double t = time.sample();
                             return t - st.t0 >= 0.2
-                                    ? Optional.of(new State(t, st.positionAt(t),
+                                    ? Option.some(new State(t, st.positionAt(t),
                                     self, scene.sample()))
-                                    : Optional.<State>empty();
+                                    : Option.none();
                         }
                 ));
         List<Character> emptyScene = new ArrayList<>(0);
@@ -90,15 +89,15 @@ public class HomoZombicus {
         sBite = Stream.filterOptional(
                 sTick.snapshot(state,
                         (u, st) -> {
-                            Optional<Character> oVictim = st.nearestSapiens(
+                            Option<Character> oVictim = st.nearestSapiens(
                                     self, scene.sample());
-                            if (oVictim.isPresent()) {
+                            if (oVictim.isDefined()) {
                                 Character victim = oVictim.get();
                                 Point myPos = st.positionAt(time.sample());
                                 if (Vector.distance(victim.pos, myPos) < 10)
-                                    return Optional.<Integer>of(victim.id);
+                                    return Option.some(victim.id);
                             }
-                            return Optional.<Integer>empty();
+                            return Option.none();
                         }
                 ));
     }

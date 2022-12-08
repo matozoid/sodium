@@ -1,6 +1,7 @@
 package nz.sodium;
 
 import io.vavr.Tuple2;
+import io.vavr.control.Option;
 import junit.framework.TestCase;
 
 import java.util.ArrayList;
@@ -135,14 +136,14 @@ public class TestStream extends TestCase {
     }
 
     public void testFilterOptional() {
-        StreamSink<Optional<String>> e = new StreamSink();
+        StreamSink<Option<String>> e = new StreamSink();
         List<String> out = new ArrayList();
         Listener l = Stream.filterOptional(e).listen(s -> {
             out.add(s);
         });
-        e.send(Optional.of("tomato"));
-        e.send(Optional.empty());
-        e.send(Optional.of("peach"));
+        e.send(Option.some("tomato"));
+        e.send(Option.none());
+        e.send(Option.some("peach"));
         l.unlisten();
         assertEquals(Arrays.asList("tomato", "peach"), out);
     }

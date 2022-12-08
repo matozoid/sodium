@@ -1,5 +1,6 @@
 package fridgets;
 
+import io.vavr.control.Option;
 import nz.sodium.*;
 
 import javax.swing.*;
@@ -29,11 +30,11 @@ public class FrView extends JPanel {
                 sMouse.send(e);
             }
         });
-        size = new CellSink<>(Optional.empty());
+        size = new CellSink<>(Option.none());
         addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
                 if (e.getID() == ComponentEvent.COMPONENT_RESIZED)
-                    size.send(Optional.of(getSize()));
+                    size.send(Option.some(getSize()));
             }
         });
         frame.addKeyListener(new KeyAdapter() {
@@ -52,7 +53,7 @@ public class FrView extends JPanel {
     }
 
     private Listener l = new Listener();
-    private final CellSink<Optional<Dimension>> size;
+    private final CellSink<Option<Dimension>> size;
     private final Cell<Drawable> drawable;
 
     public void paintComponent(Graphics g) {

@@ -2,6 +2,7 @@ package nz.sodium;
 
 import io.vavr.Function1;
 import io.vavr.Tuple2;
+import io.vavr.control.Option;
 import junit.framework.TestCase;
 
 import java.util.ArrayList;
@@ -148,15 +149,15 @@ public class TestCell extends TestCase {
     }
 
     static class SB {
-        SB(Optional<Character> a, Optional<Character> b, Optional<Cell<Character>> sw) {
+        SB(Option<Character> a, Option<Character> b, Option<Cell<Character>> sw) {
             this.a = a;
             this.b = b;
             this.sw = sw;
         }
 
-        Optional<Character> a;
-        Optional<Character> b;
-        Optional<Cell<Character>> sw;
+        Option<Character> a;
+        Option<Character> b;
+        Option<Cell<Character>> sw;
     }
 
     public void testSwitchC() {
@@ -169,22 +170,22 @@ public class TestCell extends TestCase {
         Cell<Character> bo = Cell.switchC(bsw);
         List<Character> out = new ArrayList<>();
         Listener l = bo.listen(out::add);
-        esb.send(new SB(Optional.of('B'), Optional.of('b'), Optional.empty()));
-        esb.send(new SB(Optional.of('C'), Optional.of('c'), Optional.of(bb)));
-        esb.send(new SB(Optional.of('D'), Optional.of('d'), Optional.empty()));
-        esb.send(new SB(Optional.of('E'), Optional.of('e'), Optional.of(ba)));
-        esb.send(new SB(Optional.of('F'), Optional.of('f'), Optional.empty()));
-        esb.send(new SB(Optional.empty(), Optional.empty(), Optional.of(bb)));
-        esb.send(new SB(Optional.empty(), Optional.empty(), Optional.of(ba)));
-        esb.send(new SB(Optional.of('G'), Optional.of('g'), Optional.of(bb)));
-        esb.send(new SB(Optional.of('H'), Optional.of('h'), Optional.of(ba)));
-        esb.send(new SB(Optional.of('I'), Optional.of('i'), Optional.of(ba)));
+        esb.send(new SB(Option.some('B'), Option.some('b'), Option.none()));
+        esb.send(new SB(Option.some('C'), Option.some('c'), Option.some(bb)));
+        esb.send(new SB(Option.some('D'), Option.some('d'), Option.none()));
+        esb.send(new SB(Option.some('E'), Option.some('e'), Option.some(ba)));
+        esb.send(new SB(Option.some('F'), Option.some('f'), Option.none()));
+        esb.send(new SB(Option.none(), Option.none(), Option.some(bb)));
+        esb.send(new SB(Option.none(), Option.none(), Option.some(ba)));
+        esb.send(new SB(Option.some('G'), Option.some('g'), Option.some(bb)));
+        esb.send(new SB(Option.some('H'), Option.some('h'), Option.some(ba)));
+        esb.send(new SB(Option.some('I'), Option.some('i'), Option.some(ba)));
         l.unlisten();
         assertEquals(Arrays.asList('A', 'B', 'c', 'd', 'E', 'F', 'f', 'F', 'g', 'H', 'I'), out);
     }
 
     static class SE {
-        SE(Character a, Character b, Optional<Stream<Character>> sw) {
+        SE(Character a, Character b, Option<Stream<Character>> sw) {
             this.a = a;
             this.b = b;
             this.sw = sw;
@@ -192,7 +193,7 @@ public class TestCell extends TestCase {
 
         Character a;
         Character b;
-        Optional<Stream<Character>> sw;
+        Option<Stream<Character>> sw;
     }
 
     public void testSwitchS() {
@@ -203,15 +204,15 @@ public class TestCell extends TestCase {
         List<Character> out = new ArrayList<>();
         Stream<Character> eo = Cell.switchS(bsw);
         Listener l = eo.listen(out::add);
-        ese.send(new SE('A', 'a', Optional.empty()));
-        ese.send(new SE('B', 'b', Optional.empty()));
-        ese.send(new SE('C', 'c', Optional.of(eb)));
-        ese.send(new SE('D', 'd', Optional.empty()));
-        ese.send(new SE('E', 'e', Optional.of(ea)));
-        ese.send(new SE('F', 'f', Optional.empty()));
-        ese.send(new SE('G', 'g', Optional.of(eb)));
-        ese.send(new SE('H', 'h', Optional.of(ea)));
-        ese.send(new SE('I', 'i', Optional.of(ea)));
+        ese.send(new SE('A', 'a', Option.none()));
+        ese.send(new SE('B', 'b', Option.none()));
+        ese.send(new SE('C', 'c', Option.some(eb)));
+        ese.send(new SE('D', 'd', Option.none()));
+        ese.send(new SE('E', 'e', Option.some(ea)));
+        ese.send(new SE('F', 'f', Option.none()));
+        ese.send(new SE('G', 'g', Option.some(eb)));
+        ese.send(new SE('H', 'h', Option.some(ea)));
+        ese.send(new SE('I', 'i', Option.some(ea)));
         l.unlisten();
         assertEquals(Arrays.asList('A', 'B', 'C', 'd', 'e', 'F', 'G', 'h', 'I'), out);
     }

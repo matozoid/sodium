@@ -1,31 +1,32 @@
 import io.vavr.Tuple2;
+import io.vavr.control.Option;
 import nz.sodium.*;
 
 import java.util.Optional;
 
 public class calm {
     public static <A> Stream<A> calm(Stream<A> sA,
-                                     Lazy<Optional<A>> oInit) {
+                                     Lazy<Option<A>> oInit) {
         return Stream.filterOptional(
-                sA.<Optional<A>, Optional<A>>collectLazy(
+                sA.<Option<A>, Option<A>>collectLazy(
                         oInit,
-                        (A a, Optional<A> oLastA) -> {
-                            Optional<A> oa = Optional.of(a);
+                        (A a, Option<A> oLastA) -> {
+                            Option<A> oa = Option.some(a);
                             return oa.equals(oLastA)
                                     ? new Tuple2<>(
-                                    Optional.empty(), oLastA)
+                                    Option.none(), oLastA)
                                     : new Tuple2<>(oa, oa);
                         }
                 ));
     }
 
     public static <A> Stream<A> calm(Stream<A> sA) {
-        return calm(sA, new Lazy<>(Optional.empty()));
+        return calm(sA, new Lazy<>(Option.none()));
     }
 
     public static <A> Cell<A> calm(Cell<A> a) {
         Lazy<A> initA = a.sampleLazy();
-        Lazy<Optional<A>> oInitA = initA.map(Optional::of);
+        Lazy<Option<A>> oInitA = initA.map(Option::some);
         return calm(Operational.updates(a), oInitA).holdLazy(initA);
     }
 

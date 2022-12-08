@@ -1,5 +1,7 @@
 package fridgets;
 
+import io.vavr.control.Option;
+
 import java.util.Optional;
 
 public class Supply {
@@ -20,25 +22,25 @@ public class Supply {
     }
 
     private final Impl impl;
-    private Optional<Long> oID = Optional.empty();
-    private Optional<Supply> oChild1 = Optional.empty();
-    private Optional<Supply> oChild2 = Optional.empty();
+    private Option<Long> oID = Option.none();
+    private Option<Supply> oChild1 = Option.none();
+    private Option<Supply> oChild2 = Option.none();
 
     public final synchronized long get() {
-        if (!oID.isPresent())
-            oID = Optional.of(impl.alloc());
+        if (!oID.isDefined())
+            oID = Option.some(impl.alloc());
         return oID.get();
     }
 
     public final synchronized Supply child1() {
-        if (!oChild1.isPresent())
-            oChild1 = Optional.of(new Supply(impl));
+        if (!oChild1.isDefined())
+            oChild1 = Option.some(new Supply(impl));
         return oChild1.get();
     }
 
     public final synchronized Supply child2() {
-        if (!oChild2.isPresent())
-            oChild2 = Optional.of(new Supply(impl));
+        if (!oChild2.isDefined())
+            oChild2 = Option.some(new Supply(impl));
         return oChild2.get();
     }
 }

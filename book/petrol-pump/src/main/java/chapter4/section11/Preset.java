@@ -1,6 +1,7 @@
 package chapter4.section11;
 
 import chapter4.section7.Fill;
+import io.vavr.control.Option;
 import nz.sodium.Cell;
 import pump.Delivery;
 import pump.Fuel;
@@ -17,7 +18,7 @@ public class Preset {
 
     public Preset(Cell<Integer> presetDollars,
                   Fill fi,
-                  Cell<Optional<Fuel>> fuelFlowing,
+                  Cell<Option<Fuel>> fuelFlowing,
                   Cell<Boolean> fillActive) {
         Cell<Speed> speed = presetDollars.lift(
                 fi.price, fi.dollarsDelivered, fi.litersDelivered,
@@ -38,20 +39,20 @@ public class Preset {
         delivery = fuelFlowing.lift(speed,
                 (of, speed_) ->
                         speed_ == Speed.FAST ? (
-                                of.equals(Optional.of(Fuel.ONE)) ? Delivery.FAST1 :
-                                        of.equals(Optional.of(Fuel.TWO)) ? Delivery.FAST2 :
-                                                of.equals(Optional.of(Fuel.THREE)) ? Delivery.FAST3 :
+                                of.equals(Option.some(Fuel.ONE)) ? Delivery.FAST1 :
+                                        of.equals(Option.some(Fuel.TWO)) ? Delivery.FAST2 :
+                                                of.equals(Option.some(Fuel.THREE)) ? Delivery.FAST3 :
                                                         Delivery.OFF
                         ) :
                                 speed_ == Speed.SLOW ? (
-                                        of.equals(Optional.of(Fuel.ONE)) ? Delivery.SLOW1 :
-                                                of.equals(Optional.of(Fuel.TWO)) ? Delivery.SLOW2 :
-                                                        of.equals(Optional.of(Fuel.THREE)) ? Delivery.SLOW3 :
+                                        of.equals(Option.some(Fuel.ONE)) ? Delivery.SLOW1 :
+                                                of.equals(Option.some(Fuel.TWO)) ? Delivery.SLOW2 :
+                                                        of.equals(Option.some(Fuel.THREE)) ? Delivery.SLOW3 :
                                                                 Delivery.OFF
                                 ) :
                                         Delivery.OFF);
         keypadActive = fuelFlowing.lift(speed,
                 (of, speed_) ->
-                        !of.isPresent() || speed_ == Speed.FAST);
+                        !of.isDefined() || speed_ == Speed.FAST);
     }
 }

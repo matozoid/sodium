@@ -1,5 +1,6 @@
 package chapter4.section9;
 
+import io.vavr.control.Option;
 import nz.sodium.Cell;
 import nz.sodium.CellLoop;
 import nz.sodium.Stream;
@@ -25,12 +26,12 @@ public class Keypad {
                 sKeypad.snapshot(value,
                         (key, value_) -> {
                             if (key == Key.CLEAR)
-                                return Optional.of(0);
+                                return Option.some(0);
                             else {
                                 int x10 = value_ * 10;
                                 return x10 >= 1000
-                                        ? Optional.empty()
-                                        : Optional.of(
+                                        ? Option.none()
+                                        : Option.some(
                                         key == Key.ZERO ? x10 :
                                                 key == Key.ONE ? x10 + 1 :
                                                         key == Key.TWO ? x10 + 2 :

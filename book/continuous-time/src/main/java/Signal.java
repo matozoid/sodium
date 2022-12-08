@@ -1,3 +1,4 @@
+import io.vavr.control.Option;
 import nz.sodium.Cell;
 import nz.sodium.Operational;
 import nz.sodium.Stream;
@@ -21,21 +22,21 @@ public class Signal {
 
     public final static double quantum = 0.000001;
 
-    public Optional<Double> when(double x) {
+    public Option<Double> when(double x) {
         double c = this.c - x;
         if (a == 0) {
             double t = (-c) / b;
-            return t >= quantum ? Optional.of(t + t0)
-                    : Optional.empty();
+            return t >= quantum ? Option.some(t + t0)
+                    : Option.none();
         } else {
             double b24ac = Math.sqrt(b * b - 4 * a * c);
             double t1 = ((-b) + b24ac) / (2 * a);
             double t2 = ((-b) - b24ac) / (2 * a);
             return t1 >= quantum
-                    ? t2 >= quantum ? Optional.of((t1 < t2 ? t1 : t2) + t0)
-                    : Optional.of(t1 + t0)
-                    : t2 >= quantum ? Optional.of(t2 + t0)
-                    : Optional.empty();
+                    ? t2 >= quantum ? Option.some((t1 < t2 ? t1 : t2) + t0)
+                    : Option.some(t1 + t0)
+                    : t2 >= quantum ? Option.some(t2 + t0)
+                    : Option.none();
         }
     }
 

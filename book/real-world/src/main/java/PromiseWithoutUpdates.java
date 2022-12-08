@@ -1,5 +1,6 @@
 import io.vavr.Function1;
 import io.vavr.Function2;
+import io.vavr.control.Option;
 import nz.sodium.*;
 
 import java.util.Optional;
@@ -7,17 +8,17 @@ import java.util.Optional;
 public class PromiseWithoutUpdates<A> {
     public PromiseWithoutUpdates(Stream<A> sDeliver) {
         this.sDeliver = sDeliver.once();
-        this.oValue = this.sDeliver.map(a -> Optional.of(a))
-                .hold(Optional.empty());
+        this.oValue = this.sDeliver.map(a -> Option.some(a))
+                .hold(Option.none());
     }
 
-    private PromiseWithoutUpdates(Stream<A> sDeliver, Cell<Optional<A>> oValue) {
+    private PromiseWithoutUpdates(Stream<A> sDeliver, Cell<Option<A>> oValue) {
         this.sDeliver = sDeliver;
         this.oValue = oValue;
     }
 
     public final Stream<A> sDeliver;
-    public final Cell<Optional<A>> oValue;
+    public final Cell<Option<A>> oValue;
 
     public final Stream<A> then() {
         return Stream.filterOptional(Operational.value(oValue))
@@ -34,23 +35,23 @@ public class PromiseWithoutUpdates<A> {
                                                           PromiseWithoutUpdates<A> pa, PromiseWithoutUpdates<B> pb) {
         return Transaction.run(() -> {
             class Tuple {
-                Tuple(Optional<A> oa, Optional<B> ob) {
+                Tuple(Option<A> oa, Option<B> ob) {
                     this.oa = oa;
                     this.ob = ob;
                 }
 
-                Optional<A> oa;
-                Optional<B> ob;
+                Option<A> oa;
+                Option<B> ob;
             }
             ;
-            Function2<Tuple, Tuple, Tuple> combine = (l, r) -> new Tuple(l.oa.isPresent() ? l.oa : r.oa, l.ob.isPresent() ? l.ob : r.ob);
-            Function1<Tuple, Optional<C>> result = t -> t.oa.isPresent() && t.ob.isPresent()
-                    ? Optional.of(f.apply(t.oa.get(), t.ob.get()))
-                    : Optional.empty();
-            Stream<Tuple> sA = pa.sDeliver.map(a -> new Tuple(Optional.of(a), Optional.empty()));
-            Cell<Tuple> vA = pa.oValue.map(oa -> new Tuple(oa, Optional.empty()));
-            Stream<Tuple> sB = pb.sDeliver.map(b -> new Tuple(Optional.empty(), Optional.of(b)));
-            Cell<Tuple> vB = pb.oValue.map(ob -> new Tuple(Optional.empty(), ob));
+            Function2<Tuple, Tuple, Tuple> combine = (l, r) -> new Tuple(l.oa.isDefined() ? l.oa : r.oa, l.ob.isDefined() ? l.ob : r.ob);
+            Function1<Tuple, Option<C>> result = t -> t.oa.isDefined() && t.ob.isDefined()
+                    ? Option.some(f.apply(t.oa.get(), t.ob.get()))
+                    : Option.none();
+            Stream<Tuple> sA = pa.sDeliver.map(a -> new Tuple(Option.some(a), Option.none()));
+            Cell<Tuple> vA = pa.oValue.map(oa -> new Tuple(oa, Option.none()));
+            Stream<Tuple> sB = pb.sDeliver.map(b -> new Tuple(Option.none(), Option.some(b)));
+            Cell<Tuple> vB = pb.oValue.map(ob -> new Tuple(Option.none(), ob));
             Stream<Tuple> sAArrives = sA.snapshot(vB, combine);
             Stream<Tuple> sBArrives = sB.snapshot(vA, combine);
             Stream<Tuple> sSimultaneous = sA.merge(sB, combine);
@@ -59,7 +60,7 @@ public class PromiseWithoutUpdates<A> {
                             .orElse(sSimultaneous)
                             .map(result)
             ).once();
-            Cell<Optional<C>> oValue = vA.lift(vB,
+            Cell<Option<C>> oValue = vA.lift(vB,
                     combine).map(result);
             return new PromiseWithoutUpdates<>(sDeliver, oValue);
         });

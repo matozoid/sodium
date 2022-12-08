@@ -1,6 +1,7 @@
 package lookup;
 
 import io.vavr.Function1;
+import io.vavr.control.Option;
 import nz.sodium.*;
 import swidgets.SButton;
 import swidgets.STextArea;
@@ -13,8 +14,8 @@ import java.awt.event.WindowEvent;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.Optional;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 class IsBusy<A, B> {
     public IsBusy(Function1<Stream<A>, Stream<B>> action, Stream<A> sIn) {
@@ -31,56 +32,41 @@ class IsBusy<A, B> {
 public class Lookup {
 
     public static final
-    Function1<Stream<String>, Stream<Optional<String>>> lookup = sWord -> {
-        StreamSink<Optional<String>> sDefinition = new StreamSink<>();
-        Listener l = sWord.listenWeak(wrd -> {
-            new Thread() {
-                public void run() {
-                    System.out.println("look up " + wrd);
-                    Optional<String> def = Optional.empty();
-                    try {
-                        Socket s = new Socket(InetAddress.getByName(
-                                "dict.org"), 2628);
-                        try {
-                            BufferedReader r = new BufferedReader(
-                                    new InputStreamReader(s.getInputStream(),
-                                            "UTF-8"));
-                            PrintWriter w = new PrintWriter(
-                                    new OutputStreamWriter(s.getOutputStream(),
-                                            "UTF-8"));
-                            String greeting = r.readLine();
-                            w.println("DEFINE ! " + wrd);
-                            w.flush();
-                            String result = r.readLine();
-                            if (result.startsWith("150"))
-                                result = r.readLine();
-                            if (result.startsWith("151")) {
-                                StringBuffer b = new StringBuffer();
-                                while (true) {
-                                    String l = r.readLine();
-                                    if (l.equals("."))
-                                        break;
-                                    b.append(l + "\n");
-                                }
-                                def = Optional.of(b.toString());
-                            } else
-                                System.out.println("ERROR: " + result);
-                        } finally {
-                            try {
-                                s.close();
-                            } catch (IOException e) {
-                            }
+    Function1<Stream<String>, Stream<Option<String>>> lookup = sWord -> {
+        StreamSink<Option<String>> sDefinition = new StreamSink<>();
+        Listener l = sWord.listenWeak(wrd -> new Thread(() -> {
+            System.out.println("look up " + wrd);
+            Option<String> def = Option.none();
+            try {
+                try (Socket s = new Socket(InetAddress.getByName("dict.org"), 2628)) {
+                    BufferedReader r = new BufferedReader(
+                            new InputStreamReader(s.getInputStream(), UTF_8));
+                    PrintWriter w = new PrintWriter(
+                            new OutputStreamWriter(s.getOutputStream(), UTF_8));
+                    String greeting = r.readLine();
+                    w.println("DEFINE ! " + wrd);
+                    w.flush();
+                    String result = r.readLine();
+                    if (result.startsWith("150"))
+                        result = r.readLine();
+                    if (result.startsWith("151")) {
+                        StringBuilder b = new StringBuilder();
+                        while (true) {
+                            String l1 = r.readLine();
+                            if (l1.equals("."))
+                                break;
+                            b.append(l1).append("\n");
                         }
-                    } catch (UnknownHostException e) {
-                        System.out.println(e.toString());
-                    } catch (IOException e) {
-                        System.out.println(e.toString());
-                    } finally {
-                        sDefinition.send(def);
-                    }
+                        def = Option.some(b.toString());
+                    } else
+                        System.out.println("ERROR: " + result);
                 }
-            }.start();
-        });
+            } catch (IOException e) {
+                System.out.println(e);
+            } finally {
+                sDefinition.send(def);
+            }
+        }).start());
         return sDefinition.addCleanup(l);
     };
 
@@ -102,10 +88,10 @@ public class Lookup {
             CellLoop<Boolean> enabled = new CellLoop<>();
             SButton button = new SButton("look up", enabled);
             Stream<String> sWord = button.sClicked.snapshot(word.text);
-            IsBusy<String, Optional<String>> ib =
+            IsBusy<String, Option<String>> ib =
                     new IsBusy<>(lookup, sWord);
             Stream<String> sDefinition = ib.sOut
-                    .map(o -> o.orElse("ERROR!"));
+                    .map(o -> o.getOrElse("ERROR!"));
             Cell<String> definition = sDefinition.hold("");
             Cell<String> output = definition.lift(ib.busy, (def, bsy) ->
                     bsy ? "Looking up..." : def);

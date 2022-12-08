@@ -1,10 +1,10 @@
+import io.vavr.control.Option;
 import nz.sodium.Cell;
 import nz.sodium.CellLoop;
 import nz.sodium.Stream;
 import nz.sodium.Unit;
 
 import java.awt.*;
-import java.util.Optional;
 import java.util.Random;
 
 public class SimpleHomoSapiens {
@@ -24,10 +24,10 @@ public class SimpleHomoSapiens {
                         .mult(speed);
             }
 
-            double t0;
-            Point orig;
-            double period;
-            Vector velocity;
+            final double t0;
+            final Point orig;
+            final double period;
+            final Vector velocity;
 
             Point positionAt(double t) {
                 return velocity.mult(t - t0).add(orig);
@@ -38,8 +38,8 @@ public class SimpleHomoSapiens {
         Stream<Unit> sChange = Stream.filterOptional(
                 sTick.snapshot(traj, (u, traj_) ->
                         time.sample() - traj_.t0 >= traj_.period
-                                ? Optional.of(Unit.UNIT)
-                                : Optional.<Unit>empty()
+                                ? Option.some(Unit.UNIT)
+                                : Option.none()
                 ));
         traj.loop(
                 sChange.snapshot(traj, (u, traj_) ->

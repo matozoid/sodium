@@ -1,5 +1,6 @@
 import io.vavr.Function1;
 import io.vavr.Function2;
+import io.vavr.control.Option;
 import nz.sodium.*;
 
 import java.util.Optional;
@@ -14,8 +15,8 @@ public abstract class Value<A> {
                 ValueOutput<A> out = va.construct(sWriteB.map(bij.fInv));
                 return new ValueOutput<B>(
                         out.value.map(oa ->
-                                oa.isPresent() ? Optional.of(bij.f.apply(oa.get()))
-                                        : Optional.empty()),
+                                oa.isDefined() ? Option.some(bij.f.apply(oa.get()))
+                                        : Option.none()),
                         out.cleanup);
             }
         };
@@ -30,19 +31,19 @@ public abstract class Value<A> {
                 return Transaction.run(() -> {
                     StreamLoop<A> sWriteA = new StreamLoop<>();
                     ValueOutput<A> out = va.construct(sWriteA);
-                    Cell<Optional<A>> oa = out.value;
+                    Cell<Option<A>> oa = out.value;
                     sWriteA.loop(Stream.filterOptional(
                             sWriteB.snapshot(oa, (wb, oa_) ->
-                                    oa_.isPresent()
-                                            ? Optional.of(setter.apply(oa_.get(), wb))
-                                            : Optional.empty()
+                                    oa_.isDefined()
+                                            ? Option.some(setter.apply(oa_.get(), wb))
+                                            : Option.none()
                             )
                     ));
                     return new ValueOutput<B>(
                             oa.map(oa_ ->
-                                    oa_.isPresent()
-                                            ? Optional.of(getter.apply(oa_.get()))
-                                            : Optional.empty()),
+                                    oa_.isDefined()
+                                            ? Option.some(getter.apply(oa_.get()))
+                                            : Option.none()),
                             out.cleanup
                     );
                 });

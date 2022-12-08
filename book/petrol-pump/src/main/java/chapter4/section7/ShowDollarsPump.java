@@ -1,6 +1,7 @@
 package chapter4.section7;
 
 import chapter4.section4.LifeCycle;
+import io.vavr.control.Option;
 import nz.sodium.Cell;
 import nz.sodium.Unit;
 import pump.*;
@@ -19,9 +20,9 @@ public class ShowDollarsPump implements Pump {
         return new Outputs()
                 .setDelivery(lc.fillActive.map(
                         of ->
-                                of.equals(Optional.of(Fuel.ONE)) ? Delivery.FAST1 :
-                                        of.equals(Optional.of(Fuel.TWO)) ? Delivery.FAST2 :
-                                                of.equals(Optional.of(Fuel.THREE)) ? Delivery.FAST3 :
+                                of.equals(Option.some(Fuel.ONE)) ? Delivery.FAST1 :
+                                        of.equals(Option.some(Fuel.TWO)) ? Delivery.FAST2 :
+                                                of.equals(Option.some(Fuel.THREE)) ? Delivery.FAST3 :
                                                         Delivery.OFF))
                 .setSaleCostLCD(fi.dollarsDelivered.map(
                         q -> Formatters.formatSaleCost(q)))
@@ -36,7 +37,7 @@ public class ShowDollarsPump implements Pump {
     }
 
     public static Cell<String> priceLCD(
-            Cell<Optional<Fuel>> fillActive,
+            Cell<Option<Fuel>> fillActive,
             Cell<Double> fillPrice,
             Fuel fuel,
             Inputs inputs) {
@@ -56,7 +57,7 @@ public class ShowDollarsPump implements Pump {
         }
         return fillActive.lift(fillPrice, idlePrice,
                 (oFuelSelected, fillPrice_, idlePrice_) ->
-                        oFuelSelected.isPresent()
+                        oFuelSelected.isDefined()
                                 ? oFuelSelected.get() == fuel
                                 ? Formatters.formatPrice(fillPrice_)
                                 : ""

@@ -1,12 +1,11 @@
 package chapter4.section7;
 
 import chapter4.section6.AccumulatePulsesPump;
+import io.vavr.control.Option;
 import nz.sodium.Cell;
 import nz.sodium.Stream;
 import nz.sodium.Unit;
 import pump.Fuel;
-
-import java.util.Optional;
 
 public class Fill {
     public final Cell<Double> price;
@@ -31,16 +30,16 @@ public class Fill {
             Cell<Double> price3) {
         Stream<Double> sPrice1 = Stream.filterOptional(
                 sStart.snapshot(price1,
-                        (f, p) -> f == Fuel.ONE ? Optional.of(p)
-                                : Optional.empty()));
+                        (f, p) -> f == Fuel.ONE ? Option.some(p)
+                                : Option.none()));
         Stream<Double> sPrice2 = Stream.filterOptional(
                 sStart.snapshot(price2,
-                        (f, p) -> f == Fuel.TWO ? Optional.of(p)
-                                : Optional.empty()));
+                        (f, p) -> f == Fuel.TWO ? Option.some(p)
+                                : Option.none()));
         Stream<Double> sPrice3 = Stream.filterOptional(
                 sStart.snapshot(price3,
-                        (f, p) -> f == Fuel.THREE ? Optional.of(p)
-                                : Optional.empty()));
+                        (f, p) -> f == Fuel.THREE ? Option.some(p)
+                                : Option.none()));
 
         return sPrice1.orElse(sPrice2.orElse(sPrice3))
                 .hold(0.0);
