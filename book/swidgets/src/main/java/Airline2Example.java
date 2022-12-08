@@ -25,7 +25,7 @@ class Rule {
     }
 }
 
-public class airline2 {
+public class Airline2Example {
     private static boolean unlucky(Calendar dt) {
         int day = dt.get(Calendar.DAY_OF_MONTH);
         return day == 4 || day == 14 || day == 24;

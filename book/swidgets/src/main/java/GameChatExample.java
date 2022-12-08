@@ -5,7 +5,7 @@ import swidgets.STextField;
 import javax.swing.*;
 import java.awt.*;
 
-public class gamechat {
+public class GameChatExample {
     public static void main(String[] args) {
         JFrame frame = new JFrame("gamechat");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

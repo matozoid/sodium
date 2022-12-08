@@ -5,7 +5,7 @@ import swidgets.STextField;
 import javax.swing.*;
 import java.awt.*;
 
-public class clearfield {
+public class ClearFieldExample {
     public static void main(String[] args) {
         JFrame frame = new JFrame("clearfield");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

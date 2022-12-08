@@ -1,3 +1,5 @@
+package swidgets;
+
 import nz.sodium.Cell;
 import nz.sodium.Stream;
 import nz.sodium.StreamLoop;
@@ -8,7 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class SSpinner extends JPanel {
-    SSpinner(int initialValue) {
+    public SSpinner(int initialValue) {
         StreamLoop<Integer> sSetValue = new StreamLoop<>();
         STextField textField = new STextField(
                 sSetValue.map(v -> Integer.toString(v)),

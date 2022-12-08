@@ -5,7 +5,7 @@ import swidgets.SDateField;
 import javax.swing.*;
 import java.awt.*;
 
-public class airline1 {
+public class Airline1Example {
     public static void main(String[] args) {
         JFrame view = new JFrame("airline1");
         view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

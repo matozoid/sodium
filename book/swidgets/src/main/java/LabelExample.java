@@ -1,19 +1,16 @@
-import nz.sodium.Cell;
 import swidgets.SLabel;
 import swidgets.STextField;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class reverse {
+public class LabelExample {
     public static void main(String[] args) {
-        JFrame frame = new JFrame("reverse");
+        JFrame frame = new JFrame("label");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new FlowLayout());
         STextField msg = new STextField("Hello");
-        Cell<String> reversed = msg.text.map(t ->
-                new StringBuilder(t).reverse().toString());
-        SLabel lbl = new SLabel(reversed);
+        SLabel lbl = new SLabel(msg.text);
         frame.add(msg);
         frame.add(lbl);
         frame.setSize(400, 160);
