@@ -12,7 +12,7 @@ public class FrTranslate extends Fridget {
             Stream<MouseEvent> sMouseNew =
                     sMouse.snapshot(offset, (e, o) ->
                             new MouseEvent(e.getComponent(), e.getID(),
-                                    e.getWhen(), e.getModifiers(),
+                                    e.getWhen(), e.getModifiersEx(),
                                     e.getX() - o.width, e.getY() - o.height,
                                     e.getClickCount(), e.isPopupTrigger()));
             Fridget.Output fo = fr.reify(size, sMouseNew,
