@@ -13,6 +13,7 @@ import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 class IsBusy<A, B> {
@@ -43,10 +44,10 @@ public class Lookup {
                         try {
                             BufferedReader r = new BufferedReader(
                                     new InputStreamReader(s.getInputStream(),
-                                            "UTF-8"));
+                                            StandardCharsets.UTF_8));
                             PrintWriter w = new PrintWriter(
                                     new OutputStreamWriter(s.getOutputStream(),
-                                            "UTF-8"));
+                                            StandardCharsets.UTF_8));
                             String greeting = r.readLine();
                             w.println("DEFINE ! " + wrd);
                             w.flush();
@@ -71,9 +72,9 @@ public class Lookup {
                             }
                         }
                     } catch (UnknownHostException e) {
-                        System.out.println(e.toString());
+                        System.out.println(e);
                     } catch (IOException e) {
-                        System.out.println(e.toString());
+                        System.out.println(e);
                     } finally {
                         sDefinition.send(def);
                     }

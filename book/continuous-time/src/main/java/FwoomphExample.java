@@ -1,8 +1,10 @@
+import animate.Animate;
+import animate.Shapes;
 import nz.sodium.Cell;
 
 import java.awt.*;
 
-public class fwoomph extends Shapes {
+public class FwoomphExample extends Shapes {
     public static void main(String[] args) {
         Animate.animate("fwoomph", (sys, extents) -> {
             Cell<Double> time = sys.time;

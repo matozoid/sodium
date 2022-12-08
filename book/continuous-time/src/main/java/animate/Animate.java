@@ -1,3 +1,5 @@
+package animate;
+
 import nz.sodium.*;
 import nz.sodium.time.SecondsTimerSystem;
 

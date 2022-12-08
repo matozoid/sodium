@@ -37,10 +37,9 @@ public class PromiseWithoutUpdates<A> {
                     this.ob = ob;
                 }
 
-                Optional<A> oa;
-                Optional<B> ob;
+                final Optional<A> oa;
+                final Optional<B> ob;
             }
-            ;
             Lambda2<Tuple, Tuple, Tuple> combine = (l, r) -> new Tuple(l.oa.isPresent() ? l.oa : r.oa, l.ob.isPresent() ? l.ob : r.ob);
             Lambda1<Tuple, Optional<C>> result = t -> t.oa.isPresent() && t.ob.isPresent()
                     ? Optional.of(f.apply(t.oa.get(), t.ob.get()))

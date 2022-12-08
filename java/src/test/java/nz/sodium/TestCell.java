@@ -64,7 +64,7 @@ public class TestCell extends TestCase {
             out.add(x);
         });
         l.unlisten();
-        assertEquals(Arrays.asList(12), out);
+        assertEquals(List.of(12), out);
     }
 
     public void testMapC() {
@@ -150,7 +150,7 @@ public class TestCell extends TestCase {
                     out.add(x);
                 });
         l.unlisten();
-        assertEquals(Arrays.asList(10), out);
+        assertEquals(List.of(10), out);
     }
 
     public void testHoldIsDelayed() {
@@ -250,7 +250,7 @@ public class TestCell extends TestCase {
     public void testSwitchSSimultaneous() {
         SS2 ss1 = new SS2();
         CellSink<SS2> css = new CellSink<SS2>(ss1);
-        Stream<Integer> so = Cell.switchS(css.<Stream<Integer>>map(b -> b.s));
+        Stream<Integer> so = Cell.switchS(css.map(b -> b.s));
         List<Integer> out = new ArrayList();
         Listener l = so.listen(c -> {
             out.add(c);
@@ -283,7 +283,7 @@ public class TestCell extends TestCase {
 
     public void testLoopCell() {
         final StreamSink<Integer> sa = new StreamSink();
-        Cell<Integer> sum_out = Transaction.<Cell<Integer>>run(() -> {
+        Cell<Integer> sum_out = Transaction.run(() -> {
             CellLoop<Integer> sum = new CellLoop<Integer>();
             Cell<Integer> sum_out_ = sa.snapshot(sum, (x, y) -> x + y).hold(0);
             sum.loop(sum_out_);
@@ -298,7 +298,7 @@ public class TestCell extends TestCase {
         sa.send(1);
         l.unlisten();
         assertEquals(Arrays.asList(0, 2, 5, 6), out);
-        assertEquals((int) 6, (int) sum_out.sample());
+        assertEquals(6, (int) sum_out.sample());
     }
 
     public void testAccum() {
@@ -329,12 +329,12 @@ public class TestCell extends TestCase {
             });
         });
         l.unlisten();
-        assertEquals(Arrays.asList("lettuce cheese"), out);
+        assertEquals(List.of("lettuce cheese"), out);
     }
 
     public void testLoopValueHold() {
         List<String> out = new ArrayList();
-        Cell<String> value = Transaction.<Cell<String>>run(() -> {
+        Cell<String> value = Transaction.run(() -> {
             CellLoop<String> a = new CellLoop();
             Cell<String> value_ = Operational.value(a).hold("onion");
             a.loop(new Cell<String>("cheese"));
@@ -346,13 +346,13 @@ public class TestCell extends TestCase {
         });
         eTick.send(Unit.UNIT);
         l.unlisten();
-        assertEquals(Arrays.asList("cheese"), out);
+        assertEquals(List.of("cheese"), out);
     }
 
     public void testLiftLoop() {
         List<String> out = new ArrayList();
         CellSink<String> b = new CellSink("kettle");
-        Cell<String> c = Transaction.<Cell<String>>run(() -> {
+        Cell<String> c = Transaction.run(() -> {
             CellLoop<String> a = new CellLoop();
             Cell<String> c_ = a.lift(b,
                     (aa, bb) -> aa + " " + bb);

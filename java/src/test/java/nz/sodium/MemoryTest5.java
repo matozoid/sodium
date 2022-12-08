@@ -10,7 +10,7 @@ public class MemoryTest5 {
                         Thread.sleep(5000);
                     }
                 } catch (InterruptedException e) {
-                    System.out.println(e.toString());
+                    System.out.println(e);
                 }
             }
         }.start();

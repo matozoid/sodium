@@ -13,8 +13,6 @@ public class Preset {
 
     public enum Speed {FAST, SLOW, STOPPED}
 
-    ;
-
     public Preset(Cell<Integer> presetDollars,
                   Fill fi,
                   Cell<Optional<Fuel>> fuelFlowing,

@@ -60,7 +60,7 @@ class VTextField extends STextField {
         super.removeNotify();
     }
 
-    private Listener cleanup;
+    private final Listener cleanup;
 }
 
 public class form {

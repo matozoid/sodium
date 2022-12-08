@@ -1,3 +1,5 @@
+package animate;
+
 import nz.sodium.Cell;
 import nz.sodium.Operational;
 import nz.sodium.Stream;
@@ -40,7 +42,7 @@ public class Signal {
     }
 
     public Signal integrate(double initial) {
-        if (a != 0.0) throw new InternalError("Signal can't handle x^3");
+        if (a != 0.0) throw new InternalError("animate.Signal can't handle x^3");
         return new Signal(t0, b / 2, c, initial);
     }
 

@@ -6,7 +6,7 @@ public class calm {
     public static <A> Stream<A> calm(Stream<A> sA,
                                      Lazy<Optional<A>> oInit) {
         return Stream.filterOptional(
-                sA.<Optional<A>, Optional<A>>collectLazy(
+                sA.collectLazy(
                         oInit,
                         (A a, Optional<A> oLastA) -> {
                             Optional<A> oa = Optional.of(a);

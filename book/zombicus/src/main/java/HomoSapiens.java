@@ -30,9 +30,9 @@ public class HomoSapiens {
                 }
             }
 
-            double t0;
-            Point orig;
-            double period;
+            final double t0;
+            final Point orig;
+            final double period;
             Vector velocity;
 
             Point positionAt(double t) {
@@ -49,7 +49,7 @@ public class HomoSapiens {
                             return world.hitsObstacle(traj_.positionAt(t + step))
                                     || t - traj_.t0 >= traj_.period
                                     ? Optional.of(Unit.UNIT)
-                                    : Optional.<Unit>empty();
+                                    : Optional.empty();
                         }));
         traj.loop(
                 sChange.snapshot(traj, (u, traj_) ->

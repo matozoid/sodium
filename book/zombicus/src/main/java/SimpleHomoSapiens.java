@@ -24,10 +24,10 @@ public class SimpleHomoSapiens {
                         .mult(speed);
             }
 
-            double t0;
-            Point orig;
-            double period;
-            Vector velocity;
+            final double t0;
+            final Point orig;
+            final double period;
+            final Vector velocity;
 
             Point positionAt(double t) {
                 return velocity.mult(t - t0).add(orig);
@@ -39,7 +39,7 @@ public class SimpleHomoSapiens {
                 sTick.snapshot(traj, (u, traj_) ->
                         time.sample() - traj_.t0 >= traj_.period
                                 ? Optional.of(Unit.UNIT)
-                                : Optional.<Unit>empty()
+                                : Optional.empty()
                 ));
         traj.loop(
                 sChange.snapshot(traj, (u, traj_) ->

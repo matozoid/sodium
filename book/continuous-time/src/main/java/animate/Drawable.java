@@ -1,3 +1,5 @@
+package animate;
+
 import java.awt.*;
 
 public class Drawable {

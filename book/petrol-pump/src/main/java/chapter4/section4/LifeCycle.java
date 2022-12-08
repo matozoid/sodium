@@ -24,7 +24,7 @@ public class LifeCycle {
     private static Stream<End> whenSetDown(Stream<UpDown> sNozzle,
                                            Fuel nozzleFuel,
                                            Cell<Optional<Fuel>> fillActive) {
-        return Stream.<End>filterOptional(
+        return Stream.filterOptional(
                 sNozzle.snapshot(fillActive,
                         (u, f) -> u == UpDown.DOWN &&
                                 f.equals(Optional.of(nozzleFuel))

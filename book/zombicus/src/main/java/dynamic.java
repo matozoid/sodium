@@ -24,7 +24,7 @@ public class dynamic {
                 sTick.snapshot(tAlarm,
                         (u, alarm) -> time.sample() >= alarm
                                 ? Optional.of(time.sample() + period)
-                                : Optional.<Double>empty())
+                                : Optional.empty())
         );
         double t0 = time.sample() + period;
         tAlarm.loop(sAlarm.hold(t0));
@@ -88,7 +88,7 @@ public class dynamic {
         return Stream.filterOptional(
                 sTick.snapshot(character, (u, ch) ->
                         world.hitsHole(ch.pos) ? Optional.of(self)
-                                : Optional.<Integer>empty()
+                                : Optional.empty()
                 ));
     }
 

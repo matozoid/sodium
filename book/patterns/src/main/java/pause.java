@@ -6,10 +6,10 @@ public class pause {
     public static Cell<Double> pausableClock(Stream<Unit> sPause,
                                              Stream<Unit> sResume, Cell<Double> clock) {
         Cell<Optional<Double>> pauseTime =
-                sPause.snapshot(clock, (u, t) -> Optional.<Double>of(t))
-                        .orElse(sResume.map(u -> Optional.<Double>empty()))
-                        .hold(Optional.<Double>empty());
-        Cell<Double> lostTime = sResume.<Double>accum(
+                sPause.snapshot(clock, (u, t) -> Optional.of(t))
+                        .orElse(sResume.map(u -> Optional.empty()))
+                        .hold(Optional.empty());
+        Cell<Double> lostTime = sResume.accum(
                 0.0,
                 (u, total) -> {
                     double tPause = pauseTime.sample().get();

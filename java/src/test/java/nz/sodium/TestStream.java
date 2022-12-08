@@ -22,9 +22,9 @@ public class TestStream extends TestCase {
         });
         e.send(5);
         l.unlisten();
-        assertEquals(Arrays.asList(5), out);
+        assertEquals(List.of(5), out);
         e.send(6);
-        assertEquals(Arrays.asList(5), out);
+        assertEquals(List.of(5), out);
     }
 
     public void testMap() {
@@ -36,7 +36,7 @@ public class TestStream extends TestCase {
         });
         e.send(5);
         l.unlisten();
-        assertEquals(Arrays.asList("5"), out);
+        assertEquals(List.of("5"), out);
     }
 
     public void testMapTo() {
@@ -148,7 +148,7 @@ public class TestStream extends TestCase {
 
     public void testLoopStream() {
         final StreamSink<Integer> ea = new StreamSink();
-        Stream<Integer> ec = Transaction.<Stream<Integer>>run(() -> {
+        Stream<Integer> ec = Transaction.run(() -> {
             StreamLoop<Integer> eb = new StreamLoop<Integer>();
             Stream<Integer> ec_ = ea.map(x -> x % 10).merge(eb, (x, y) -> x + y);
             Stream<Integer> eb_out = ea.map(x -> x / 10).filter(x -> x != 0);
@@ -225,7 +225,7 @@ public class TestStream extends TestCase {
         e.send('B');
         e.send('C');
         l.unlisten();
-        assertEquals(Arrays.asList('A'), out);
+        assertEquals(List.of('A'), out);
     }
 
     public void testDefer() {

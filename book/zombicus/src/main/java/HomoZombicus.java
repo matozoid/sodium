@@ -77,7 +77,7 @@ public class HomoZombicus {
                             return t - st.t0 >= 0.2
                                     ? Optional.of(new State(t, st.positionAt(t),
                                     self, scene.sample()))
-                                    : Optional.<State>empty();
+                                    : Optional.empty();
                         }
                 ));
         List<Character> emptyScene = new ArrayList<Character>(0);
@@ -96,9 +96,9 @@ public class HomoZombicus {
                                 Character victim = oVictim.get();
                                 Point myPos = st.positionAt(time.sample());
                                 if (Vector.distance(victim.pos, myPos) < 10)
-                                    return Optional.<Integer>of(victim.id);
+                                    return Optional.of(victim.id);
                             }
-                            return Optional.<Integer>empty();
+                            return Optional.empty();
                         }
                 ));
     }
