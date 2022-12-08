@@ -1,19 +1,23 @@
 package nz.sodium;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-public class TestStream extends TestCase {
-    @Override
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class TestStream {
+    @AfterEach
     protected void tearDown() throws Exception {
         System.gc();
         Thread.sleep(100);
     }
 
+    @Test
     public void testSendStream() {
         StreamSink<Integer> e = new StreamSink();
         List<Integer> out = new ArrayList();
@@ -25,6 +29,7 @@ public class TestStream extends TestCase {
         assertEquals(List.of(5), out);
     }
 
+    @Test
     public void testMap() {
         StreamSink<Integer> e = new StreamSink();
         Stream<String> m = e.map(x -> Integer.toString(x));
@@ -35,6 +40,7 @@ public class TestStream extends TestCase {
         assertEquals(List.of("5"), out);
     }
 
+    @Test
     public void testMapTo() {
         StreamSink<Integer> e = new StreamSink();
         Stream<String> m = e.mapTo("fusebox");
@@ -46,6 +52,7 @@ public class TestStream extends TestCase {
         assertEquals(Arrays.asList("fusebox", "fusebox"), out);
     }
 
+    @Test
     public void testMergeNonSimultaneous() {
         StreamSink<Integer> e1 = new StreamSink();
         StreamSink<Integer> e2 = new StreamSink();
@@ -58,6 +65,7 @@ public class TestStream extends TestCase {
         assertEquals(Arrays.asList(7, 9, 8), out);
     }
 
+    @Test
     public void testMergeSimultaneous() {
         StreamSink<Integer> s1 = new StreamSink((l, r) -> r);
         StreamSink<Integer> s2 = new StreamSink((l, r) -> r);
@@ -92,6 +100,7 @@ public class TestStream extends TestCase {
         assertEquals(Arrays.asList(60, 9, 90, 90, 90), out);
     }
 
+    @Test
     public void testCoalesce() {
         StreamSink<Integer> s = new StreamSink<>(Integer::sum);
         List<Integer> out = new ArrayList();
@@ -108,6 +117,7 @@ public class TestStream extends TestCase {
         assertEquals(Arrays.asList(2, 48), out);
     }
 
+    @Test
     public void testFilter() {
         StreamSink<Character> e = new StreamSink();
         List<Character> out = new ArrayList();
@@ -119,6 +129,7 @@ public class TestStream extends TestCase {
         assertEquals(Arrays.asList('H', 'I'), out);
     }
 
+    @Test
     public void testFilterOptional() {
         StreamSink<Optional<String>> e = new StreamSink();
         List<String> out = new ArrayList();
@@ -130,6 +141,7 @@ public class TestStream extends TestCase {
         assertEquals(Arrays.asList("tomato", "peach"), out);
     }
 
+    @Test
     public void testLoopStream() {
         final StreamSink<Integer> ea = new StreamSink();
         Stream<Integer> ec = Transaction.run(() -> {
@@ -147,6 +159,7 @@ public class TestStream extends TestCase {
         assertEquals(Arrays.asList(2, 7), out);
     }
 
+    @Test
     public void testGate() {
         StreamSink<Character> ec = new StreamSink();
         CellSink<Boolean> epred = new CellSink(true);
@@ -161,6 +174,7 @@ public class TestStream extends TestCase {
         assertEquals(Arrays.asList('H', 'I'), out);
     }
 
+    @Test
     public void testCollect() {
         StreamSink<Integer> ea = new StreamSink();
         List<Integer> out = new ArrayList();
@@ -177,6 +191,7 @@ public class TestStream extends TestCase {
         assertEquals(Arrays.asList(105, 112, 113, 115, 118), out);
     }
 
+    @Test
     public void testAccum() {
         StreamSink<Integer> ea = new StreamSink();
         List<Integer> out = new ArrayList();
@@ -191,6 +206,7 @@ public class TestStream extends TestCase {
         assertEquals(Arrays.asList(100, 105, 112, 113, 115, 118), out);
     }
 
+    @Test
     public void testOnce() {
         StreamSink<Character> e = new StreamSink();
         List<Character> out = new ArrayList();
@@ -202,6 +218,7 @@ public class TestStream extends TestCase {
         assertEquals(List.of('A'), out);
     }
 
+    @Test
     public void testDefer() {
         StreamSink<Character> e = new StreamSink();
         Cell<Character> b = e.hold(' ');

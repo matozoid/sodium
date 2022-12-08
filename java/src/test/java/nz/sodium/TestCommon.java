@@ -4,14 +4,17 @@
 
 package nz.sodium;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class TestCommon extends TestCase {
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+public class TestCommon {
+
+    @Test
     public void test_Base_send1() {
         StreamSink<String> s = Transaction.run(() -> {
             StreamSink<String> s_ = new StreamSink();
@@ -32,6 +35,7 @@ public class TestCommon extends TestCase {
         assertEquals(Arrays.asList("a", "b"), out);
     }
 
+    @Test
     public void test_Operational_split() {
         StreamSink<List<String>> a = Transaction.run(() -> {
             StreamSink<List<String>> a_ = new StreamSink();
@@ -53,6 +57,7 @@ public class TestCommon extends TestCase {
         assertEquals(Arrays.asList("a", "b"), b_0);
     }
 
+    @Test
     public void test_Operational_defer1() {
         StreamSink<String> a = Transaction.run(() -> {
             StreamSink<String> a_ = new StreamSink();
@@ -84,6 +89,7 @@ public class TestCommon extends TestCase {
         assertEquals(List.of("b"), b_1);
     }
 
+    @Test
     public void test_Operational_defer2() {
         StreamSink<String> a = Transaction.run(() -> {
             StreamSink<String> a_ = new StreamSink();
@@ -120,6 +126,7 @@ public class TestCommon extends TestCase {
         assertEquals(Arrays.asList("B", "b"), c_1);
     }
 
+    @Test
     public void test_Stream_orElse1() {
         StreamSink<Integer> a = Transaction.run(() -> {
             StreamSink<Integer> a_ = new StreamSink();
@@ -176,6 +183,7 @@ public class TestCommon extends TestCase {
         assertEquals(List.of(30), c_3);
     }
 
+    @Test
     public void test_Operational_deferSimultaneous() {
         StreamSink<String> a = Transaction.run(() -> {
             StreamSink<String> a_ = new StreamSink();
