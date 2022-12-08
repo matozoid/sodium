@@ -1,10 +1,6 @@
 package nz.sodium;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Vector;
+import java.util.*;
 
 /**
  * Represents a stream of discrete events/firings containing values of type A.

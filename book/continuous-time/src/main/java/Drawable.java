@@ -1,7 +1,9 @@
-import java.awt.Graphics;
+import java.awt.*;
 
 public class Drawable {
-    public void draw(Graphics g, int ht, Point orig, double scale) {}
+    public void draw(Graphics g, int ht, Point orig, double scale) {
+    }
+
     public final Drawable append(Drawable second) {
         Drawable first = this;
         return new Drawable() {

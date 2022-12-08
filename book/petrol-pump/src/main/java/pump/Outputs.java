@@ -1,6 +1,8 @@
 package pump;
 
-import nz.sodium.*;
+import nz.sodium.Cell;
+import nz.sodium.Stream;
+import nz.sodium.Unit;
 
 public class Outputs {
     private Outputs(
@@ -51,41 +53,49 @@ public class Outputs {
                 saleQuantityLCD, priceLCD1, priceLCD2, priceLCD3, sBeep,
                 sSaleComplete);
     }
+
     public Outputs setPresetLCD(Cell<String> presetLCD) {
         return new Outputs(delivery, presetLCD, saleCostLCD,
                 saleQuantityLCD, priceLCD1, priceLCD2, priceLCD3, sBeep,
                 sSaleComplete);
     }
+
     public Outputs setSaleCostLCD(Cell<String> saleCostLCD) {
         return new Outputs(delivery, presetLCD, saleCostLCD,
                 saleQuantityLCD, priceLCD1, priceLCD2, priceLCD3, sBeep,
                 sSaleComplete);
     }
+
     public Outputs setSaleQuantityLCD(Cell<String> saleQuantityLCD) {
         return new Outputs(delivery, presetLCD, saleCostLCD,
                 saleQuantityLCD, priceLCD1, priceLCD2, priceLCD3, sBeep,
                 sSaleComplete);
     }
+
     public Outputs setPriceLCD1(Cell<String> priceLCD1) {
         return new Outputs(delivery, presetLCD, saleCostLCD,
                 saleQuantityLCD, priceLCD1, priceLCD2, priceLCD3, sBeep,
                 sSaleComplete);
     }
+
     public Outputs setPriceLCD2(Cell<String> priceLCD2) {
         return new Outputs(delivery, presetLCD, saleCostLCD,
                 saleQuantityLCD, priceLCD1, priceLCD2, priceLCD3, sBeep,
                 sSaleComplete);
     }
+
     public Outputs setPriceLCD3(Cell<String> priceLCD3) {
         return new Outputs(delivery, presetLCD, saleCostLCD,
                 saleQuantityLCD, priceLCD1, priceLCD2, priceLCD3, sBeep,
                 sSaleComplete);
     }
+
     public Outputs setBeep(Stream<Unit> sBeep) {
         return new Outputs(delivery, presetLCD, saleCostLCD,
                 saleQuantityLCD, priceLCD1, priceLCD2, priceLCD3, sBeep,
                 sSaleComplete);
     }
+
     public Outputs setSaleComplete(Stream<Sale> sSaleComplete) {
         return new Outputs(delivery, presetLCD, saleCostLCD,
                 saleQuantityLCD, priceLCD1, priceLCD2, priceLCD3, sBeep,

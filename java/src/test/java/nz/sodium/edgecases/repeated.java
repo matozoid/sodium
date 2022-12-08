@@ -1,4 +1,9 @@
-import nz.sodium.*;
+package nz.sodium.edgecases;
+
+import nz.sodium.Stream;
+import nz.sodium.StreamLoop;
+import nz.sodium.StreamSink;
+import nz.sodium.Transaction;
 
 public class repeated {
     public static void main(String[] args) {

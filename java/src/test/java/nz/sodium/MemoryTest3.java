@@ -1,19 +1,15 @@
 package nz.sodium;
 
-public class MemoryTest3
-{
-    public static void main(String[] args)
-    {
+public class MemoryTest3 {
+    public static void main(String[] args) {
         new Thread() {
-            public void run()
-            {
+            public void run() {
                 try {
                     while (true) {
-                        System.out.println("memory "+Runtime.getRuntime().totalMemory());
+                        System.out.println("memory " + Runtime.getRuntime().totalMemory());
                         Thread.sleep(5000);
                     }
-                }
-                catch (InterruptedException e) {
+                } catch (InterruptedException e) {
                     System.out.println(e.toString());
                 }
             }

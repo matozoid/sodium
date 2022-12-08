@@ -1,10 +1,13 @@
 package fridgets;
 
-import java.awt.Dimension;
+import nz.sodium.Cell;
+import nz.sodium.Lambda5;
+import nz.sodium.Stream;
+
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.Optional;
-import nz.sodium.*;
 
 public abstract class Fridget {
     public static class Output {
@@ -16,18 +19,22 @@ public abstract class Fridget {
             this.desiredSize = desiredSize;
             this.sChangeFocus = sChangeFocus;
         }
+
         public Cell<Drawable> drawable;
         public Cell<Dimension> desiredSize;
         public Stream<Long> sChangeFocus;
     }
+
     public Fridget(Lambda5<
             Cell<Optional<Dimension>>, Stream<MouseEvent>,
             Stream<KeyEvent>, Cell<Long>, Supply, Output> reify_) {
         this.reify_ = reify_;
     }
+
     private final Lambda5<
             Cell<Optional<Dimension>>, Stream<MouseEvent>,
             Stream<KeyEvent>, Cell<Long>, Supply, Output> reify_;
+
     public final Output reify(
             Cell<Optional<Dimension>> size,
             Stream<MouseEvent> sMouse, Stream<KeyEvent> sKey,

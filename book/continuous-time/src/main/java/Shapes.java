@@ -1,18 +1,18 @@
-import java.awt.Color;
-import java.awt.Graphics;
-import nz.sodium.*;
+import nz.sodium.Cell;
+
+import java.awt.*;
 
 public class Shapes {
     public static Cell<Drawable> circle(Color color) {
         return new Cell<Drawable>(new Drawable() {
             public void draw(Graphics g, int ht, Point offset, double sc) {
-                int rad = (int)sc;
-                int x = (int)offset.x;
-                int y = (int)offset.y;
+                int rad = (int) sc;
+                int x = (int) offset.x;
+                int y = (int) offset.y;
                 g.setColor(color);
-                g.fillOval(x-rad, (ht-1-y)-rad, rad*2, rad*2);
+                g.fillOval(x - rad, (ht - 1 - y) - rad, rad * 2, rad * 2);
                 g.setColor(Color.black);
-                g.drawOval(x-rad, (ht-1-y)-rad, rad*2, rad*2);
+                g.drawOval(x - rad, (ht - 1 - y) - rad, rad * 2, rad * 2);
             }
         });
     }

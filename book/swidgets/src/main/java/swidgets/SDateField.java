@@ -1,21 +1,24 @@
 package swidgets;
 
-import nz.sodium.*;
+import nz.sodium.Cell;
+
+import javax.swing.*;
+import java.awt.*;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Optional;
 import java.util.Vector;
-import java.awt.FlowLayout;
-import javax.swing.JComponent;
 
 public class SDateField extends JComponent {
     public SDateField() {
         this(new GregorianCalendar());
     }
-    private static final String[] months = new String[] {
-        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+
+    private static final String[] months = new String[]{
+            "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
     };
+
     public SDateField(Calendar cal) {
         Vector<Integer> years = new Vector<>();
         Calendar now = new GregorianCalendar();
@@ -35,19 +38,20 @@ public class SDateField extends JComponent {
         add(month);
         add(day);
         Cell<Optional<Integer>> monthIndex = month.selectedItem.map(
-            ostr -> {
-                if (ostr.isPresent()) {
-                    for (int i = 0; i < months.length; i++)
-                        if (months[i].equals(ostr.get()))
-                            return Optional.of(i);
-                }
-                return Optional.empty();
-            });
+                ostr -> {
+                    if (ostr.isPresent()) {
+                        for (int i = 0; i < months.length; i++)
+                            if (months[i].equals(ostr.get()))
+                                return Optional.of(i);
+                    }
+                    return Optional.empty();
+                });
         date = year.selectedItem.lift(monthIndex, day.selectedItem,
-        	(oy, om, od) -> oy.isPresent() && om.isPresent() && od.isPresent()
-                ? new GregorianCalendar(oy.get(), om.get(), od.get())
-                : new GregorianCalendar());
+                (oy, om, od) -> oy.isPresent() && om.isPresent() && od.isPresent()
+                        ? new GregorianCalendar(oy.get(), om.get(), od.get())
+                        : new GregorianCalendar());
     }
+
     public final Cell<Calendar> date;
 }
 

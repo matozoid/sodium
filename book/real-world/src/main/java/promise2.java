@@ -1,4 +1,6 @@
-import nz.sodium.*;
+import nz.sodium.StreamSink;
+import nz.sodium.Transaction;
+
 import java.util.ArrayList;
 
 public class promise2 {

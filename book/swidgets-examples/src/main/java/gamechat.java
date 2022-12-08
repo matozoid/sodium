@@ -1,7 +1,9 @@
+import nz.sodium.Stream;
+import swidgets.SButton;
+import swidgets.STextField;
+
 import javax.swing.*;
-import java.awt.FlowLayout;
-import swidgets.*;
-import nz.sodium.*;
+import java.awt.*;
 
 public class gamechat {
     public static void main(String[] args) {
@@ -11,7 +13,7 @@ public class gamechat {
         SButton onegai = new SButton("Onegai shimasu");
         SButton thanks = new SButton("Thank you");
         Stream<String> sOnegai = onegai.sClicked.map(u ->
-            "Onegai shimasu");
+                "Onegai shimasu");
         Stream<String> sThanks = thanks.sClicked.map(u -> "Thank you");
         Stream<String> sCanned = sOnegai.orElse(sThanks);
         STextField text = new STextField(sCanned, "");

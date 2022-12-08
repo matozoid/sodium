@@ -1,7 +1,8 @@
+import swidgets.SLabel;
+import swidgets.STextField;
+
 import javax.swing.*;
-import java.awt.FlowLayout;
-import swidgets.*;
-import nz.sodium.*;
+import java.awt.*;
 
 public class label {
     public static void main(String[] args) {

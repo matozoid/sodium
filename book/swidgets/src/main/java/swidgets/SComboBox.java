@@ -1,10 +1,10 @@
 package swidgets;
 
-import nz.sodium.*;
+import nz.sodium.Cell;
+import nz.sodium.CellSink;
 
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import javax.swing.*;
+import java.awt.event.ItemEvent;
 import java.util.Optional;
 import java.util.Vector;
 

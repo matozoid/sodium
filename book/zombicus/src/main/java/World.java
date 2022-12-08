@@ -1,6 +1,4 @@
-import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.Polygon;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,19 +15,17 @@ public class World {
     public final Dimension windowSize;
     private final List<Polygon> holes;
 
-    public boolean hitsHole(Point pt)
-    {
+    public boolean hitsHole(Point pt) {
         for (Polygon o : holes)
             if (o.contains(pt))
                 return true;
         return false;
     }
 
-    public boolean hitsObstacle(Point pt)
-    {
+    public boolean hitsObstacle(Point pt) {
         return hitsHole(pt) ||
-               pt.x < 31 || pt.x >= (windowSize.width - 31) ||
-               pt.y < 73 || pt.y >= (windowSize.height - 23);
+                pt.x < 31 || pt.x >= (windowSize.width - 31) ||
+                pt.y < 73 || pt.y >= (windowSize.height - 23);
     }
 }
 

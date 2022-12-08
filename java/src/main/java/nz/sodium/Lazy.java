@@ -1,7 +1,5 @@
 package nz.sodium;
 
-import java.util.Optional;
-
 /**
  * A representation for a value that may not be available until the current
  * transaction is closed.

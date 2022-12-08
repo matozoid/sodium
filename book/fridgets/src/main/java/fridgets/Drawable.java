@@ -1,9 +1,11 @@
 package fridgets;
 
-import java.awt.Graphics;
+import java.awt.*;
 
 public class Drawable {
-    public void draw(Graphics g) {}
+    public void draw(Graphics g) {
+    }
+
     public final Drawable append(Drawable second) {
         Drawable first = this;
         return new Drawable() {

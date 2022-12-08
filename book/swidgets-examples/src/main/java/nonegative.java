@@ -1,7 +1,11 @@
+import nz.sodium.CellLoop;
+import nz.sodium.Stream;
+import nz.sodium.Transaction;
+import swidgets.SButton;
+import swidgets.SLabel;
+
 import javax.swing.*;
-import java.awt.FlowLayout;
-import swidgets.*;
-import nz.sodium.*;
+import java.awt.*;
 
 public class nonegative {
     public static void main(String[] args) {
@@ -11,7 +15,7 @@ public class nonegative {
         Transaction.runVoid(() -> {
             CellLoop<Integer> value = new CellLoop<>();
             SLabel lblValue = new SLabel(
-                         value.map(i -> Integer.toString(i)));
+                    value.map(i -> Integer.toString(i)));
             SButton plus = new SButton("+");
             SButton minus = new SButton("-");
             view.add(lblValue);
@@ -22,7 +26,7 @@ public class nonegative {
             Stream<Integer> sDelta = sPlusDelta.orElse(sMinusDelta);
             Stream<Integer> sUpdate = sDelta.snapshot(value,
                     Integer::sum
-                ).filter(n -> n >= 0);
+            ).filter(n -> n >= 0);
             value.loop(sUpdate.hold(0));
         });
         view.setSize(400, 160);

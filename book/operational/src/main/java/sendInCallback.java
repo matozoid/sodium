@@ -1,4 +1,5 @@
-import nz.sodium.*;
+import nz.sodium.Listener;
+import nz.sodium.StreamSink;
 
 public class sendInCallback {
     public static void main(String[] args) {
@@ -7,7 +8,9 @@ public class sendInCallback {
         // Should throw an exception because you're not allowed to use send() inside
         // a callback.
         Listener l = sX.listen(x -> sY.send(x)).append(
-                     sY.listen(y -> { System.out.println(y); }));
+                sY.listen(y -> {
+                    System.out.println(y);
+                }));
         sX.send(1);
         sX.send(2);
         sX.send(3);

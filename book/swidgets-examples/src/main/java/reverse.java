@@ -1,7 +1,9 @@
+import nz.sodium.Cell;
+import swidgets.SLabel;
+import swidgets.STextField;
+
 import javax.swing.*;
-import java.awt.FlowLayout;
-import swidgets.*;
-import nz.sodium.*;
+import java.awt.*;
 
 public class reverse {
     public static void main(String[] args) {
@@ -10,7 +12,7 @@ public class reverse {
         frame.setLayout(new FlowLayout());
         STextField msg = new STextField("Hello");
         Cell<String> reversed = msg.text.map(t ->
-            new StringBuilder(t).reverse().toString());
+                new StringBuilder(t).reverse().toString());
         SLabel lbl = new SLabel(reversed);
         frame.add(msg);
         frame.add(lbl);

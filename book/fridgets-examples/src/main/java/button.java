@@ -1,6 +1,10 @@
-import fridgets.*;
+import fridgets.FrButton;
+import fridgets.FrView;
+import nz.sodium.Cell;
+import nz.sodium.Listener;
+import nz.sodium.Transaction;
+
 import javax.swing.*;
-import nz.sodium.*;
 
 public class button {
     public static void main(String[] args) {
@@ -9,7 +13,7 @@ public class button {
         frame.setContentPane(Transaction.run(() -> {
             FrButton b = new FrButton(new Cell<>("OK"));
             Listener l = b.sClicked.listen(
-                u -> System.out.println("clicked!"));
+                    u -> System.out.println("clicked!"));
             return new FrView(frame, b) {
                 public void removeNotify() {
                     super.removeNotify();
@@ -17,7 +21,7 @@ public class button {
                 }
             };
         }));
-        frame.setSize(360,120);
+        frame.setSize(360, 120);
         frame.setVisible(true);
     }
 }

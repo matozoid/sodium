@@ -1,7 +1,7 @@
+import nz.sodium.Transaction;
+
 import javax.swing.*;
 import java.awt.*;
-
-import nz.sodium.*;
 
 public class spinme {
     public static void main(String[] args) {

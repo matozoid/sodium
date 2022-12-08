@@ -1,19 +1,15 @@
 package nz.sodium;
 
-public class MemoryTest4
-{
-    public static void main(String[] args)
-    {
+public class MemoryTest4 {
+    public static void main(String[] args) {
         new Thread() {
-            public void run()
-            {
+            public void run() {
                 try {
                     while (true) {
-                        System.out.println("memory "+Runtime.getRuntime().totalMemory());
+                        System.out.println("memory " + Runtime.getRuntime().totalMemory());
                         Thread.sleep(5000);
                     }
-                }
-                catch (InterruptedException e) {
+                } catch (InterruptedException e) {
                     System.out.println(e.toString());
                 }
             }
@@ -21,7 +17,7 @@ public class MemoryTest4
 
         StreamSink<Integer> et = new StreamSink<Integer>();
         StreamSink<Integer> eChange = new StreamSink<Integer>();
-        Cell<Stream<Integer>> oout = eChange.map(x -> (Stream<Integer>)et).hold((Stream<Integer>)et);
+        Cell<Stream<Integer>> oout = eChange.map(x -> (Stream<Integer>) et).hold((Stream<Integer>) et);
         Stream<Integer> out = Cell.switchS(oout);
         Listener l = out.listen(tt -> {
             System.out.println(tt);

@@ -1,4 +1,4 @@
-import java.awt.Point;
+import java.awt.*;
 
 public class Character {
     public Character(int id, CharacterType type, Point pos,
@@ -8,6 +8,7 @@ public class Character {
         this.pos = pos;
         this.velocity = velocity;
     }
+
     public final int id;
     public final CharacterType type;
     public final Point pos;

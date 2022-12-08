@@ -1,7 +1,10 @@
 import fridgets.*;
+import nz.sodium.Cell;
+import nz.sodium.Listener;
+import nz.sodium.Transaction;
+
 import javax.swing.*;
 import java.util.ArrayList;
-import nz.sodium.*;
 
 public class textfield {
     public static void main(String[] args) {
@@ -16,23 +19,23 @@ public class textfield {
             fridgets.add(ok);
             fridgets.add(cancel);
             Fridget buttons = new FrFlow(FrFlow.Direction.HORIZONTAL,
-                fridgets);
+                    fridgets);
             fridgets = new ArrayList<>();
             fridgets.add(firstName);
             fridgets.add(lastName);
             fridgets.add(buttons);
             Fridget dialog =
-                new FrFlow(FrFlow.Direction.VERTICAL, fridgets);
+                    new FrFlow(FrFlow.Direction.VERTICAL, fridgets);
             Listener l =
-                ok.sClicked
-                      .map(u -> firstName.text.sample()+" "+
-                                lastName.text.sample())
-                      .listen(name -> System.out.println("OK: "+name))
-                  .append(
-                      cancel.sClicked.listen(
-                          u -> System.out.println("Cancel")
-                      )
-                  );
+                    ok.sClicked
+                            .map(u -> firstName.text.sample() + " " +
+                                    lastName.text.sample())
+                            .listen(name -> System.out.println("OK: " + name))
+                            .append(
+                                    cancel.sClicked.listen(
+                                            u -> System.out.println("Cancel")
+                                    )
+                            );
             return new FrView(frame, dialog) {
                 public void removeNotify() {
                     super.removeNotify();
@@ -40,7 +43,7 @@ public class textfield {
                 }
             };
         }));
-        frame.setSize(360,120);
+        frame.setSize(360, 120);
         frame.setVisible(true);
     }
 }

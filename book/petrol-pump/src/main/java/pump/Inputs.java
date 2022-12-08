@@ -1,6 +1,8 @@
 package pump;
 
-import nz.sodium.*;
+import nz.sodium.Cell;
+import nz.sodium.Stream;
+import nz.sodium.Unit;
 
 public class Inputs {
     public Inputs(

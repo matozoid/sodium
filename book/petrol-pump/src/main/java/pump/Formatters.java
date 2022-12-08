@@ -7,8 +7,8 @@ import java.util.Locale;
 public class Formatters {
     public static DecimalFormat priceFmt = new DecimalFormat("#0.0000000",
             new DecimalFormatSymbols(Locale.US));
-    public static String formatPrice(double price)
-    {
+
+    public static String formatPrice(double price) {
         int lcdSize = 4;
         String text = priceFmt.format(price);
         int i = 0;
@@ -25,15 +25,15 @@ public class Formatters {
 
     public static DecimalFormat costFmt = new DecimalFormat("#0.00",
             new DecimalFormatSymbols(Locale.US));
-    public static String formatSaleCost(double cost)
-    {
+
+    public static String formatSaleCost(double cost) {
         return costFmt.format(cost);
     }
 
     public static DecimalFormat quantityFmt = new DecimalFormat("#0.00",
             new DecimalFormatSymbols(Locale.US));
-    public static String formatSaleQuantity(double quantity)
-    {
+
+    public static String formatSaleQuantity(double quantity) {
         return quantityFmt.format(quantity);
     }
 }

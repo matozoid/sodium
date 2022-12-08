@@ -1,34 +1,22 @@
 package pump;
 
+import nz.sodium.*;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.imageio.*;
 import java.applet.Applet;
 import java.applet.AudioClip;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
-import java.awt.event.MouseMotionAdapter;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.GridLayout;
-import java.awt.Point;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Graphics;
-import java.awt.Rectangle;
-import java.awt.image.*;
-import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Arrays;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Optional;
 import java.util.List;
-
-import nz.sodium.*;
+import java.util.Optional;
 
 
 class PumpFace extends Component {
@@ -49,7 +37,6 @@ class PumpFace extends Component {
     public final Cell<Rectangle>[] nozzleRects = new Cell[3];
 
     PumpFace(
-            URL rootURL,
             StreamSink<Point> sClick,
             Cell<List<Integer>> presetLCD,
             Cell<List<Integer>> saleCostLCD,
@@ -358,13 +345,13 @@ public class PetrolPump extends JFrame {
                 Stream<Unit> sBeep = Cell.switchS(outputs.map(o -> o.sBeep));
                 Stream<Sale> sSaleComplete = Cell.switchS(outputs.map(o -> o.sSaleComplete));
 
-                AudioClip beepClip = Applet.newAudioClip(getClass().getResource( "/sounds/beep.wav"));
+                AudioClip beepClip = Applet.newAudioClip(getClass().getResource("/sounds/beep.wav"));
                 l = l.append(sBeep.listen(u -> {
                     System.out.println("BEEP!");
                     beepClip.play();
                 }));
 
-                AudioClip fastRumble = Applet.newAudioClip(getClass().getResource( "/sounds/fast.wav"));
+                AudioClip fastRumble = Applet.newAudioClip(getClass().getResource("/sounds/fast.wav"));
                 AudioClip slowRumble = Applet.newAudioClip(getClass().getResource("/sounds/slow.wav"));
 
                 l = l.append(changes(delivery).listen(d -> {
@@ -389,7 +376,7 @@ public class PetrolPump extends JFrame {
                 }));
 
                 PumpFace face = new PumpFace(
-                        rootURL, sClick,
+                        sClick,
                         format7Seg(presetLCD, 5),
                         format7Seg(saleCostLCD, 5),
                         format7Seg(saleQuantityLCD, 5),

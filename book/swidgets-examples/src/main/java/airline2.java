@@ -1,20 +1,26 @@
+import nz.sodium.Cell;
+import nz.sodium.Lambda2;
+import swidgets.SButton;
+import swidgets.SDateField;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.Calendar;
-import swidgets.*;
-import nz.sodium.*;
 
 class Rule {
     public Rule(Lambda2<Calendar, Calendar, Boolean> f) {
         this.f = f;
     }
+
     public final Lambda2<Calendar, Calendar, Boolean> f;
+
     public Cell<Boolean> reify(Cell<Calendar> dep, Cell<Calendar> ret) {
         return dep.lift(ret, f);
     }
+
     public Rule and(Rule other) {
         return new Rule(
-            (d, r) -> this.f.apply(d, r) && other.f.apply(d, r)
+                (d, r) -> this.f.apply(d, r) && other.f.apply(d, r)
         );
     }
 }
@@ -24,6 +30,7 @@ public class airline2 {
         int day = dt.get(Calendar.DAY_OF_MONTH);
         return day == 4 || day == 14 || day == 24;
     }
+
     public static void main(String[] args) {
         JFrame view = new JFrame("airline2");
         view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

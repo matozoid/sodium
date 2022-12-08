@@ -1,7 +1,9 @@
+import nz.sodium.Stream;
+import swidgets.SButton;
+import swidgets.STextField;
+
 import javax.swing.*;
-import java.awt.FlowLayout;
-import swidgets.*;
-import nz.sodium.*;
+import java.awt.*;
 
 public class clearfield {
     public static void main(String[] args) {

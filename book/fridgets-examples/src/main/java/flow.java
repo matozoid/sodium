@@ -1,7 +1,13 @@
-import fridgets.*;
+import fridgets.FrButton;
+import fridgets.FrFlow;
+import fridgets.FrView;
+import fridgets.Fridget;
+import nz.sodium.Cell;
+import nz.sodium.Listener;
+import nz.sodium.Transaction;
+
 import javax.swing.*;
 import java.util.ArrayList;
-import nz.sodium.*;
 
 public class flow {
     public static void main(String[] args) {
@@ -14,15 +20,15 @@ public class flow {
             fridgets.add(ok);
             fridgets.add(cancel);
             Fridget dialog = new FrFlow(FrFlow.Direction.HORIZONTAL,
-                fridgets);
+                    fridgets);
             Listener l =
-                ok.sClicked.listen(
-                    u -> System.out.println("OK"))
-                  .append(
-                      cancel.sClicked.listen(
-                          u -> System.out.println("Cancel")
-                      )
-                  );
+                    ok.sClicked.listen(
+                                    u -> System.out.println("OK"))
+                            .append(
+                                    cancel.sClicked.listen(
+                                            u -> System.out.println("Cancel")
+                                    )
+                            );
             return new FrView(frame, dialog) {
                 public void removeNotify() {
                     super.removeNotify();
@@ -30,7 +36,7 @@ public class flow {
                 }
             };
         }));
-        frame.setSize(360,120);
+        frame.setSize(360, 120);
         frame.setVisible(true);
     }
 }

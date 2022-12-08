@@ -1,7 +1,9 @@
+import nz.sodium.Cell;
+import swidgets.SLabel;
+import swidgets.STextField;
+
 import javax.swing.*;
-import java.awt.FlowLayout;
-import swidgets.*;
-import nz.sodium.*;
+import java.awt.*;
 
 public class add {
     public static void main(String[] args) {
@@ -20,6 +22,7 @@ public class add {
         frame.setSize(400, 160);
         frame.setVisible(true);
     }
+
     private static Integer parseInt(String t) {
         try {
             return Integer.parseInt(t);

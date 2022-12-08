@@ -1,3 +1,3 @@
 package pump;
 
-public enum Fuel { ONE, TWO, THREE }
+public enum Fuel {ONE, TWO, THREE}

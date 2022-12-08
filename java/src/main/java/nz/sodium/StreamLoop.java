@@ -1,15 +1,14 @@
 package nz.sodium;
 
 /**
- * A forward reference for a {@link Stream} equivalent to the Stream that is referenced. 
+ * A forward reference for a {@link Stream} equivalent to the Stream that is referenced.
  */
 public class StreamLoop<A> extends StreamWithSend<A> {
     boolean assigned = false;
 
-    public StreamLoop()
-    {
-    	if (Transaction.getCurrentTransaction() == null)
-    	    throw new RuntimeException("StreamLoop/CellLoop must be used within an explicit transaction");
+    public StreamLoop() {
+        if (Transaction.getCurrentTransaction() == null)
+            throw new RuntimeException("StreamLoop/CellLoop must be used within an explicit transaction");
     }
 
     /**
@@ -18,8 +17,7 @@ public class StreamLoop<A> extends StreamWithSend<A> {
      * This requires you to create an explicit transaction with {@link Transaction#run(Lambda0)}
      * or {@link Transaction#runVoid(Runnable)}.
      */
-    public void loop(final Stream<A> ea_out)
-    {
+    public void loop(final Stream<A> ea_out) {
         if (assigned)
             throw new RuntimeException("StreamLoop looped more than once");
         assigned = true;

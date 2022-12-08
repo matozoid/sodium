@@ -11,15 +11,15 @@ public final class CellSink<A> extends Cell<A> {
      * sent in the same transaction, the last one is used.
      */
     public CellSink(A initValue) {
-    	super(new StreamSink<>(), initValue);
+        super(new StreamSink<>(), initValue);
     }
 
     /**
      * Construct a writable cell with the specified initial value. If multiple values are
      * sent in the same transaction, the specified function is used to combine them.
      */
-    public CellSink(A initValue, Lambda2<A,A,A> f) {
-    	super(new StreamSink<>(f), initValue);
+    public CellSink(A initValue, Lambda2<A, A, A> f) {
+        super(new StreamSink<>(f), initValue);
     }
 
     /**
@@ -27,10 +27,10 @@ public final class CellSink<A> extends Cell<A> {
      * handlers registered with {@link Stream#listen(Handler)} or {@link Cell#listen(Handler)}.
      * An exception will be thrown, because CellSink is for interfacing I/O to FRP only.
      * You are not meant to use this to define your own primitives.
+     *
      * @param a Value to push into the cell.
      */
-    public void send(A a)
-    {
-        ((StreamSink<A>)str).send(a);
+    public void send(A a) {
+        ((StreamSink<A>) str).send(a);
     }
 }

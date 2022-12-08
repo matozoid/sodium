@@ -6,8 +6,7 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-public class STextArea extends JTextArea
-{
+public class STextArea extends JTextArea {
     public STextArea(String initText, int rows, int columns) {
         this(new Stream<>(), initText, rows, columns);
     }
@@ -83,9 +82,11 @@ public class STextArea extends JTextArea
             public void changedUpdate(DocumentEvent e) {
                 update();
             }
+
             public void removeUpdate(DocumentEvent e) {
                 update();
             }
+
             public void insertUpdate(DocumentEvent e) {
                 update();
             }
@@ -103,15 +104,15 @@ public class STextArea extends JTextArea
             setText(text);
             sDecrement.send(-1);
         })).append(
-            Operational.updates(enabled).listen(
-                ena -> {
-                    if (SwingUtilities.isEventDispatchThread())
-                        this.setEnabled(ena);
-                    else {
-                        SwingUtilities.invokeLater(() -> this.setEnabled(ena));
-                    }
-                }
-            )
+                Operational.updates(enabled).listen(
+                        ena -> {
+                            if (SwingUtilities.isEventDispatchThread())
+                                this.setEnabled(ena);
+                            else {
+                                SwingUtilities.invokeLater(() -> this.setEnabled(ena));
+                            }
+                        }
+                )
         );
     }
 

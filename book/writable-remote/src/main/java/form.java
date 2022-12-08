@@ -1,49 +1,65 @@
-import swidgets.*;
 import nz.sodium.*;
-import java.util.Optional;
-import java.awt.FlowLayout;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
+import swidgets.SButton;
+import swidgets.STextField;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import javax.swing.*;
 
 class Date {
     public Date(int year, int month, int day) {
-        this.year = year; this.month = month; this.day = day; }
+        this.year = year;
+        this.month = month;
+        this.day = day;
+    }
+
     public final int year, month, day;
+
     public final Date setYear(int year_) {
-                                return new Date(year_, month,  day); }
+        return new Date(year_, month, day);
+    }
+
     public final Date setMonth(int month_) {
-                                return new Date(year,  month_, day); }
+        return new Date(year, month_, day);
+    }
+
     public final Date setDay(int day_) {
-                                return new Date(year,  month,  day_); }
-    public String toString() { return year+"."+month+"."+day; }
+        return new Date(year, month, day_);
+    }
+
+    public String toString() {
+        return year + "." + month + "." + day;
+    }
 }
 
 class VTextField extends STextField {
     public VTextField(Value<String> v, int width) {
         this(new StreamLoop<String>(), v, width);
     }
+
     private VTextField(StreamLoop<String> sRemoteWrite, Value<String> v,
-                                                           int width) {
+                       int width) {
         this(sRemoteWrite, v.construct(sRemoteWrite), width);
     }
+
     private VTextField(StreamLoop<String> sRemoteWrite,
-                   ValueOutput<String> outRemote, int width) {
+                       ValueOutput<String> outRemote, int width) {
         super(
-            Stream.filterOptional(Operational.value(outRemote.value)),
-            "",
-            width,
-            outRemote.value.map(oV -> oV.isPresent())
+                Stream.filterOptional(Operational.value(outRemote.value)),
+                "",
+                width,
+                outRemote.value.map(oV -> oV.isPresent())
         );
         sRemoteWrite.loop(sUserChanges);
         this.cleanup = outRemote.cleanup;
     }
+
     public void removeNotify() {
         cleanup.unlisten();
         super.removeNotify();
     }
+
     private Listener cleanup;
 }
 
@@ -55,27 +71,28 @@ public class form {
             SButton newClient = new SButton("Open new client");
             frame.add(newClient);
             BackEnd be = new BackEnd();
-            Value<String> vName    = be.allocate("name", "Joe Bloggs");
+            Value<String> vName = be.allocate("name", "Joe Bloggs");
             Value<Date> vBirthDate = be.allocate("birthDate",
-                new Date(1980, 5, 1));
+                    new Date(1980, 5, 1));
 
             Value<Integer> vYear = vBirthDate.lens(
-                d -> d.year,
-                (dt, y) -> dt.setYear(y)
+                    d -> d.year,
+                    (dt, y) -> dt.setYear(y)
             );
             Value<Integer> vMonth = vBirthDate.lens(
-                d -> d.month,
-                (dt, y) -> dt.setMonth(y)
+                    d -> d.month,
+                    (dt, y) -> dt.setMonth(y)
             );
             Value<Integer> vDay = vBirthDate.lens(
-                d -> d.day,
-                (dt, y) -> dt.setDay(y)
+                    d -> d.day,
+                    (dt, y) -> dt.setDay(y)
             );
-            Bijection<Integer,String> toString = new Bijection<>(
+            Bijection<Integer, String> toString = new Bijection<>(
                     i -> Integer.toString(i),
                     s -> {
-                        try { return Integer.parseInt(s); }
-                        catch (NumberFormatException e) {
+                        try {
+                            return Integer.parseInt(s);
+                        } catch (NumberFormatException e) {
                             return 0;
                         }
                     });
@@ -83,7 +100,7 @@ public class form {
             Value<String> vMonthStr = vMonth.map(toString);
             Value<String> vDayStr = vDay.map(toString);
 
-            frame.setSize(500,250);
+            frame.setSize(500, 250);
             frame.setVisible(true);
             return newClient.sClicked.listen(u -> {
                 SwingUtilities.invokeLater(() -> {
@@ -116,7 +133,7 @@ public class form {
                         c.gridx = 3;
                         client.add(new VTextField(vDayStr, 2), c);
 
-                        client.setSize(300,100);
+                        client.setSize(300, 100);
                         client.setVisible(true);
                     });
                     client.addWindowListener(new WindowAdapter() {
@@ -135,7 +152,10 @@ public class form {
         });
         while (true) {
             Runtime.getRuntime().gc();
-            try { Thread.sleep(1000); } catch (InterruptedException e) {}
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+            }
         }
     }
 }

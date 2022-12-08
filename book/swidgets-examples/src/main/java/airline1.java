@@ -1,8 +1,9 @@
+import nz.sodium.Cell;
+import swidgets.SButton;
+import swidgets.SDateField;
+
 import javax.swing.*;
 import java.awt.*;
-import java.util.Calendar;
-import swidgets.*;
-import nz.sodium.*;
 
 public class airline1 {
     public static void main(String[] args) {
@@ -12,7 +13,7 @@ public class airline1 {
         SDateField dep = new SDateField();
         SDateField ret = new SDateField();
         Cell<Boolean> valid = dep.date.lift(ret.date,
-            (d, r) -> d.compareTo(r) <= 0);
+                (d, r) -> d.compareTo(r) <= 0);
         SButton ok = new SButton("OK", valid);
 
         GridBagLayout gridbag = new GridBagLayout();

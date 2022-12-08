@@ -1,20 +1,21 @@
 import nz.sodium.*;
+
 import java.util.Optional;
 
 public class calm {
     public static <A> Stream<A> calm(Stream<A> sA,
-                                           Lazy<Optional<A>> oInit) {
+                                     Lazy<Optional<A>> oInit) {
         return Stream.filterOptional(
-            sA.<Optional<A>,Optional<A>>collectLazy(
-                oInit,
-                (A a, Optional<A> oLastA) -> {
-                    Optional<A> oa = Optional.of(a);
-                    return oa.equals(oLastA)
-                        ? new Tuple2<Optional<A>,Optional<A>>(
-                            Optional.empty(), oLastA)
-                        : new Tuple2<Optional<A>,Optional<A>>(oa, oa);
-                }
-            ));
+                sA.<Optional<A>, Optional<A>>collectLazy(
+                        oInit,
+                        (A a, Optional<A> oLastA) -> {
+                            Optional<A> oa = Optional.of(a);
+                            return oa.equals(oLastA)
+                                    ? new Tuple2<Optional<A>, Optional<A>>(
+                                    Optional.empty(), oLastA)
+                                    : new Tuple2<Optional<A>, Optional<A>>(oa, oa);
+                        }
+                ));
     }
 
     public static <A> Stream<A> calm(Stream<A> sA) {

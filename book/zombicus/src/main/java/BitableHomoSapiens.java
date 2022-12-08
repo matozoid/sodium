@@ -1,8 +1,10 @@
-import java.awt.Point;
+import nz.sodium.Cell;
+import nz.sodium.Stream;
+import nz.sodium.Unit;
+
+import java.awt.*;
 import java.util.List;
 import java.util.Set;
-
-import nz.sodium.*;
 
 public class BitableHomoSapiens {
     public BitableHomoSapiens(

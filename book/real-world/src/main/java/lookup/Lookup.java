@@ -1,23 +1,28 @@
 package lookup;
 
+import nz.sodium.*;
+import swidgets.SButton;
+import swidgets.STextArea;
+import swidgets.STextField;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import swidgets.*;
-import nz.sodium.*;
 import java.util.Optional;
 
-class IsBusy<A,B> {
+class IsBusy<A, B> {
     public IsBusy(Lambda1<Stream<A>, Stream<B>> action, Stream<A> sIn) {
         sOut = action.apply(sIn);
         busy = sOut.map(i -> false)
-                   .orElse(sIn.map(i -> true))
-                   .hold(false);
+                .orElse(sIn.map(i -> true))
+                .hold(false);
     }
+
     public final Stream<B> sOut;
     public final Cell<Boolean> busy;
 }
@@ -30,20 +35,20 @@ public class Lookup {
         Listener l = sWord.listenWeak(wrd -> {
             new Thread() {
                 public void run() {
-                    System.out.println("look up "+wrd);
+                    System.out.println("look up " + wrd);
                     Optional<String> def = Optional.empty();
                     try {
                         Socket s = new Socket(InetAddress.getByName(
-                            "dict.org"), 2628);
+                                "dict.org"), 2628);
                         try {
                             BufferedReader r = new BufferedReader(
-                                new InputStreamReader(s.getInputStream(),
-                                    "UTF-8"));
+                                    new InputStreamReader(s.getInputStream(),
+                                            "UTF-8"));
                             PrintWriter w = new PrintWriter(
-                                new OutputStreamWriter(s.getOutputStream(),
-                                    "UTF-8"));
+                                    new OutputStreamWriter(s.getOutputStream(),
+                                            "UTF-8"));
                             String greeting = r.readLine();
-                            w.println("DEFINE ! "+wrd);
+                            w.println("DEFINE ! " + wrd);
                             w.flush();
                             String result = r.readLine();
                             if (result.startsWith("150"))
@@ -54,24 +59,22 @@ public class Lookup {
                                     String l = r.readLine();
                                     if (l.equals("."))
                                         break;
-                                    b.append(l+"\n");
+                                    b.append(l + "\n");
                                 }
                                 def = Optional.of(b.toString());
+                            } else
+                                System.out.println("ERROR: " + result);
+                        } finally {
+                            try {
+                                s.close();
+                            } catch (IOException e) {
                             }
-                            else
-                                System.out.println("ERROR: "+result);
                         }
-                        finally {
-                            try { s.close(); } catch (IOException e) {}
-                        }
-                    }
-                    catch (UnknownHostException e) {
+                    } catch (UnknownHostException e) {
                         System.out.println(e.toString());
-                    }
-                    catch (IOException e) {
+                    } catch (IOException e) {
                         System.out.println(e.toString());
-                    }
-                    finally {
+                    } finally {
                         sDefinition.send(def);
                     }
                 }
@@ -99,12 +102,12 @@ public class Lookup {
             SButton button = new SButton("look up", enabled);
             Stream<String> sWord = button.sClicked.snapshot(word.text);
             IsBusy<String, Optional<String>> ib =
-                                     new IsBusy<>(lookup, sWord);
+                    new IsBusy<>(lookup, sWord);
             Stream<String> sDefinition = ib.sOut
-                .map(o -> o.orElse("ERROR!"));
+                    .map(o -> o.orElse("ERROR!"));
             Cell<String> definition = sDefinition.hold("");
             Cell<String> output = definition.lift(ib.busy, (def, bsy) ->
-                bsy ? "Looking up..." : def);
+                    bsy ? "Looking up..." : def);
             enabled.loop(ib.busy.map(b -> !b));
             STextArea outputArea = new STextArea(output, enabled);
             view.add(word, c);
@@ -123,7 +126,7 @@ public class Lookup {
                 System.exit(0);
             }
         });
-        view.setSize(500,250);
+        view.setSize(500, 250);
         view.setVisible(true);
     }
 }

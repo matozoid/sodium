@@ -1,4 +1,7 @@
-import nz.sodium.*;
+import nz.sodium.CellSink;
+import nz.sodium.Listener;
+import nz.sodium.Operational;
+import nz.sodium.Transaction;
 
 public class value2 {
     public static void main(String[] args) {

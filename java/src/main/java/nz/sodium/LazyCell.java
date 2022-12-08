@@ -7,8 +7,7 @@ class LazyCell<A> extends Cell<A> {
     }
 
     @Override
-    A sampleNoTrans()
-    {
+    A sampleNoTrans() {
         if (value == null && lazyInitValue != null) {
             value = lazyInitValue.get();
             lazyInitValue = null;

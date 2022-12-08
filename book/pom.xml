@@ -10,7 +10,7 @@
 
     <artifactId>sodium-book</artifactId>
     <packaging>pom</packaging>
-    
+
     <modules>
         <module>battle</module>
         <module>continuous-time</module>

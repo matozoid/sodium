@@ -1,7 +1,10 @@
+import nz.sodium.Cell;
+import nz.sodium.Stream;
+import swidgets.SButton;
+import swidgets.SLabel;
+
 import javax.swing.*;
-import java.awt.FlowLayout;
-import swidgets.*;
-import nz.sodium.*;
+import java.awt.*;
 
 public class redgreen {
     public static void main(String[] args) {

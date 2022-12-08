@@ -1,4 +1,6 @@
-import nz.sodium.*;
+import nz.sodium.Cell;
+import nz.sodium.Listener;
+
 import java.util.Optional;
 
 public class ValueOutput<A> {
@@ -6,6 +8,7 @@ public class ValueOutput<A> {
         this.value = value;
         this.cleanup = cleanup;
     }
+
     public final Cell<Optional<A>> value;
     public final Listener cleanup;
 }

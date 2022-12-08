@@ -1,7 +1,6 @@
 package pump;
 
-public class Sale
-{
+public class Sale {
     public Sale(Fuel fuel, double price, double cost, double quantity) {
         this.fuel = fuel;
         this.price = price;

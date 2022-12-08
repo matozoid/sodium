@@ -17,13 +17,13 @@ public class SButton extends JButton {
         // Do it at the end of the transaction so it works with looped cells
         Transaction.post(() -> setEnabled(enabled.sample()));
         l = Operational.updates(enabled).listen(
-            ena -> {
-                if (SwingUtilities.isEventDispatchThread())
-                    this.setEnabled(ena);
-                else {
-                    SwingUtilities.invokeLater(() -> this.setEnabled(ena));
+                ena -> {
+                    if (SwingUtilities.isEventDispatchThread())
+                        this.setEnabled(ena);
+                    else {
+                        SwingUtilities.invokeLater(() -> this.setEnabled(ena));
+                    }
                 }
-            }
         );
     }
 

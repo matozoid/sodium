@@ -1,22 +1,26 @@
-import java.awt.Dimension;
-import java.awt.Point;
+import nz.sodium.Cell;
+import nz.sodium.CellLoop;
+import nz.sodium.Stream;
+import nz.sodium.Unit;
+
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import nz.sodium.*;
 
 public class characters {
     static <A> Cell<List<A>> sequence(Collection<Cell<A>> in) {
         Cell<List<A>> out = new Cell<>(new ArrayList<A>());
         for (Cell<A> c : in)
             out = out.lift(c,
-                (list0, a) -> {
-                    List<A> list = new ArrayList<A>(list0);
-                    list.add(a);
-                    return list;
-                });
+                    (list0, a) -> {
+                        List<A> list = new ArrayList<A>(list0);
+                        list.add(a);
+                        return list;
+                    });
         return out;
     }
+
     static Cell<List<Character>> createCharacters(
             Cell<Double> time, Stream<Unit> sTick, World world,
             Cell<List<Character>> scene) {
@@ -27,31 +31,30 @@ public class characters {
                 Point pos0 = new Point(x, y);
                 if (id != 3 && id != 6 && id != 7) {
                     HomoSapiens h = new HomoSapiens(world, id, pos0,
-                        time, sTick);
+                            time, sTick);
                     chars.add(h.character);
-                }
-                else {
+                } else {
                     HomoZombicus z = new HomoZombicus(id, pos0,
-                        time, sTick, scene);
+                            time, sTick, scene);
                     chars.add(z.character);
                 }
                 id++;
             }
         return sequence(chars);
     }
-    public static void main(String[] args)
-    {
+
+    public static void main(String[] args) {
         Animate.animate(
-            "Zombicus characters",
-            (Cell<Double> time, Stream<Unit> sTick,
-                                            Dimension windowSize) -> {
-                World world = new World(windowSize);
-                CellLoop<List<Character>> scene = new CellLoop<>();
-                Cell<List<Character>> scene_ = createCharacters(
-                    time, sTick, world, scene);
-                scene.loop(scene_);
-                return scene;
-            }
+                "Zombicus characters",
+                (Cell<Double> time, Stream<Unit> sTick,
+                 Dimension windowSize) -> {
+                    World world = new World(windowSize);
+                    CellLoop<List<Character>> scene = new CellLoop<>();
+                    Cell<List<Character>> scene_ = createCharacters(
+                            time, sTick, world, scene);
+                    scene.loop(scene_);
+                    return scene;
+                }
         );
     }
 }

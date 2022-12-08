@@ -1,24 +1,14 @@
-import javax.imageio.*;
+import nz.sodium.*;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseMotionAdapter;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Point;
-import java.awt.Polygon;
-import java.awt.Toolkit;
-import java.awt.image.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import nz.sodium.*;
 
 public class Animate extends JPanel {
     private final Dimension windowSize = new Dimension(700, 500);
@@ -34,15 +24,14 @@ public class Animate extends JPanel {
 
     public interface Animation {
         public Cell<List<Character>> create(
-            Cell<Double> time, Stream<Unit> sTick,
-            Dimension screenSize);
+                Cell<Double> time, Stream<Unit> sTick,
+                Dimension screenSize);
     }
 
     public Animate(Animation animation, List<Polygon> obstacles)
-        throws MalformedURLException, IOException
-    {
-        sapienImgL = ImageIO.read(getClass().getResourceAsStream( "/images/homo-sapien-left.png"));
-        sapienImgR = ImageIO.read(getClass().getResourceAsStream( "/images/homo-sapien-right.png"));
+            throws MalformedURLException, IOException {
+        sapienImgL = ImageIO.read(getClass().getResourceAsStream("/images/homo-sapien-left.png"));
+        sapienImgR = ImageIO.read(getClass().getResourceAsStream("/images/homo-sapien-right.png"));
         zombicusImgL = ImageIO.read(getClass().getResourceAsStream("/images/homo-zombicus-left.png"));
         zombicusImgR = ImageIO.read(getClass().getResourceAsStream("/images/homo-zombicus-right.png"));
         coneImg = ImageIO.read(getClass().getResourceAsStream("/images/roadius-conium.png"));
@@ -54,7 +43,7 @@ public class Animate extends JPanel {
         this.obstacles = obstacles;
         addMouseListener(new MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent ev) {
-                System.out.println(ev.getX()+","+ev.getY());
+                System.out.println(ev.getX() + "," + ev.getY());
             }
         });
     }
@@ -68,22 +57,21 @@ public class Animate extends JPanel {
             for (Polygon o : obstacles) {
                 g.fillPolygon(o);
                 for (int i = 0; i < o.npoints; i++)
-                    g.drawImage(coneImg, o.xpoints[i]-14, o.ypoints[i]-53, null);
+                    g.drawImage(coneImg, o.xpoints[i] - 14, o.ypoints[i] - 53, null);
             }
             List<Character> chars = new ArrayList<Character>(scene.sample());
             chars.sort((a, b) -> a.pos.y == b.pos.y ? 0 :
-                                 a.pos.y < b.pos.y ? -1 : 1);
+                    a.pos.y < b.pos.y ? -1 : 1);
             for (Character c : chars) {
                 if (c.type == CharacterType.SAPIENS)
                     if (c.velocity.dx < 0)
-                        g.drawImage(sapienImgL, c.pos.x-30, c.pos.y-73, null);
+                        g.drawImage(sapienImgL, c.pos.x - 30, c.pos.y - 73, null);
                     else
-                        g.drawImage(sapienImgR, c.pos.x-23, c.pos.y-73, null);
+                        g.drawImage(sapienImgR, c.pos.x - 23, c.pos.y - 73, null);
+                else if (c.velocity.dx < 0)
+                    g.drawImage(zombicusImgL, c.pos.x - 39, c.pos.y - 73, null);
                 else
-                    if (c.velocity.dx < 0)
-                        g.drawImage(zombicusImgL, c.pos.x-39, c.pos.y-73, null);
-                    else
-                        g.drawImage(zombicusImgR, c.pos.x-23, c.pos.y-73, null);
+                    g.drawImage(zombicusImgR, c.pos.x - 23, c.pos.y - 73, null);
             }
         });
         Toolkit.getDefaultToolkit().sync();
@@ -93,13 +81,11 @@ public class Animate extends JPanel {
         return windowSize;
     }
 
-    public static void animate(String title, Animation animation)
-    {
+    public static void animate(String title, Animation animation) {
         animate(title, animation, new ArrayList<Polygon>());
     }
 
-    public static void animate(String title, Animation animation, List<Polygon> obstacles)
-    {
+    public static void animate(String title, Animation animation, List<Polygon> obstacles) {
         try {
             JFrame frame = new JFrame(title);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -114,17 +100,18 @@ public class Animate extends JPanel {
                 long tIdeal = tLast + 20;
                 long toWait = tIdeal - t;
                 if (toWait > 0)
-                    try { Thread.sleep(toWait); } catch (InterruptedException e) {}
-                view.time.send((double)(tIdeal - t0) * 0.001);
+                    try {
+                        Thread.sleep(toWait);
+                    } catch (InterruptedException e) {
+                    }
+                view.time.send((double) (tIdeal - t0) * 0.001);
                 view.sTick.send(Unit.UNIT);
                 view.repaint(0);
                 tLast = tIdeal;
             }
-        }
-        catch (MalformedURLException e) {
+        } catch (MalformedURLException e) {
             e.printStackTrace();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

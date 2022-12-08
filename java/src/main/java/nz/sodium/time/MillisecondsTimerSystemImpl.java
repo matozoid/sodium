@@ -3,7 +3,7 @@ package nz.sodium.time;
 import java.util.TreeSet;
 
 class MillisecondsTimerSystemImpl implements TimerSystemImpl<Long> {
-    public class SimpleTimer implements Timer, Comparable<SimpleTimer>  {
+    public class SimpleTimer implements Timer, Comparable<SimpleTimer> {
         private SimpleTimer(long t, Runnable callback) {
             this.t = t;
             synchronized (lock) {
@@ -11,21 +11,25 @@ class MillisecondsTimerSystemImpl implements TimerSystemImpl<Long> {
             }
             this.callback = callback;
         }
+
         private final long t;
         private final long seq;
         private final Runnable callback;
+
         public void cancel() {
             synchronized (lock) {
                 timers.remove(this);
             }
         }
-		@Override
-		public int compareTo(SimpleTimer o) {
-		    if (t < o.t) return -1;
-		    if (t > o.t) return 1;
+
+        @Override
+        public int compareTo(SimpleTimer o) {
+            if (t < o.t) return -1;
+            if (t > o.t) return 1;
             return Long.compare(seq, o.seq);
         }
     }
+
     private final Object lock = new Object();
     private long nextSeq = 0;
     private final TreeSet<SimpleTimer> timers = new TreeSet<>();
@@ -61,16 +65,17 @@ class MillisecondsTimerSystemImpl implements TimerSystemImpl<Long> {
             if (tWait > 0) {
                 try {
                     Thread.sleep(tWait);
-                }
-                catch (InterruptedException e) {
+                } catch (InterruptedException e) {
                 }
             }
         }
     });
+
     public MillisecondsTimerSystemImpl() {
         timerThread.setDaemon(true);
         timerThread.start();
     }
+
     public Timer setTimer(Long t, Runnable callback) {
         SimpleTimer timer = new SimpleTimer(t, callback);
         synchronized (lock) {
@@ -79,9 +84,11 @@ class MillisecondsTimerSystemImpl implements TimerSystemImpl<Long> {
         }
         return timer;
     }
+
     public void runTimersTo(Long now) {
         timeTillNext(now);
     }
+
     public Long now() {
         return System.currentTimeMillis();
     }

@@ -1,7 +1,8 @@
-import java.util.Vector;
-import java.util.TreeSet;
+import nz.sodium.Stream;
+
 import java.util.Set;
-import nz.sodium.*;
+import java.util.TreeSet;
+import java.util.Vector;
 
 public class Helper {
     public static <A> Stream<Set<A>> mergeToSet(Iterable<Stream<A>> sa) {
