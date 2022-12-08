@@ -6,8 +6,6 @@ import nz.sodium.Cell;
 import nz.sodium.Unit;
 import pump.*;
 
-import java.util.Optional;
-
 public class ShowDollarsPump implements Pump {
     public Outputs create(Inputs inputs) {
         LifeCycle lc = new LifeCycle(inputs.sNozzle1,

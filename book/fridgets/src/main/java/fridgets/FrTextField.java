@@ -7,7 +7,6 @@ import nz.sodium.Stream;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.util.Optional;
 
 class TextUpdate {
     TextUpdate(String txt, int newX) {

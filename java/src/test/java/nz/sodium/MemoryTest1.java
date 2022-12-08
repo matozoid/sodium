@@ -3,8 +3,6 @@ package nz.sodium;
 import io.vavr.Tuple2;
 import io.vavr.control.Option;
 
-import java.util.Optional;
-
 public class MemoryTest1 {
     public static void main(String[] args) {
         new Thread(() -> {

@@ -7,8 +7,6 @@ import nz.sodium.Stream;
 import nz.sodium.Unit;
 import pump.Key;
 
-import java.util.Optional;
-
 public class Keypad {
     public final Cell<Integer> value;
     public final Stream<Unit> sBeep;

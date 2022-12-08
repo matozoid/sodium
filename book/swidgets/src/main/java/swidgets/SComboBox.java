@@ -6,7 +6,6 @@ import nz.sodium.CellSink;
 
 import javax.swing.*;
 import java.awt.event.ItemEvent;
-import java.util.Optional;
 import java.util.Vector;
 
 public class SComboBox<E> extends JComboBox<E> {

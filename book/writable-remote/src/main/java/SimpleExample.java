@@ -1,12 +1,10 @@
+import io.vavr.control.Option;
 import junction.BackEnd;
 import junction.Value;
 import junction.ValueOutput;
-import io.vavr.control.Option;
 import nz.sodium.Cell;
 import nz.sodium.Listener;
 import nz.sodium.StreamSink;
-
-import java.util.Optional;
 
 public class SimpleExample {
     public static void main(String[] args) {

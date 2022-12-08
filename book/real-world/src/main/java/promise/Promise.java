@@ -4,8 +4,6 @@ import io.vavr.Function2;
 import io.vavr.control.Option;
 import nz.sodium.*;
 
-import java.util.Optional;
-
 public class Promise<A> {
     public Promise(Stream<A> sDeliver) {
         this.sDeliver = sDeliver.once();

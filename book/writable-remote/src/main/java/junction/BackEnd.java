@@ -1,9 +1,7 @@
-import io.vavr.control.Option;
 package junction;
 
+import io.vavr.control.Option;
 import nz.sodium.*;
-
-import java.util.Optional;
 
 public class BackEnd {
     public BackEnd() {

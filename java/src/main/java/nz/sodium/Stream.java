@@ -81,12 +81,12 @@ public class Stream<A> {
             public void unlisten() {
                 l0.unlisten();
                 synchronized (keepListenersAlive) {
-                    keepListenersAlive=keepListenersAlive.remove(this);
+                    keepListenersAlive = keepListenersAlive.remove(this);
                 }
             }
         };
         synchronized (keepListenersAlive) {
-            keepListenersAlive=keepListenersAlive.add(l);
+            keepListenersAlive = keepListenersAlive.add(l);
         }
         return l;
     }

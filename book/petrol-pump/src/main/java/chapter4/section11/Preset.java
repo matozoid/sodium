@@ -6,8 +6,6 @@ import nz.sodium.Cell;
 import pump.Delivery;
 import pump.Fuel;
 
-import java.util.Optional;
-
 public class Preset {
     public final Cell<Delivery> delivery;
     public final Cell<Boolean> keypadActive;

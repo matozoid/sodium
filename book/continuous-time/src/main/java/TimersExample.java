@@ -3,8 +3,6 @@ import nz.sodium.*;
 import nz.sodium.time.MillisecondsTimerSystem;
 import nz.sodium.time.TimerSystem;
 
-import java.util.Optional;
-
 public class TimersExample {
     static Stream<Long> periodic(TimerSystem<Long> sys, long period) {
         Cell<Long> time = sys.time;

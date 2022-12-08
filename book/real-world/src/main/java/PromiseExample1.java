@@ -1,8 +1,6 @@
 import nz.sodium.StreamSink;
 import promise.Promise;
 
-import java.util.ArrayList;
-
 public class PromiseExample1 {
     public static void main(String[] args) {
         System.out.println("*** test 1");

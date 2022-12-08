@@ -7,10 +7,9 @@ import nz.sodium.Stream;
 import nz.sodium.Unit;
 
 import java.awt.*;
-import java.util.Optional;
 import java.util.Random;
 
-import static nz.sodium.Unit.*;
+import static nz.sodium.Unit.UNIT;
 
 public class HomoSapiens {
     public HomoSapiens(

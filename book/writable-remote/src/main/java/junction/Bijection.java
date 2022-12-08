@@ -1,6 +1,5 @@
 package junction;
 
-import nz.sodium.Lambda1;
 import io.vavr.Function1;
 
 public class Bijection<A, B> {

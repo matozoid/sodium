@@ -5,8 +5,6 @@ import io.vavr.Function2;
 import io.vavr.control.Option;
 import nz.sodium.*;
 
-import java.util.Optional;
-
 public class PromiseWithoutUpdates<A> {
     public PromiseWithoutUpdates(Stream<A> sDeliver) {
         this.sDeliver = sDeliver.once();

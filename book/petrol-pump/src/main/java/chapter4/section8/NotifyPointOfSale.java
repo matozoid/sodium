@@ -11,8 +11,6 @@ import nz.sodium.Unit;
 import pump.Fuel;
 import pump.Sale;
 
-import java.util.Optional;
-
 public class NotifyPointOfSale {
     public final Stream<Fuel> sStart;
     public final Cell<Option<Fuel>> fillActive;

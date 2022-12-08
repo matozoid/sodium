@@ -1,7 +1,7 @@
-import lib.*;
-import lib.Character;
 import io.vavr.Function1;
 import io.vavr.control.Option;
+import lib.Character;
+import lib.*;
 import nz.sodium.*;
 
 import java.awt.*;

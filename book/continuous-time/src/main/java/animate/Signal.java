@@ -5,8 +5,6 @@ import nz.sodium.Cell;
 import nz.sodium.Operational;
 import nz.sodium.Stream;
 
-import java.util.Optional;
-
 public class Signal {
     public Signal(double t0, double a, double b, double c) {
         this.t0 = t0;

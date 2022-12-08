@@ -7,7 +7,6 @@ import nz.sodium.Stream;
 
 import java.awt.*;
 import java.util.Collection;
-import java.util.Optional;
 
 public class FrFlow extends Fridget {
     public enum Direction {HORIZONTAL, VERTICAL}

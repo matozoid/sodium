@@ -1,5 +1,5 @@
-import lib.*;
 import lib.Character;
+import lib.*;
 import nz.sodium.*;
 
 import java.awt.*;

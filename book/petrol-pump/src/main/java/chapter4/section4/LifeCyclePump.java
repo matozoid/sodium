@@ -3,8 +3,6 @@ package chapter4.section4;
 import io.vavr.control.Option;
 import pump.*;
 
-import java.util.Optional;
-
 public class LifeCyclePump implements Pump {
     public Outputs create(Inputs inputs) {
         LifeCycle lc = new LifeCycle(inputs.sNozzle1,

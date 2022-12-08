@@ -3,8 +3,6 @@ package swidgets;
 import nz.sodium.Cell;
 import nz.sodium.Stream;
 import nz.sodium.StreamLoop;
-import swidgets.SButton;
-import swidgets.STextField;
 
 import javax.swing.*;
 import java.awt.*;

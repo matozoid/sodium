@@ -7,7 +7,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.Optional;
 import java.util.Vector;
 
 public class SDateField extends JComponent {

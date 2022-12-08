@@ -1,5 +1,5 @@
-import lib.*;
 import lib.Character;
+import lib.*;
 import nz.sodium.Cell;
 import nz.sodium.CellLoop;
 import nz.sodium.Stream;

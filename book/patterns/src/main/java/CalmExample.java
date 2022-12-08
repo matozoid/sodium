@@ -2,8 +2,6 @@ import io.vavr.Tuple2;
 import io.vavr.control.Option;
 import nz.sodium.*;
 
-import java.util.Optional;
-
 public class CalmExample {
     public static <A> Stream<A> calm(Stream<A> sA,
                                      Lazy<Option<A>> oInit) {

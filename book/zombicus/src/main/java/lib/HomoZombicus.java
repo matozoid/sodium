@@ -52,7 +52,7 @@ public class HomoZombicus {
             }
 
             Option<Character> nearestSapiens(int self,
-                                               List<Character> scene) {
+                                             List<Character> scene) {
                 List<Character> sapiens = new ArrayList<>();
                 for (Character ch : scene) {
                     if (ch.type == CharacterType.SAPIENS)

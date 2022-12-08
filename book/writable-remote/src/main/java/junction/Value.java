@@ -3,9 +3,10 @@ package junction;
 import io.vavr.Function1;
 import io.vavr.Function2;
 import io.vavr.control.Option;
-import nz.sodium.*;
-
-import java.util.Optional;
+import nz.sodium.Cell;
+import nz.sodium.Stream;
+import nz.sodium.StreamLoop;
+import nz.sodium.Transaction;
 
 public abstract class Value<A> {
     public abstract ValueOutput<A> construct(Stream<A> sWrite);
