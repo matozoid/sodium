@@ -1,5 +1,6 @@
 package nz.sodium;
 
+import io.vavr.Tuple2;
 import junit.framework.TestCase;
 
 import java.util.ArrayList;
@@ -142,25 +143,21 @@ public class TestCell extends TestCase {
             b2.send(7);
             return new Tuple2<>(b1, b2);
         });
-        CellSink<Integer> b1 = t.a;
-        CellSink<Integer> b2 = t.b;
+        CellSink<Integer> b1 = t._1;
+        CellSink<Integer> b2 = t._2;
         List<Integer> out = new ArrayList<>();
-        Listener l = b1.lift(b2, (x, y) -> x + y)
-                .listen(x -> {
-                    out.add(x);
-                });
+        Listener l = b1.lift(b2, Integer::sum)
+                .listen(out::add);
         l.unlisten();
         assertEquals(Arrays.asList(10), out);
     }
 
     public void testHoldIsDelayed() {
-        StreamSink<Integer> e = new StreamSink<Integer>();
+        StreamSink<Integer> e = new StreamSink<>();
         Cell<Integer> h = e.hold(0);
         Stream<String> pair = e.snapshot(h, (a, b) -> a + " " + b);
-        List<String> out = new ArrayList<String>();
-        Listener l = pair.listen((String x) -> {
-            out.add(x);
-        });
+        List<String> out = new ArrayList<>();
+        Listener l = pair.listen(out::add);
         e.send(2);
         e.send(3);
         l.unlisten();

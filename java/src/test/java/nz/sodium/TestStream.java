@@ -1,5 +1,6 @@
 package nz.sodium;
 
+import io.vavr.Tuple2;
 import junit.framework.TestCase;
 
 import java.util.ArrayList;

@@ -1,5 +1,7 @@
 package nz.sodium;
 
+import io.vavr.Tuple2;
+
 import java.util.*;
 
 /**
@@ -396,8 +398,8 @@ public class Stream<A> {
             StreamLoop<S> es = new StreamLoop<>();
             Cell<S> s = es.holdLazy(initState);
             Stream<Tuple2<B, S>> ebs = ea.snapshot(s, f);
-            Stream<B> eb = ebs.map(bs -> bs.a);
-            Stream<S> es_out = ebs.map(bs -> bs.b);
+            Stream<B> eb = ebs.map(bs -> bs._1);
+            Stream<S> es_out = ebs.map(bs -> bs._2);
             es.loop(es_out);
             return eb;
         });

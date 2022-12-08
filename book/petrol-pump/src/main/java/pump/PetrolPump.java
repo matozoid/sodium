@@ -1,5 +1,6 @@
 package pump;
 
+import io.vavr.Tuple2;
 import nz.sodium.*;
 
 import javax.imageio.ImageIO;
@@ -390,12 +391,11 @@ public class PetrolPump extends JFrame {
                 add(face, BorderLayout.CENTER);
                 for (int i = 0; i < 3; i++) {
                     final Cell<Tuple2<Rectangle, UpDown>> rect_state =
-                            face.nozzleRects[i].lift(nozzles[i],
-                                    (rect, state) -> new Tuple2<Rectangle, UpDown>(rect, state));
+                            face.nozzleRects[i].lift(nozzles[i], Tuple2::new);
                     ((CellLoop<UpDown>) nozzles[i]).loop(
                             Stream.<UpDown>filterOptional(
                                     sClick.snapshot(rect_state,
-                                            (pt, rs) -> rs.a.contains(pt) ? Optional.of(invert(rs.b))
+                                            (pt, rs) -> rs._1.contains(pt) ? Optional.of(invert(rs._2))
                                                     : Optional.empty()
                                     )
                             ).hold(UpDown.DOWN)

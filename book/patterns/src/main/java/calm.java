@@ -1,3 +1,4 @@
+import io.vavr.Tuple2;
 import nz.sodium.*;
 
 import java.util.Optional;
@@ -11,26 +12,26 @@ public class calm {
                         (A a, Optional<A> oLastA) -> {
                             Optional<A> oa = Optional.of(a);
                             return oa.equals(oLastA)
-                                    ? new Tuple2<Optional<A>, Optional<A>>(
+                                    ? new Tuple2<>(
                                     Optional.empty(), oLastA)
-                                    : new Tuple2<Optional<A>, Optional<A>>(oa, oa);
+                                    : new Tuple2<>(oa, oa);
                         }
                 ));
     }
 
     public static <A> Stream<A> calm(Stream<A> sA) {
-        return calm(sA, new Lazy<Optional<A>>(Optional.empty()));
+        return calm(sA, new Lazy<>(Optional.empty()));
     }
 
     public static <A> Cell<A> calm(Cell<A> a) {
         Lazy<A> initA = a.sampleLazy();
-        Lazy<Optional<A>> oInitA = initA.map(a_ -> Optional.of(a_));
+        Lazy<Optional<A>> oInitA = initA.map(Optional::of);
         return calm(Operational.updates(a), oInitA).holdLazy(initA);
     }
 
     public static void main(String[] args) {
         CellSink<Integer> sa = new CellSink<>(1);
-        Listener l = calm(sa).listen(i -> System.out.println(i));
+        Listener l = calm(sa).listen(System.out::println);
         sa.send(1);
         sa.send(2);
         sa.send(2);
