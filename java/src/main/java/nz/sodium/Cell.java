@@ -246,12 +246,6 @@ public class Cell<A> {
                         currentListener.unlisten();
                     currentListener = ba.value(trans2).listen(out.node, trans2, out::send, false);
                 }
-
-                @Override
-                protected void finalize() {
-                    if (currentListener != null)
-                        currentListener.unlisten();
-                }
             };
             Listener l1 = bba.value(trans0).listen_(out.node, h);
             return out.lastFiringOnly(trans0).unsafeAddCleanup(l1).holdLazy(za);
@@ -268,7 +262,7 @@ public class Cell<A> {
     private static <A> Stream<A> switchS(final Transaction trans1, final Cell<Stream<A>> bea) {
         final StreamWithSend<A> out = new StreamWithSend<>();
         final TransactionHandler<A> h2 = out::send;
-        TransactionHandler<Stream<A>> h1 = new TransactionHandler<Stream<A>>() {
+        TransactionHandler<Stream<A>> h1 = new TransactionHandler<>() {
             private Listener currentListener = bea.sampleNoTrans().listen(out.node, trans1, h2, false);
 
             @Override
@@ -279,21 +273,9 @@ public class Cell<A> {
                     currentListener = ea.listen(out.node, trans2, h2, true);
                 });
             }
-
-            @Override
-            protected void finalize() {
-                if (currentListener != null)
-                    currentListener.unlisten();
-            }
         };
         Listener l1 = bea.updates().listen(out.node, trans1, h1, false);
         return out.unsafeAddCleanup(l1);
-    }
-
-    @Override
-    protected void finalize() {
-        if (cleanup != null)
-            cleanup.unlisten();
     }
 
     /**

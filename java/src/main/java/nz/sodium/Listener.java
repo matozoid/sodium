@@ -8,7 +8,7 @@ public class Listener {
     }
 
     /**
-     * Deregister the listener that was registered so it will no longer be called back,
+     * Deregister the listener that was registered, so it will no longer be called back,
      * allowing associated resources to be garbage collected.
      */
     public void unlisten() {

@@ -155,7 +155,6 @@ public class Stream<A> {
      *          cell. Apart from this the function must be <em>referentially transparent</em>.
      */
     public final <B> Stream<B> map(final Lambda1<A, B> f) {
-        final Stream<A> ev = this;
         final StreamWithSend<B> out = new StreamWithSend<>();
         Listener l = listen_(out.node, (trans2, a) -> out.send(trans2, f.apply(a)));
         return out.unsafeAddCleanup(l);
@@ -214,7 +213,6 @@ public class Stream<A> {
      * transaction.
      */
     public final <B, C> Stream<C> snapshot(final Cell<B> c, final Lambda2<A, B, C> f) {
-        final Stream<A> ev = this;
         final StreamWithSend<C> out = new StreamWithSend<>();
         Listener l = listen_(out.node, (trans2, a) -> out.send(trans2, f.apply(a, c.sampleNoTrans())));
         return out.unsafeAddCleanup(l);
@@ -300,7 +298,7 @@ public class Stream<A> {
      *          {@link Cell#sample()}. Apart from this the function must be <em>referentially transparent</em>.
      */
     public final Stream<A> merge(final Stream<A> s, final Lambda2<A, A, A> f) {
-        return Transaction.apply(trans -> Stream.<A>merge(Stream.this, s).coalesce(trans, f));
+        return Transaction.apply(trans -> Stream.merge(Stream.this, s).coalesce(trans, f));
     }
 
     /**
@@ -327,12 +325,11 @@ public class Stream<A> {
         else if (len == 2) return sas.get(start).merge(sas.get(start + 1), f);
         else {
             int mid = (start + end) / 2;
-            return Stream.<A>merge(sas, start, mid, f).merge(Stream.merge(sas, mid, end, f), f);
+            return Stream.merge(sas, start, mid, f).merge(Stream.merge(sas, mid, end, f), f);
         }
     }
 
     private Stream<A> coalesce(Transaction trans1, final Lambda2<A, A, A> f) {
-        final Stream<A> ev = this;
         final StreamWithSend<A> out = new StreamWithSend<>();
         TransactionHandler<A> h = new CoalesceHandler<>(f, out);
         Listener l = listen(out.node, trans1, h, false);
@@ -350,7 +347,6 @@ public class Stream<A> {
      * Return a stream that only outputs events for which the predicate returns true.
      */
     public final Stream<A> filter(final Lambda1<A, Boolean> predicate) {
-        final Stream<A> ev = this;
         final StreamWithSend<A> out = new StreamWithSend<>();
         Listener l = listen_(out.node, (trans2, a) -> {
             if (predicate.apply(a)) out.send(trans2, a);
@@ -364,9 +360,7 @@ public class Stream<A> {
      */
     public static <A> Stream<A> filterOptional(final Stream<Optional<A>> ev) {
         final StreamWithSend<A> out = new StreamWithSend<>();
-        Listener l = ev.listen_(out.node, (trans2, oa) -> {
-            oa.ifPresent(a -> out.send(trans2, a));
-        });
+        Listener l = ev.listen_(out.node, (trans2, oa) -> oa.ifPresent(a -> out.send(trans2, a)));
         return out.unsafeAddCleanup(l);
     }
 
@@ -482,11 +476,5 @@ public class Stream<A> {
             fsNew.add(cleanup);
             return new Stream<>(node, fsNew, firings);
         });
-    }
-
-    @Override
-    protected void finalize() {
-        for (Listener l : finalizers)
-            l.unlisten();
     }
 }
