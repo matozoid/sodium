@@ -1,6 +1,6 @@
 import fridgets.Supply;
 
-public class supply {
+public class SupplyExample {
     public static void main(String[] args) {
         Supply a = new Supply();
         Supply b = a.child1();

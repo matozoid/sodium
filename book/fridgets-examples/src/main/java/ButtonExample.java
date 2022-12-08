@@ -6,14 +6,13 @@ import nz.sodium.Transaction;
 
 import javax.swing.*;
 
-public class button {
+public class ButtonExample {
     public static void main(String[] args) {
         JFrame frame = new JFrame("button");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(Transaction.run(() -> {
             FrButton b = new FrButton(new Cell<>("OK"));
-            Listener l = b.sClicked.listen(
-                    u -> System.out.println("clicked!"));
+            Listener l = b.sClicked.listen(u -> System.out.println("clicked!"));
             return new FrView(frame, b) {
                 public void removeNotify() {
                     super.removeNotify();

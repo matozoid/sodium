@@ -31,14 +31,9 @@ public abstract class Fridget {
         this.reify_ = reify_;
     }
 
-    private final Lambda5<
-            Cell<Optional<Dimension>>, Stream<MouseEvent>,
-            Stream<KeyEvent>, Cell<Long>, Supply, Output> reify_;
+    private final Lambda5<Cell<Optional<Dimension>>, Stream<MouseEvent>, Stream<KeyEvent>, Cell<Long>, Supply, Output> reify_;
 
-    public final Output reify(
-            Cell<Optional<Dimension>> size,
-            Stream<MouseEvent> sMouse, Stream<KeyEvent> sKey,
-            Cell<Long> focus, Supply idSupply) {
+    public final Output reify(Cell<Optional<Dimension>> size, Stream<MouseEvent> sMouse, Stream<KeyEvent> sKey, Cell<Long> focus, Supply idSupply) {
         return reify_.apply(size, sMouse, sKey, focus, idSupply);
     }
 }

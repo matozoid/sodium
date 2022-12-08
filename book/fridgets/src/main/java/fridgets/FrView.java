@@ -44,11 +44,9 @@ public class FrView extends JPanel {
         CellLoop<Long> focus = new CellLoop<>();
         Fridget.Output fo = fr.reify(size, sMouse, sKey, focus,
                 new Supply());
-        focus.loop(fo.sChangeFocus.hold(-1l));
+        focus.loop(fo.sChangeFocus.hold(-1L));
         this.drawable = fo.drawable;
-        l = l.append(Operational.updates(drawable).listen(d -> {
-            repaint();
-        }));
+        l = l.append(Operational.updates(drawable).listen(d -> repaint()));
     }
 
     private Listener l = new Listener();
@@ -63,9 +61,6 @@ public class FrView extends JPanel {
     public void removeNotify() {
         l.unlisten();
         super.removeNotify();
-    }
-
-    public void handleKeys(JFrame frame) {
     }
 }
 
