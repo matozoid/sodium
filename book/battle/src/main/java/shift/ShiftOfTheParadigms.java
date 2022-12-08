@@ -384,7 +384,7 @@ public class ShiftOfTheParadigms {
     }
 
     public static void main(String[] args) {
-        HashMap<String, Element> elements = new HashMap<String, Element>();
+        HashMap<String, Element> elements = new HashMap<>();
 
         elements.put("triangle", shape(50, 50, 3, 0.0));
         elements.put("square", shape(125, 50, 4, 45.0));

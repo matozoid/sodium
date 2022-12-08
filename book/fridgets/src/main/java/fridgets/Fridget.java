@@ -1,7 +1,7 @@
 package fridgets;
 
 import nz.sodium.Cell;
-import nz.sodium.Lambda5;
+import nz.sodium.Function5;
 import nz.sodium.Stream;
 
 import java.awt.*;
@@ -25,13 +25,13 @@ public abstract class Fridget {
         public Stream<Long> sChangeFocus;
     }
 
-    public Fridget(Lambda5<
+    public Fridget(Function5<
             Cell<Optional<Dimension>>, Stream<MouseEvent>,
             Stream<KeyEvent>, Cell<Long>, Supply, Output> reify_) {
         this.reify_ = reify_;
     }
 
-    private final Lambda5<
+    private final Function5<
             Cell<Optional<Dimension>>, Stream<MouseEvent>,
             Stream<KeyEvent>, Cell<Long>, Supply, Output> reify_;
 

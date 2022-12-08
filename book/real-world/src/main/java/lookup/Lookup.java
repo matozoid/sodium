@@ -16,7 +16,7 @@ import java.net.UnknownHostException;
 import java.util.Optional;
 
 class IsBusy<A, B> {
-    public IsBusy(Lambda1<Stream<A>, Stream<B>> action, Stream<A> sIn) {
+    public IsBusy(Function1<Stream<A>, Stream<B>> action, Stream<A> sIn) {
         sOut = action.apply(sIn);
         busy = sOut.map(i -> false)
                 .orElse(sIn.map(i -> true))
@@ -30,7 +30,7 @@ class IsBusy<A, B> {
 public class Lookup {
 
     public static final
-    Lambda1<Stream<String>, Stream<Optional<String>>> lookup = sWord -> {
+    Function1<Stream<String>, Stream<Optional<String>>> lookup = sWord -> {
         StreamSink<Optional<String>> sDefinition = new StreamSink<>();
         Listener l = sWord.listenWeak(wrd -> {
             new Thread() {

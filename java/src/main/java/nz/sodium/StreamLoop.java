@@ -14,7 +14,7 @@ public class StreamLoop<A> extends StreamWithSend<A> {
     /**
      * Resolve the loop to specify what the StreamLoop was a forward reference to. It
      * must be invoked inside the same transaction as the place where the StreamLoop is used.
-     * This requires you to create an explicit transaction with {@link Transaction#run(Lambda0)}
+     * This requires you to create an explicit transaction with {@link Transaction#run(Function0)}
      * or {@link Transaction#runVoid(Runnable)}.
      */
     public void loop(final Stream<A> ea_out) {

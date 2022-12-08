@@ -36,8 +36,8 @@ public class Animate extends JPanel {
         zombicusImgR = ImageIO.read(getClass().getResourceAsStream("/images/homo-zombicus-right.png"));
         coneImg = ImageIO.read(getClass().getResourceAsStream("/images/roadius-conium.png"));
         Transaction.runVoid(() -> {
-            time = new CellSink<Double>(0.0);
-            sTick = new StreamSink<Unit>();
+            time = new CellSink<>(0.0);
+            sTick = new StreamSink<>();
             this.scene = animation.create(time, sTick, windowSize);
         });
         this.obstacles = obstacles;
@@ -59,7 +59,7 @@ public class Animate extends JPanel {
                 for (int i = 0; i < o.npoints; i++)
                     g.drawImage(coneImg, o.xpoints[i] - 14, o.ypoints[i] - 53, null);
             }
-            List<Character> chars = new ArrayList<Character>(scene.sample());
+            List<Character> chars = new ArrayList<>(scene.sample());
             chars.sort((a, b) -> a.pos.y == b.pos.y ? 0 :
                     a.pos.y < b.pos.y ? -1 : 1);
             for (Character c : chars) {
@@ -82,7 +82,7 @@ public class Animate extends JPanel {
     }
 
     public static void animate(String title, Animation animation) {
-        animate(title, animation, new ArrayList<Polygon>());
+        animate(title, animation, new ArrayList<>());
     }
 
     public static void animate(String title, Animation animation, List<Polygon> obstacles) {

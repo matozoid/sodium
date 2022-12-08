@@ -15,8 +15,8 @@ public class MemoryTest4 {
             }
         }.start();
 
-        StreamSink<Integer> et = new StreamSink<Integer>();
-        StreamSink<Integer> eChange = new StreamSink<Integer>();
+        StreamSink<Integer> et = new StreamSink<>();
+        StreamSink<Integer> eChange = new StreamSink<>();
         Cell<Stream<Integer>> oout = eChange.map(x -> (Stream<Integer>) et).hold((Stream<Integer>) et);
         Stream<Integer> out = Cell.switchS(oout);
         Listener l = out.listen(tt -> {

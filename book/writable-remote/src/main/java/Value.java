@@ -7,7 +7,7 @@ public abstract class Value<A> {
 
     public final <B> Value<B> map(Bijection<A, B> bij) {
         Value<A> va = this;
-        return new Value<B>() {
+        return new Value<>() {
             public ValueOutput<B> construct(Stream<B> sWriteB) {
                 ValueOutput<A> out = va.construct(sWriteB.map(bij.fInv));
                 return new ValueOutput<B>(
@@ -20,10 +20,10 @@ public abstract class Value<A> {
     }
 
     public final <B> Value<B> lens(
-            Lambda1<A, B> getter,
-            Lambda2<A, B, A> setter) {
+            Function1<A, B> getter,
+            Function2<A, B, A> setter) {
         Value<A> va = this;
-        return new Value<B>() {
+        return new Value<>() {
             public ValueOutput<B> construct(Stream<B> sWriteB) {
                 return Transaction.run(() -> {
                     StreamLoop<A> sWriteA = new StreamLoop<>();

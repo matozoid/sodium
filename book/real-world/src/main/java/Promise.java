@@ -29,7 +29,7 @@ public class Promise<A> {
     }
 
     public <B, C> Promise<C> lift(Promise<B> pb,
-                                  final Lambda2<A, B, C> f) {
+                                  final Function2<A, B, C> f) {
         return Transaction.run(() -> new Promise<C>(
                 this.oValue.lift(pb.oValue,
                         (oa, ob) ->

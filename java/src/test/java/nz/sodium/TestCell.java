@@ -1,5 +1,6 @@
 package nz.sodium;
 
+import io.vavr.Function1;
 import io.vavr.Tuple2;
 import junit.framework.TestCase;
 
@@ -16,9 +17,9 @@ public class TestCell extends TestCase {
     }
 
     public void testHold() {
-        StreamSink<Integer> e = new StreamSink<Integer>();
+        StreamSink<Integer> e = new StreamSink<>();
         Cell<Integer> b = e.hold(0);
-        List<Integer> out = new ArrayList<Integer>();
+        List<Integer> out = new ArrayList<>();
         Listener l = Operational.updates(b).listen(x -> {
             out.add(x);
         });
@@ -29,9 +30,9 @@ public class TestCell extends TestCase {
     }
 
     public void testSnapshot() {
-        CellSink<Integer> b = new CellSink<Integer>(0);
-        StreamSink<Long> trigger = new StreamSink<Long>();
-        List<String> out = new ArrayList<String>();
+        CellSink<Integer> b = new CellSink<>(0);
+        StreamSink<Long> trigger = new StreamSink<>();
+        List<String> out = new ArrayList<>();
         Listener l = trigger.snapshot(b, (x, y) -> x + " " + y)
                 .listen(x -> {
                     out.add(x);
@@ -47,8 +48,8 @@ public class TestCell extends TestCase {
     }
 
     public void testValues() {
-        CellSink<Integer> b = new CellSink<Integer>(9);
-        List<Integer> out = new ArrayList<Integer>();
+        CellSink<Integer> b = new CellSink<>(9);
+        List<Integer> out = new ArrayList<>();
         Listener l = b.listen(x -> {
             out.add(x);
         });
@@ -59,7 +60,7 @@ public class TestCell extends TestCase {
     }
 
     public void testConstantBehavior() {
-        Cell<Integer> b = new Cell<Integer>(12);
+        Cell<Integer> b = new Cell<>(12);
         List<Integer> out = new ArrayList();
         Listener l = b.listen(x -> {
             out.add(x);
@@ -69,8 +70,8 @@ public class TestCell extends TestCase {
     }
 
     public void testMapC() {
-        CellSink<Integer> b = new CellSink<Integer>(6);
-        List<String> out = new ArrayList<String>();
+        CellSink<Integer> b = new CellSink<>(6);
+        List<String> out = new ArrayList<>();
         Listener l = b.map(x -> x.toString())
                 .listen(x -> {
                     out.add(x);
@@ -81,8 +82,8 @@ public class TestCell extends TestCase {
     }
 
     public void testMapCLateListen() {
-        CellSink<Integer> b = new CellSink<Integer>(6);
-        List<String> out = new ArrayList<String>();
+        CellSink<Integer> b = new CellSink<>(6);
+        List<String> out = new ArrayList<>();
         Cell<String> bm = b.map(x -> x.toString());
         b.send(2);
         Listener l = bm.listen(x -> {
@@ -94,13 +95,11 @@ public class TestCell extends TestCase {
     }
 
     public void testApply() {
-        CellSink<Lambda1<Long, String>> bf = new CellSink<Lambda1<Long, String>>(
+        CellSink<Function1<Long, String>> bf = new CellSink<>(
                 (Long b) -> "1 " + b);
-        CellSink<Long> ba = new CellSink<Long>(5L);
-        List<String> out = new ArrayList<String>();
-        Listener l = Cell.apply(bf, ba).listen(x -> {
-            out.add(x);
-        });
+        CellSink<Long> ba = new CellSink<>(5L);
+        List<String> out = new ArrayList<>();
+        Listener l = Cell.apply(bf, ba).listen(out::add);
         bf.send((Long b) -> "12 " + b);
         ba.send(6L);
         l.unlisten();
@@ -108,14 +107,12 @@ public class TestCell extends TestCase {
     }
 
     public void testLift() {
-        CellSink<Integer> a = new CellSink<Integer>(1);
-        CellSink<Long> b = new CellSink<Long>(5L);
-        List<String> out = new ArrayList<String>();
+        CellSink<Integer> a = new CellSink<>(1);
+        CellSink<Long> b = new CellSink<>(5L);
+        List<String> out = new ArrayList<>();
         Listener l = a.lift(b,
                 (x, y) -> x + " " + y
-        ).listen((String x) -> {
-            out.add(x);
-        });
+        ).listen(out::add);
         a.send(12);
         b.send(6L);
         l.unlisten();
@@ -123,14 +120,12 @@ public class TestCell extends TestCase {
     }
 
     public void testLiftGlitch() {
-        CellSink<Integer> a = new CellSink<Integer>(1);
+        CellSink<Integer> a = new CellSink<>(1);
         Cell<Integer> a3 = a.map((Integer x) -> x * 3);
         Cell<Integer> a5 = a.map((Integer x) -> x * 5);
         Cell<String> b = a3.lift(a5, (x, y) -> x + " " + y);
-        List<String> out = new ArrayList<String>();
-        Listener l = b.listen((String x) -> {
-            out.add(x);
-        });
+        List<String> out = new ArrayList<>();
+        Listener l = b.listen(out::add);
         a.send(2);
         l.unlisten();
         assertEquals(Arrays.asList("3 5", "6 10"), out);
@@ -184,10 +179,8 @@ public class TestCell extends TestCase {
         Cell<Character> bb = Stream.filterOptional(esb.map(s -> s.b)).hold('a');
         Cell<Cell<Character>> bsw = Stream.filterOptional(esb.map(s -> s.sw)).hold(ba);
         Cell<Character> bo = Cell.switchC(bsw);
-        List<Character> out = new ArrayList<Character>();
-        Listener l = bo.listen(c -> {
-            out.add(c);
-        });
+        List<Character> out = new ArrayList<>();
+        Listener l = bo.listen(out::add);
         esb.send(new SB(Optional.of('B'), Optional.of('b'), Optional.empty()));
         esb.send(new SB(Optional.of('C'), Optional.of('c'), Optional.of(bb)));
         esb.send(new SB(Optional.of('D'), Optional.of('d'), Optional.empty()));
@@ -215,15 +208,13 @@ public class TestCell extends TestCase {
     }
 
     public void testSwitchS() {
-        StreamSink<SE> ese = new StreamSink();
+        StreamSink<SE> ese = new StreamSink<>();
         Stream<Character> ea = ese.map(s -> s.a);
         Stream<Character> eb = ese.map(s -> s.b);
         Cell<Stream<Character>> bsw = Stream.filterOptional(ese.map(s -> s.sw)).hold(ea);
-        List<Character> out = new ArrayList();
+        List<Character> out = new ArrayList<>();
         Stream<Character> eo = Cell.switchS(bsw);
-        Listener l = eo.listen(c -> {
-            out.add(c);
-        });
+        Listener l = eo.listen(c -> out.add(c));
         ese.send(new SE('A', 'a', Optional.empty()));
         ese.send(new SE('B', 'b', Optional.empty()));
         ese.send(new SE('C', 'c', Optional.of(eb)));
@@ -241,12 +232,12 @@ public class TestCell extends TestCase {
         SS2() {
         }
 
-        final StreamSink<Integer> s = new StreamSink<Integer>();
+        final StreamSink<Integer> s = new StreamSink<>();
     }
 
     public void testSwitchSSimultaneous() {
         SS2 ss1 = new SS2();
-        CellSink<SS2> css = new CellSink<SS2>(ss1);
+        CellSink<SS2> css = new CellSink<>(ss1);
         Stream<Integer> so = Cell.switchS(css.<Stream<Integer>>map(b -> b.s));
         List<Integer> out = new ArrayList();
         Listener l = so.listen(c -> {
@@ -281,7 +272,7 @@ public class TestCell extends TestCase {
     public void testLoopCell() {
         final StreamSink<Integer> sa = new StreamSink();
         Cell<Integer> sum_out = Transaction.<Cell<Integer>>run(() -> {
-            CellLoop<Integer> sum = new CellLoop<Integer>();
+            CellLoop<Integer> sum = new CellLoop<>();
             Cell<Integer> sum_out_ = sa.snapshot(sum, (x, y) -> x + y).hold(0);
             sum.loop(sum_out_);
             return sum_out_;
@@ -320,7 +311,7 @@ public class TestCell extends TestCase {
             Cell<String> a = new Cell("lettuce");
             CellLoop<String> b = new CellLoop();
             Stream<String> eSnap = Operational.value(a).snapshot(b, (String aa, String bb) -> aa + " " + bb);
-            b.loop(new Cell<String>("cheese"));
+            b.loop(new Cell<>("cheese"));
             return eSnap.listen((x) -> {
                 out.add(x);
             });
@@ -334,7 +325,7 @@ public class TestCell extends TestCase {
         Cell<String> value = Transaction.<Cell<String>>run(() -> {
             CellLoop<String> a = new CellLoop();
             Cell<String> value_ = Operational.value(a).hold("onion");
-            a.loop(new Cell<String>("cheese"));
+            a.loop(new Cell<>("cheese"));
             return value_;
         });
         StreamSink<Unit> eTick = new StreamSink();
@@ -353,7 +344,7 @@ public class TestCell extends TestCase {
             CellLoop<String> a = new CellLoop();
             Cell<String> c_ = a.lift(b,
                     (aa, bb) -> aa + " " + bb);
-            a.loop(new Cell<String>("tea"));
+            a.loop(new Cell<>("tea"));
             return c_;
         });
         Listener l = c.listen((x) -> {
@@ -370,7 +361,7 @@ public class TestCell extends TestCase {
         Listener l = Cell.switchS(si.map(i -> {
             Cell<String> c = new Cell<>("A" + i);
             return Operational.defer(Operational.value(c));
-        }).hold(new Stream<String>())).listen(x -> {
+        }).hold(new Stream<>())).listen(x -> {
             out.add(x);
         });
         si.send(2);

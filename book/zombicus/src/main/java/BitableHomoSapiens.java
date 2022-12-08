@@ -30,7 +30,7 @@ public class BitableHomoSapiens {
                 sBecome.map(z -> z.character).hold(h.character)
         );
         this.sBite = Cell.switchS(
-                sBecome.map(z -> z.sBite).hold(new Stream<Integer>())
+                sBecome.map(z -> z.sBite).hold(new Stream<>())
         );
     }
 

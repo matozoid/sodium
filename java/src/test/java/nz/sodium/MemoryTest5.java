@@ -15,7 +15,7 @@ public class MemoryTest5 {
             }
         }.start();
 
-        StreamSink<Integer> eChange = new StreamSink<Integer>();
+        StreamSink<Integer> eChange = new StreamSink<>();
         Cell<Integer> out = eChange.hold(0);
         Listener l = out.listen(tt -> {
             //System.out.println(tt)

@@ -20,7 +20,7 @@ class TextUpdate {
 
 public class FrTextField extends Fridget {
     public FrTextField(String initText) {
-        this(initText, new CellLoop<String>());
+        this(initText, new CellLoop<>());
     }
 
     private FrTextField(String initText, CellLoop<String> text) {

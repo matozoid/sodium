@@ -1,6 +1,6 @@
 package nz.sodium;
 
-import io.vavr.Tuple2;
+import io.vavr.*;
 
 import java.util.*;
 
@@ -156,7 +156,7 @@ public class Stream<A> {
      *          {@link Cell#sample()} in which case it is equivalent to {@link Stream#snapshot(Cell)}ing the
      *          cell. Apart from this the function must be <em>referentially transparent</em>.
      */
-    public final <B> Stream<B> map(final Lambda1<A, B> f) {
+    public final <B> Stream<B> map(final Function1<A, B> f) {
         final StreamWithSend<B> out = new StreamWithSend<>();
         Listener l = listen_(out.node, (trans2, a) -> out.send(trans2, f.apply(a)));
         return out.unsafeAddCleanup(l);
@@ -176,9 +176,9 @@ public class Stream<A> {
      * by this stream's event values.
      * <p>
      * There is an implicit delay: State updates caused by event firings don't become
-     * visible as the cell's current value as viewed by {@link Stream#snapshot(Cell, Lambda2)}
+     * visible as the cell's current value as viewed by {@link Stream#snapshot(Cell, Function2)}
      * until the following transaction. To put this another way,
-     * {@link Stream#snapshot(Cell, Lambda2)} always sees the value of a cell as it was before
+     * {@link Stream#snapshot(Cell, Function2)} always sees the value of a cell as it was before
      * any state changes from the current transaction.
      */
     public final Cell<A> hold(final A initValue) {
@@ -197,7 +197,7 @@ public class Stream<A> {
     }
 
     /**
-     * Variant of {@link #snapshot(Cell, Lambda2)} that captures the cell's value
+     * Variant of {@link #snapshot(Cell, Function2)} that captures the cell's value
      * at the time of the event firing, ignoring the stream's value.
      */
     public final <B> Stream<B> snapshot(Cell<B> c) {
@@ -210,56 +210,56 @@ public class Stream<A> {
      * <p>
      * There is an implicit delay: State updates caused by event firings being held with
      * {@link Stream#hold(Object)} don't become visible as the cell's current value until
-     * the following transaction. To put this another way, {@link Stream#snapshot(Cell, Lambda2)}
+     * the following transaction. To put this another way, {@link Stream#snapshot(Cell, Function2)}
      * always sees the value of a cell as it was before any state changes from the current
      * transaction.
      */
-    public final <B, C> Stream<C> snapshot(final Cell<B> c, final Lambda2<A, B, C> f) {
+    public final <B, C> Stream<C> snapshot(final Cell<B> c, final Function2<A, B, C> f) {
         final StreamWithSend<C> out = new StreamWithSend<>();
         Listener l = listen_(out.node, (trans2, a) -> out.send(trans2, f.apply(a, c.sampleNoTrans())));
         return out.unsafeAddCleanup(l);
     }
 
     /**
-     * Variant of {@link #snapshot(Cell, Lambda2)} that captures the values of
+     * Variant of {@link #snapshot(Cell, Function2)} that captures the values of
      * two cells.
      */
-    public final <B, C, D> Stream<D> snapshot(final Cell<B> cb, final Cell<C> cc, final Lambda3<A, B, C, D> fn) {
+    public final <B, C, D> Stream<D> snapshot(final Cell<B> cb, final Cell<C> cc, final Function3<A, B, C, D> fn) {
         return this.snapshot(cb, (a, b) -> fn.apply(a, b, cc.sample()));
     }
 
     /**
-     * Variant of {@link #snapshot(Cell, Lambda2)} that captures the values of
+     * Variant of {@link #snapshot(Cell, Function2)} that captures the values of
      * three cells.
      */
-    public final <B, C, D, E> Stream<E> snapshot(final Cell<B> cb, final Cell<C> cc, final Cell<D> cd, final Lambda4<A, B, C, D, E> fn) {
+    public final <B, C, D, E> Stream<E> snapshot(final Cell<B> cb, final Cell<C> cc, final Cell<D> cd, final Function4<A, B, C, D, E> fn) {
         return this.snapshot(cb, (a, b) -> fn.apply(a, b, cc.sample(), cd.sample()));
     }
 
     /**
-     * Variant of {@link #snapshot(Cell, Lambda2)} that captures the values of
+     * Variant of {@link #snapshot(Cell, Function2)} that captures the values of
      * four cells.
      */
-    public final <B, C, D, E, F> Stream<F> snapshot(final Cell<B> cb, final Cell<C> cc, final Cell<D> cd, final Cell<E> ce, final Lambda5<A, B, C, D, E, F> fn) {
+    public final <B, C, D, E, F> Stream<F> snapshot(final Cell<B> cb, final Cell<C> cc, final Cell<D> cd, final Cell<E> ce, final Function5<A, B, C, D, E, F> fn) {
         return this.snapshot(cb, (a, b) -> fn.apply(a, b, cc.sample(), cd.sample(), ce.sample()));
     }
 
     /**
-     * Variant of {@link #snapshot(Cell, Lambda2)} that captures the values of
+     * Variant of {@link #snapshot(Cell, Function2)} that captures the values of
      * five cells.
      */
-    public final <B, C, D, E, F, G> Stream<G> snapshot(final Cell<B> cb, final Cell<C> cc, final Cell<D> cd, final Cell<E> ce, final Cell<F> cf, final Lambda6<A, B, C, D, E, F, G> fn) {
+    public final <B, C, D, E, F, G> Stream<G> snapshot(final Cell<B> cb, final Cell<C> cc, final Cell<D> cd, final Cell<E> ce, final Cell<F> cf, final Function6<A, B, C, D, E, F, G> fn) {
         return this.snapshot(cb, (a, b) -> fn.apply(a, b, cc.sample(), cd.sample(), ce.sample(), cf.sample()));
     }
 
     /**
-     * Variant of {@link Stream#merge(Stream, Lambda2)} that merges two streams and will drop an event
+     * Variant of {@link Stream#merge(Stream, Function2)} that merges two streams and will drop an event
      * in the simultaneous case.
      * <p>
      * In the case where two events are simultaneous (i.e. both
      * within the same transaction), the event from <em>this</em> will take precedence, and
      * the event from <em>s</em> will be dropped.
-     * If you want to specify your own combining function, use {@link Stream#merge(Stream, Lambda2)}.
+     * If you want to specify your own combining function, use {@link Stream#merge(Stream, Function2)}.
      * s1.orElse(s2) is equivalent to s1.merge(s2, (l, r) -&gt; l).
      * <p>
      * The name orElse() is used instead of merge() to make it really clear that care should
@@ -299,7 +299,7 @@ public class Stream<A> {
      * @param f Function to combine the values. It may construct FRP logic or use
      *          {@link Cell#sample()}. Apart from this the function must be <em>referentially transparent</em>.
      */
-    public final Stream<A> merge(final Stream<A> s, final Lambda2<A, A, A> f) {
+    public final Stream<A> merge(final Stream<A> s, final Function2<A, A, A> f) {
         return Transaction.apply(trans -> Stream.merge(Stream.this, s).coalesce(trans, f));
     }
 
@@ -311,16 +311,16 @@ public class Stream<A> {
     }
 
     /**
-     * Variant of {@link #merge(Stream, Lambda2)} that merges a collection of streams.
+     * Variant of {@link #merge(Stream, Function2)} that merges a collection of streams.
      */
-    public static <A> Stream<A> merge(Iterable<Stream<A>> ss, final Lambda2<A, A, A> f) {
+    public static <A> Stream<A> merge(Iterable<Stream<A>> ss, final Function2<A, A, A> f) {
         Vector<Stream<A>> v = new Vector<>();
         for (Stream<A> s : ss)
             v.add(s);
         return merge(v, 0, v.size(), f);
     }
 
-    private static <A> Stream<A> merge(Vector<Stream<A>> sas, int start, int end, final Lambda2<A, A, A> f) {
+    private static <A> Stream<A> merge(Vector<Stream<A>> sas, int start, int end, final Function2<A, A, A> f) {
         int len = end - start;
         if (len == 0) return new Stream<>();
         else if (len == 1) return sas.get(start);
@@ -331,7 +331,7 @@ public class Stream<A> {
         }
     }
 
-    private Stream<A> coalesce(Transaction trans1, final Lambda2<A, A, A> f) {
+    private Stream<A> coalesce(Transaction trans1, final Function2<A, A, A> f) {
         final StreamWithSend<A> out = new StreamWithSend<>();
         TransactionHandler<A> h = new CoalesceHandler<>(f, out);
         Listener l = listen(out.node, trans1, h, false);
@@ -348,7 +348,7 @@ public class Stream<A> {
     /**
      * Return a stream that only outputs events for which the predicate returns true.
      */
-    public final Stream<A> filter(final Lambda1<A, Boolean> predicate) {
+    public final Stream<A> filter(final Function1<A, Boolean> predicate) {
         final StreamWithSend<A> out = new StreamWithSend<>();
         Listener l = listen_(out.node, (trans2, a) -> {
             if (predicate.apply(a)) out.send(trans2, a);
@@ -384,15 +384,15 @@ public class Stream<A> {
      *          {@link Cell#sample()} in which case it is equivalent to {@link Stream#snapshot(Cell)}ing the
      *          cell. Apart from this the function must be <em>referentially transparent</em>.
      */
-    public final <B, S> Stream<B> collect(final S initState, final Lambda2<A, S, Tuple2<B, S>> f) {
+    public final <B, S> Stream<B> collect(final S initState, final Function2<A, S, Tuple2<B, S>> f) {
         return collectLazy(new Lazy<>(initState), f);
     }
 
     /**
-     * A variant of {@link #collect(Object, Lambda2)} that takes an initial state returned by
+     * A variant of {@link #collect(Object, Function2)} that takes an initial state returned by
      * {@link Cell#sampleLazy()}.
      */
-    public final <B, S> Stream<B> collectLazy(final Lazy<S> initState, final Lambda2<A, S, Tuple2<B, S>> f) {
+    public final <B, S> Stream<B> collectLazy(final Lazy<S> initState, final Function2<A, S, Tuple2<B, S>> f) {
         return Transaction.run(() -> {
             final Stream<A> ea = Stream.this;
             StreamLoop<S> es = new StreamLoop<>();
@@ -412,15 +412,15 @@ public class Stream<A> {
      *          {@link Cell#sample()} in which case it is equivalent to {@link Stream#snapshot(Cell)}ing the
      *          cell. Apart from this the function must be <em>referentially transparent</em>.
      */
-    public final <S> Cell<S> accum(final S initState, final Lambda2<A, S, S> f) {
+    public final <S> Cell<S> accum(final S initState, final Function2<A, S, S> f) {
         return accumLazy(new Lazy<>(initState), f);
     }
 
     /**
-     * A variant of {@link #accum(Object, Lambda2)} that takes an initial state returned by
+     * A variant of {@link #accum(Object, Function2)} that takes an initial state returned by
      * {@link Cell#sampleLazy()}.
      */
-    public final <S> Cell<S> accumLazy(final Lazy<S> initState, final Lambda2<A, S, S> f) {
+    public final <S> Cell<S> accumLazy(final Lazy<S> initState, final Function2<A, S, S> f) {
         return Transaction.run(() -> {
             final Stream<A> ea = Stream.this;
             StreamLoop<S> es = new StreamLoop<>();

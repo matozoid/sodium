@@ -29,7 +29,7 @@ public class FrView extends JPanel {
                 sMouse.send(e);
             }
         });
-        size = new CellSink<Optional<Dimension>>(Optional.empty());
+        size = new CellSink<>(Optional.empty());
         addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
                 if (e.getID() == ComponentEvent.COMPONENT_RESIZED)

@@ -1,12 +1,12 @@
-import nz.sodium.Lambda1;
+import nz.sodium.Function1;
 
 public class Bijection<A, B> {
-    public Bijection(Lambda1<A, B> f, Lambda1<B, A> fInv) {
+    public Bijection(Function1<A, B> f, Function1<B, A> fInv) {
         this.f = f;
         this.fInv = fInv;
     }
 
-    public final Lambda1<A, B> f;
-    public final Lambda1<B, A> fInv;
+    public final Function1<A, B> f;
+    public final Function1<B, A> fInv;
 }
 

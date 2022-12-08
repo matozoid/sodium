@@ -258,7 +258,7 @@ public class PetrolPump extends JFrame {
                 topTwoPanels.add(secondPanel);
                 firstPanel.add(new JLabel("Logic"));
 
-                SComboBox<Pump> logic = new SComboBox<>(new DefaultComboBoxModel<Pump>(new Pump[]{
+                SComboBox<Pump> logic = new SComboBox<>(new DefaultComboBoxModel<>(new Pump[]{
                         new chapter4.section4.LifeCyclePump(),
                         new chapter4.section6.AccumulatePulsesPump(),
                         new chapter4.section7.ShowDollarsPump(),
@@ -278,7 +278,7 @@ public class PetrolPump extends JFrame {
                 STextField textPrice3 = new STextField("1.499", 7);
                 secondPanel.add(textPrice3);
 
-                Lambda1<String, Double> parseDbl = str -> {
+                Function1<String, Double> parseDbl = str -> {
                     try {
                         return Double.parseDouble(str);
                     } catch (NumberFormatException e) {
@@ -287,7 +287,7 @@ public class PetrolPump extends JFrame {
                 };
 
                 // An event of mouse presses
-                StreamSink<Point> sClick = new StreamSink<Point>();
+                StreamSink<Point> sClick = new StreamSink<>();
 
                 /*
                 l = l.append(sClick.listen(pt -> {
@@ -310,13 +310,13 @@ public class PetrolPump extends JFrame {
                 @SuppressWarnings("unchecked")
                 CellLoop<UpDown>[] nozzles = new CellLoop[3];
                 for (int i = 0; i < 3; i++)
-                    nozzles[i] = new CellLoop<UpDown>();
+                    nozzles[i] = new CellLoop<>();
 
                 Cell<Double> calibration = new Cell<>(0.001);
                 Cell<Double> price1 = textPrice1.text.map(parseDbl);
                 Cell<Double> price2 = textPrice2.text.map(parseDbl);
                 Cell<Double> price3 = textPrice3.text.map(parseDbl);
-                CellSink<Stream<Unit>> csClearSale = new CellSink<>(new Stream<Unit>());
+                CellSink<Stream<Unit>> csClearSale = new CellSink<>(new Stream<>());
                 Stream<Unit> sClearSale = Cell.switchS(csClearSale);
 
                 Cell<Outputs> outputs = logic.selectedItem.map(

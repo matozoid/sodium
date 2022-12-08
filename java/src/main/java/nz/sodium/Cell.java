@@ -1,5 +1,7 @@
 package nz.sodium;
 
+import io.vavr.*;
+
 /**
  * Represents a value of type A that changes over time.
  */
@@ -44,9 +46,9 @@ public class Cell<A> {
      * Sample the cell's current value.
      * <p>
      * It may be used inside the functions passed to primitives that apply them to {@link Stream}s,
-     * including {@link Stream#map(Lambda1)} in which case it is equivalent to snapshotting the cell,
-     * {@link Stream#snapshot(Cell, Lambda2)}, {@link Stream#filter(Lambda1)} and
-     * {@link Stream#merge(Stream, Lambda2)}.
+     * including {@link Stream#map(Function1)} in which case it is equivalent to snapshotting the cell,
+     * {@link Stream#snapshot(Cell, Function2)}, {@link Stream#filter(Function1)} and
+     * {@link Stream#merge(Stream, Function2)}.
      * It should generally be avoided in favour of {@link #listen(Handler)} so you don't
      * miss any updates, but in many circumstances it makes sense.
      */
@@ -112,7 +114,7 @@ public class Cell<A> {
      *
      * @param f Function to apply to convert the values. It must be <em>referentially transparent</em>.
      */
-    public final <B> Cell<B> map(final Lambda1<A, B> f) {
+    public final <B> Cell<B> map(final Function1<A, B> f) {
         return Transaction.apply(trans -> updates().map(f).holdLazy(trans, sampleLazy(trans).map(f)));
     }
 
@@ -122,9 +124,9 @@ public class Cell<A> {
      *
      * @param fn Function to apply. It must be <em>referentially transparent</em>.
      */
-    public final <B, C> Cell<C> lift(Cell<B> b, final Lambda2<A, B, C> fn) {
-        Lambda1<A, Lambda1<B, C>> ffa = aa -> (Lambda1<B, C>) bb -> fn.apply(aa, bb);
-        Cell<Lambda1<B, C>> bf = this.map(ffa);
+    public final <B, C> Cell<C> lift(Cell<B> b, final Function2<A, B, C> fn) {
+        Function1<A, Function1<B, C>> ffa = aa -> (Function1<B, C>) bb -> fn.apply(aa, bb);
+        Cell<Function1<B, C>> bf = this.map(ffa);
         return apply(bf, b);
     }
 
@@ -134,9 +136,9 @@ public class Cell<A> {
      *
      * @param fn Function to apply. It must be <em>referentially transparent</em>.
      */
-    public final <B, C, D> Cell<D> lift(Cell<B> b, Cell<C> c, final Lambda3<A, B, C, D> fn) {
-        Lambda1<A, Lambda1<B, Lambda1<C, D>>> ffa = aa -> (Lambda1<B, Lambda1<C, D>>) bb -> (Lambda1<C, D>) cc -> fn.apply(aa, bb, cc);
-        Cell<Lambda1<B, Lambda1<C, D>>> bf = this.map(ffa);
+    public final <B, C, D> Cell<D> lift(Cell<B> b, Cell<C> c, final Function3<A, B, C, D> fn) {
+        Function1<A, Function1<B, Function1<C, D>>> ffa = aa -> (Function1<B, Function1<C, D>>) bb -> (Function1<C, D>) cc -> fn.apply(aa, bb, cc);
+        Cell<Function1<B, Function1<C, D>>> bf = this.map(ffa);
         return apply(apply(bf, b), c);
     }
 
@@ -146,9 +148,9 @@ public class Cell<A> {
      *
      * @param fn Function to apply. It must be <em>referentially transparent</em>.
      */
-    public final <B, C, D, E> Cell<E> lift(Cell<B> b, Cell<C> c, Cell<D> d, final Lambda4<A, B, C, D, E> fn) {
-        Lambda1<A, Lambda1<B, Lambda1<C, Lambda1<D, E>>>> ffa = aa -> (Lambda1<B, Lambda1<C, Lambda1<D, E>>>) bb -> (Lambda1<C, Lambda1<D, E>>) cc -> (Lambda1<D, E>) dd -> fn.apply(aa, bb, cc, dd);
-        Cell<Lambda1<B, Lambda1<C, Lambda1<D, E>>>> bf = this.map(ffa);
+    public final <B, C, D, E> Cell<E> lift(Cell<B> b, Cell<C> c, Cell<D> d, final Function4<A, B, C, D, E> fn) {
+        Function1<A, Function1<B, Function1<C, Function1<D, E>>>> ffa = aa -> (Function1<B, Function1<C, Function1<D, E>>>) bb -> (Function1<C, Function1<D, E>>) cc -> (Function1<D, E>) dd -> fn.apply(aa, bb, cc, dd);
+        Cell<Function1<B, Function1<C, Function1<D, E>>>> bf = this.map(ffa);
         return apply(apply(apply(bf, b), c), d);
     }
 
@@ -158,9 +160,9 @@ public class Cell<A> {
      *
      * @param fn Function to apply. It must be <em>referentially transparent</em>.
      */
-    public final <B, C, D, E, F> Cell<F> lift(Cell<B> b, Cell<C> c, Cell<D> d, Cell<E> e, final Lambda5<A, B, C, D, E, F> fn) {
-        Lambda1<A, Lambda1<B, Lambda1<C, Lambda1<D, Lambda1<E, F>>>>> ffa = aa -> (Lambda1<B, Lambda1<C, Lambda1<D, Lambda1<E, F>>>>) bb -> (Lambda1<C, Lambda1<D, Lambda1<E, F>>>) cc -> (Lambda1<D, Lambda1<E, F>>) dd -> (Lambda1<E, F>) ee -> fn.apply(aa, bb, cc, dd, ee);
-        Cell<Lambda1<B, Lambda1<C, Lambda1<D, Lambda1<E, F>>>>> bf = this.map(ffa);
+    public final <B, C, D, E, F> Cell<F> lift(Cell<B> b, Cell<C> c, Cell<D> d, Cell<E> e, final Function5<A, B, C, D, E, F> fn) {
+        Function1<A, Function1<B, Function1<C, Function1<D, Function1<E, F>>>>> ffa = aa -> (Function1<B, Function1<C, Function1<D, Function1<E, F>>>>) bb -> (Function1<C, Function1<D, Function1<E, F>>>) cc -> (Function1<D, Function1<E, F>>) dd -> (Function1<E, F>) ee -> fn.apply(aa, bb, cc, dd, ee);
+        Cell<Function1<B, Function1<C, Function1<D, Function1<E, F>>>>> bf = this.map(ffa);
         return apply(apply(apply(apply(bf, b), c), d), e);
     }
 
@@ -170,9 +172,9 @@ public class Cell<A> {
      *
      * @param fn Function to apply. It must be <em>referentially transparent</em>.
      */
-    public final <B, C, D, E, F, G> Cell<G> lift(Cell<B> b, Cell<C> c, Cell<D> d, Cell<E> e, Cell<F> f, final Lambda6<A, B, C, D, E, F, G> fn) {
-        Lambda1<A, Lambda1<B, Lambda1<C, Lambda1<D, Lambda1<E, Lambda1<F, G>>>>>> ffa = aa -> (Lambda1<B, Lambda1<C, Lambda1<D, Lambda1<E, Lambda1<F, G>>>>>) bb -> (Lambda1<C, Lambda1<D, Lambda1<E, Lambda1<F, G>>>>) cc -> (Lambda1<D, Lambda1<E, Lambda1<F, G>>>) dd -> (Lambda1<E, Lambda1<F, G>>) ee -> (Lambda1<F, G>) ff -> fn.apply(aa, bb, cc, dd, ee, ff);
-        Cell<Lambda1<B, Lambda1<C, Lambda1<D, Lambda1<E, Lambda1<F, G>>>>>> bf = this.map(ffa);
+    public final <B, C, D, E, F, G> Cell<G> lift(Cell<B> b, Cell<C> c, Cell<D> d, Cell<E> e, Cell<F> f, final Function6<A, B, C, D, E, F, G> fn) {
+        Function1<A, Function1<B, Function1<C, Function1<D, Function1<E, Function1<F, G>>>>>> ffa = aa -> (Function1<B, Function1<C, Function1<D, Function1<E, Function1<F, G>>>>>) bb -> (Function1<C, Function1<D, Function1<E, Function1<F, G>>>>) cc -> (Function1<D, Function1<E, Function1<F, G>>>) dd -> (Function1<E, Function1<F, G>>) ee -> (Function1<F, G>) ff -> fn.apply(aa, bb, cc, dd, ee, ff);
+        Cell<Function1<B, Function1<C, Function1<D, Function1<E, Function1<F, G>>>>>> bf = this.map(ffa);
         return apply(apply(apply(apply(apply(bf, b), c), d), e), f);
     }
 
@@ -180,7 +182,7 @@ public class Cell<A> {
      * Apply a value inside a cell to a function inside a cell. This is the
      * primitive for all function lifting.
      */
-    public static <A, B> Cell<B> apply(final Cell<Lambda1<A, B>> bf, final Cell<A> ba) {
+    public static <A, B> Cell<B> apply(final Cell<Function1<A, B>> bf, final Cell<A> ba) {
         return Transaction.apply(trans0 -> {
             final StreamWithSend<B> out = new StreamWithSend<>();
 
@@ -188,7 +190,7 @@ public class Cell<A> {
                 ApplyHandler(Transaction trans0) {
                 }
 
-                Lambda1<A, B> f = null;
+                Function1<A, B> f = null;
                 boolean f_present = false;
                 A a = null;
                 boolean a_present = false;
@@ -233,7 +235,7 @@ public class Cell<A> {
         return Transaction.apply(trans0 -> {
             Lazy<A> za = bba.sampleLazy().map(Cell::sample);
             final StreamWithSend<A> out = new StreamWithSend<>();
-            TransactionHandler<Cell<A>> h = new TransactionHandler<Cell<A>>() {
+            TransactionHandler<Cell<A>> h = new TransactionHandler<>() {
                 private Listener currentListener;
 
                 @Override
@@ -309,10 +311,10 @@ public class Cell<A> {
      * function applied to the input cells' values.
      *
      * @param fn Function to apply. It must be <em>referentially transparent</em>.
-     * @deprecated As of release 1.1.0, replaced by {@link #lift(Cell, Lambda2)}
+     * @deprecated As of release 1.1.0, replaced by {@link #lift(Cell, Function2)}
      */
     @Deprecated
-    public static <A, B, C> Cell<C> lift(final Lambda2<A, B, C> fn, Cell<A> a, Cell<B> b) {
+    public static <A, B, C> Cell<C> lift(final Function2<A, B, C> fn, Cell<A> a, Cell<B> b) {
         return a.lift(b, fn);
     }
 
@@ -321,10 +323,10 @@ public class Cell<A> {
      * function applied to the input cells' values.
      *
      * @param fn Function to apply. It must be <em>referentially transparent</em>.
-     * @deprecated As of release 1.1.0, replaced by {@link #lift(Cell, Cell, Lambda3)}
+     * @deprecated As of release 1.1.0, replaced by {@link #lift(Cell, Cell, Function3)}
      */
     @Deprecated
-    public static <A, B, C, D> Cell<D> lift(final Lambda3<A, B, C, D> fn, Cell<A> a, Cell<B> b, Cell<C> c) {
+    public static <A, B, C, D> Cell<D> lift(final Function3<A, B, C, D> fn, Cell<A> a, Cell<B> b, Cell<C> c) {
         return a.lift(b, c, fn);
     }
 
@@ -333,10 +335,10 @@ public class Cell<A> {
      * function applied to the input cells' values.
      *
      * @param fn Function to apply. It must be <em>referentially transparent</em>.
-     * @deprecated As of release 1.1.0, replaced by {@link #lift(Cell, Cell, Cell, Lambda4)}
+     * @deprecated As of release 1.1.0, replaced by {@link #lift(Cell, Cell, Cell, Function4)}
      */
     @Deprecated
-    public static <A, B, C, D, E> Cell<E> lift(final Lambda4<A, B, C, D, E> fn, Cell<A> a, Cell<B> b, Cell<C> c, Cell<D> d) {
+    public static <A, B, C, D, E> Cell<E> lift(final Function4<A, B, C, D, E> fn, Cell<A> a, Cell<B> b, Cell<C> c, Cell<D> d) {
         return a.lift(b, c, d, fn);
     }
 
@@ -345,10 +347,10 @@ public class Cell<A> {
      * function applied to the input cells' values.
      *
      * @param fn Function to apply. It must be <em>referentially transparent</em>.
-     * @deprecated As of release 1.1.0, replaced by {@link #lift(Cell, Cell, Cell, Cell, Lambda5)}
+     * @deprecated As of release 1.1.0, replaced by {@link #lift(Cell, Cell, Cell, Cell, Function5)}
      */
     @Deprecated
-    public static <A, B, C, D, E, F> Cell<F> lift(final Lambda5<A, B, C, D, E, F> fn, Cell<A> a, Cell<B> b, Cell<C> c, Cell<D> d, Cell<E> e) {
+    public static <A, B, C, D, E, F> Cell<F> lift(final Function5<A, B, C, D, E, F> fn, Cell<A> a, Cell<B> b, Cell<C> c, Cell<D> d, Cell<E> e) {
         return a.lift(b, c, d, e, fn);
     }
 
@@ -357,10 +359,10 @@ public class Cell<A> {
      * function applied to the input cells' values.
      *
      * @param fn Function to apply. It must be <em>referentially transparent</em>.
-     * @deprecated As of release 1.1.0, replaced by {@link #lift(Cell, Cell, Cell, Cell, Cell, Lambda6)}
+     * @deprecated As of release 1.1.0, replaced by {@link #lift(Cell, Cell, Cell, Cell, Cell, Function6)}
      */
     @Deprecated
-    public static <A, B, C, D, E, F, G> Cell<G> lift(final Lambda6<A, B, C, D, E, F, G> fn, Cell<A> a, Cell<B> b, Cell<C> c, Cell<D> d, Cell<E> e, Cell<F> f) {
+    public static <A, B, C, D, E, F, G> Cell<G> lift(final Function6<A, B, C, D, E, F, G> fn, Cell<A> a, Cell<B> b, Cell<C> c, Cell<D> d, Cell<E> e, Cell<F> f) {
         return a.lift(b, c, d, e, f, fn);
     }
 }

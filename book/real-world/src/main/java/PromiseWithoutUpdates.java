@@ -28,7 +28,7 @@ public class PromiseWithoutUpdates<A> {
         );
     }
 
-    public static <A, B, C> PromiseWithoutUpdates<C> lift(final Lambda2<A, B, C> f,
+    public static <A, B, C> PromiseWithoutUpdates<C> lift(final Function2<A, B, C> f,
                                                           PromiseWithoutUpdates<A> pa, PromiseWithoutUpdates<B> pb) {
         return Transaction.run(() -> {
             class Tuple {
@@ -41,8 +41,8 @@ public class PromiseWithoutUpdates<A> {
                 Optional<B> ob;
             }
             ;
-            Lambda2<Tuple, Tuple, Tuple> combine = (l, r) -> new Tuple(l.oa.isPresent() ? l.oa : r.oa, l.ob.isPresent() ? l.ob : r.ob);
-            Lambda1<Tuple, Optional<C>> result = t -> t.oa.isPresent() && t.ob.isPresent()
+            Function2<Tuple, Tuple, Tuple> combine = (l, r) -> new Tuple(l.oa.isPresent() ? l.oa : r.oa, l.ob.isPresent() ? l.ob : r.ob);
+            Function1<Tuple, Optional<C>> result = t -> t.oa.isPresent() && t.ob.isPresent()
                     ? Optional.of(f.apply(t.oa.get(), t.ob.get()))
                     : Optional.empty();
             Stream<Tuple> sA = pa.sDeliver.map(a -> new Tuple(Optional.of(a), Optional.empty()));
@@ -59,7 +59,7 @@ public class PromiseWithoutUpdates<A> {
             ).once();
             Cell<Optional<C>> oValue = vA.lift(vB,
                     combine).map(result);
-            return new PromiseWithoutUpdates<C>(sDeliver, oValue);
+            return new PromiseWithoutUpdates<>(sDeliver, oValue);
         });
     }
 }

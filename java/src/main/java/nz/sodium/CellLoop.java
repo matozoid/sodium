@@ -11,7 +11,7 @@ public final class CellLoop<A> extends LazyCell<A> {
     /**
      * Resolve the loop to specify what the CellLoop was a forward reference to. It
      * must be invoked inside the same transaction as the place where the CellLoop is used.
-     * This requires you to create an explicit transaction with {@link Transaction#run(Lambda0)}
+     * This requires you to create an explicit transaction with {@link Transaction#run(Function0)}
      * or {@link Transaction#runVoid(Runnable)}.
      */
     public void loop(final Cell<A> a_out) {

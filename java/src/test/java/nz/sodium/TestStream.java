@@ -150,7 +150,7 @@ public class TestStream extends TestCase {
     public void testLoopStream() {
         final StreamSink<Integer> ea = new StreamSink();
         Stream<Integer> ec = Transaction.<Stream<Integer>>run(() -> {
-            StreamLoop<Integer> eb = new StreamLoop<Integer>();
+            StreamLoop<Integer> eb = new StreamLoop<>();
             Stream<Integer> ec_ = ea.map(x -> x % 10).merge(eb, (x, y) -> x + y);
             Stream<Integer> eb_out = ea.map(x -> x / 10).filter(x -> x != 0);
             eb.loop(eb_out);

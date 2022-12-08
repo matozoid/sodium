@@ -35,7 +35,7 @@ class Date {
 
 class VTextField extends STextField {
     public VTextField(Value<String> v, int width) {
-        this(new StreamLoop<String>(), v, width);
+        this(new StreamLoop<>(), v, width);
     }
 
     private VTextField(StreamLoop<String> sRemoteWrite, Value<String> v,

@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public class FrButton extends Fridget {
     public FrButton(Cell<String> label) {
-        this(label, new StreamLoop<Unit>());
+        this(label, new StreamLoop<>());
     }
 
     private FrButton(Cell<String> label, StreamLoop<Unit> sClicked) {

@@ -6,11 +6,11 @@ import java.util.*;
 
 public class dynamic {
     static <A> Cell<List<A>> sequence(Collection<Cell<A>> in) {
-        Cell<List<A>> out = new Cell<>(new ArrayList<A>());
+        Cell<List<A>> out = new Cell<>(new ArrayList<>());
         for (Cell<A> c : in)
             out = out.lift(c,
                     (list0, a) -> {
-                        List<A> list = new ArrayList<A>(list0);
+                        List<A> list = new ArrayList<>(list0);
                         list.add(a);
                         return list;
                     });
@@ -105,7 +105,7 @@ public class dynamic {
             CellLoop<State> state = new CellLoop<>();
             Point center = new Point(world.windowSize.width / 2,
                     world.windowSize.height / 2);
-            Stream<Lambda1<State, State>> sAdd =
+            Stream<Function1<State, State>> sAdd =
                     periodicTimer(time, sTick, 6.0)
                             .map(u ->
                                     st -> {
@@ -117,9 +117,9 @@ public class dynamic {
                                                         world));
                                     }
                             );
-            Stream<Lambda1<State, State>> sRemove
+            Stream<Function1<State, State>> sRemove
                     = sDestroy.map(ids -> st -> st.remove(ids));
-            Stream<Lambda1<State, State>> sChange = sAdd.merge(sRemove,
+            Stream<Function1<State, State>> sChange = sAdd.merge(sRemove,
                     (f1, f2) -> a -> f1.apply(f2.apply(a)));
             state.loop(sChange.snapshot(state, (f, st) -> f.apply(st))
                     .hold(initState));

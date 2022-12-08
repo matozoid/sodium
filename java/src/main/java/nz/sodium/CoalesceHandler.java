@@ -1,12 +1,14 @@
 package nz.sodium;
 
+import io.vavr.Function2;
+
 class CoalesceHandler<A> implements TransactionHandler<A> {
-    public CoalesceHandler(Lambda2<A, A, A> f, StreamWithSend<A> out) {
+    public CoalesceHandler(Function2<A, A, A> f, StreamWithSend<A> out) {
         this.f = f;
         this.out = out;
     }
 
-    private final Lambda2<A, A, A> f;
+    private final Function2<A, A, A> f;
     private final StreamWithSend<A> out;
     private boolean accumValid = false;
     private A accum;

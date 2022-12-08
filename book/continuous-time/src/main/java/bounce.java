@@ -26,7 +26,7 @@ public class bounce extends Shapes {
                     .orElse(bounceAt(sys, velx, posx, rightWall)));
             sBounceY.loop(bounceAt(sys, vely, posy, floor));
             return translate(
-                    scale(circle(Color.red), new Cell<Double>(ballRadius)),
+                    scale(circle(Color.red), new Cell<>(ballRadius)),
                     time.lift(posx, posy, (t, x, y) ->
                             new Point(x.valueAt(t), y.valueAt(t)))
             );

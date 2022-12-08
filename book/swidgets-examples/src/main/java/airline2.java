@@ -1,5 +1,5 @@
 import nz.sodium.Cell;
-import nz.sodium.Lambda2;
+import nz.sodium.Function2;
 import swidgets.SButton;
 import swidgets.SDateField;
 
@@ -8,11 +8,11 @@ import java.awt.*;
 import java.util.Calendar;
 
 class Rule {
-    public Rule(Lambda2<Calendar, Calendar, Boolean> f) {
+    public Rule(Function2<Calendar, Calendar, Boolean> f) {
         this.f = f;
     }
 
-    public final Lambda2<Calendar, Calendar, Boolean> f;
+    public final Function2<Calendar, Calendar, Boolean> f;
 
     public Cell<Boolean> reify(Cell<Calendar> dep, Cell<Calendar> ret) {
         return dep.lift(ret, f);

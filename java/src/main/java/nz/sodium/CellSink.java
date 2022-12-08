@@ -1,5 +1,7 @@
 package nz.sodium;
 
+import io.vavr.Function2;
+
 /**
  * A cell that allows values to be pushed into it, acting as an interface between the
  * world of I/O and the world of FRP. Code that exports CellSinks for read-only use
@@ -18,7 +20,7 @@ public final class CellSink<A> extends Cell<A> {
      * Construct a writable cell with the specified initial value. If multiple values are
      * sent in the same transaction, the specified function is used to combine them.
      */
-    public CellSink(A initValue, Lambda2<A, A, A> f) {
+    public CellSink(A initValue, Function2<A, A, A> f) {
         super(new StreamSink<>(f), initValue);
     }
 

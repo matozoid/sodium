@@ -1,5 +1,7 @@
 package nz.sodium;
 
+import io.vavr.Function2;
+
 /**
  * A stream that allows values to be pushed into it, acting as an interface between the
  * world of I/O and the world of FRP. Code that exports StreamSinks for read-only use
@@ -9,7 +11,7 @@ public class StreamSink<A> extends StreamWithSend<A> {
     /**
      * Construct a StreamSink that allows send() to be called once on it per transaction.
      * If you call send() more than once, it will throw an exception. If you need to do
-     * this, then use {@link #StreamSink(Lambda2)}.
+     * this, then use {@link #StreamSink(Function2)}.
      */
     public StreamSink() {
         this((left, right) -> {
@@ -25,7 +27,7 @@ public class StreamSink<A> extends StreamWithSend<A> {
      * @param f Function to combine the values. It may construct FRP logic or use
      *          {@link Cell#sample()}. Apart from this the function must be <em>referentially transparent</em>.
      */
-    public StreamSink(Lambda2<A, A, A> f) {
+    public StreamSink(Function2<A, A, A> f) {
         this.coalescer = new CoalesceHandler<>(f, this);
     }
 

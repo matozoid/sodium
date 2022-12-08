@@ -1,5 +1,7 @@
 package nz.sodium;
 
+import io.vavr.Function1;
+
 import java.util.LinkedList;
 
 
@@ -38,7 +40,7 @@ public class Operational {
      * initiated transaction. Same as {@link #split(Stream)} but it works on a single value.
      */
     public static <A> Stream<A> defer(Stream<A> s) {
-        return split(s.map((Lambda1<A, Iterable<A>>) a -> {
+        return split(s.map((Function1<A, Iterable<A>>) a -> {
             LinkedList<A> l = new LinkedList<>();
             l.add(a);
             return l;

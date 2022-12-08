@@ -1,5 +1,8 @@
 package nz.sodium;
 
+import io.vavr.Function0;
+import io.vavr.Function1;
+
 import java.util.*;
 
 
@@ -94,7 +97,7 @@ public final class Transaction {
      * In most cases this is not needed, because the primitives always create their own
      * transaction automatically, but it is needed in some circumstances.
      */
-    public static <A> A run(Lambda0<A> code) {
+    public static <A> A run(Function0<A> code) {
         synchronized (transactionLock) {
             // If we are already inside a transaction (which must be on the same
             // thread otherwise we wouldn't have acquired transactionLock), then
@@ -147,7 +150,7 @@ public final class Transaction {
         }
     }
 
-    static <A> A apply(Lambda1<Transaction, A> code) {
+    static <A> A apply(Function1<Transaction, A> code) {
         synchronized (transactionLock) {
             // If we are already inside a transaction (which must be on the same
             // thread otherwise we wouldn't have acquired transactionLock), then

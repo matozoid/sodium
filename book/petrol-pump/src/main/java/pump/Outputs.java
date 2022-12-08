@@ -27,15 +27,15 @@ public class Outputs {
     }
 
     public Outputs() {
-        this.delivery = new Cell<Delivery>(Delivery.OFF);
-        this.presetLCD = new Cell<String>("");
-        this.saleCostLCD = new Cell<String>("");
-        this.saleQuantityLCD = new Cell<String>("");
-        this.priceLCD1 = new Cell<String>("");
-        this.priceLCD2 = new Cell<String>("");
-        this.priceLCD3 = new Cell<String>("");
-        this.sBeep = new Stream<Unit>();
-        this.sSaleComplete = new Stream<Sale>();
+        this.delivery = new Cell<>(Delivery.OFF);
+        this.presetLCD = new Cell<>("");
+        this.saleCostLCD = new Cell<>("");
+        this.saleQuantityLCD = new Cell<>("");
+        this.priceLCD1 = new Cell<>("");
+        this.priceLCD2 = new Cell<>("");
+        this.priceLCD3 = new Cell<>("");
+        this.sBeep = new Stream<>();
+        this.sSaleComplete = new Stream<>();
     }
 
     public final Cell<Delivery> delivery;
