@@ -1,23 +1,20 @@
 Sodium - Functional Reactive Programming (FRP) library for multiple languages
 
+----
+
+Fork notes:
+
+This fork uses Maven in a more "normal" way,
+takes a layer of dust off the code,
+and has a "vavr" branch that uses VAVR types.
+
+----
+
 This is based on Flapjax, Yampa, scala.React and a number of other Functional
 Reactive Programming efforts, as well as a lot of personal experience. Enjoy.
 
 Status:
-  C++ - complete, but the memory management is not quite right yet - in separate sodium-cxx repository
-  C# - complete (source in dotnet folder, binaries in SodiumFRP NuGet package)
-  F# - complete (source in dotnet folder, binaries in SodiumFRP.FSharp NuGet package)
   Java - complete
-  Kotlin - complete - in separate sodium-kotlin repository
-  Scala - complete
-  Typescript/Javascript - complete - in separate sodium-typescript repository
-
-  Haskell - deprecated in favour of Heinrich Apfelmus's Reactive Banana
-  Embedded-C - just an experiment
-  Rust - complete - in separate sodium-rust repository
-
-Got a question about how to use Sodium? Go to Sodium user forum:
-  http://sodium.nz/
 
 Found a bug? Raise an issue at
   https://github.com/SodiumFRP/
