@@ -24,15 +24,7 @@ public class StreamLoop<A> extends StreamWithSend<A> {
             throw new RuntimeException("StreamLoop looped more than once");
         assigned = true;
         final StreamLoop<A> me = this;
-        Transaction.runVoid(new Runnable() {
-            public void run() {
-                unsafeAddCleanup(ea_out.listen_(StreamLoop.this.node, new TransactionHandler<A>() {
-                    public void run(Transaction trans, A a) {
-                        me.send(trans, a);
-                    }
-                }));
-            }
-        });
+        Transaction.runVoid(() -> unsafeAddCleanup(ea_out.listen_(StreamLoop.this.node, me::send)));
     }
 }
 

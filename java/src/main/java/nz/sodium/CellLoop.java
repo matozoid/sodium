@@ -1,11 +1,11 @@
 package nz.sodium;
 
 /**
- * A forward reference for a {@link Cell} equivalent to the Cell that is referenced. 
+ * A forward reference for a {@link Cell} equivalent to the Cell that is referenced.
  */
 public final class CellLoop<A> extends LazyCell<A> {
     public CellLoop() {
-    	super(new StreamLoop<A>(), null);
+        super(new StreamLoop<>(), null);
     }
 
     /**
@@ -14,22 +14,18 @@ public final class CellLoop<A> extends LazyCell<A> {
      * This requires you to create an explicit transaction with {@link Transaction#run(Lambda0)}
      * or {@link Transaction#runVoid(Runnable)}.
      */
-    public void loop(final Cell<A> a_out)
-    {
+    public void loop(final Cell<A> a_out) {
         final CellLoop<A> me = this;
-        Transaction.apply(new Lambda1<Transaction, Unit>() {
-        	public Unit apply(final Transaction trans) {
-                ((StreamLoop<A>)me.str).loop(a_out.updates());
-                me.lazyInitValue = a_out.sampleLazy(trans);
-                return Unit.UNIT;
-            }
+        Transaction.apply(trans -> {
+            ((StreamLoop<A>) me.str).loop(a_out.updates());
+            me.lazyInitValue = a_out.sampleLazy(trans);
+            return Unit.UNIT;
         });
     }
 
     @Override
-    A sampleNoTrans()
-    {
-        if (!((StreamLoop<A>)str).assigned)
+    A sampleNoTrans() {
+        if (!((StreamLoop<A>) str).assigned)
             throw new RuntimeException("CellLoop sampled before it was looped");
         return super.sampleNoTrans();
     }

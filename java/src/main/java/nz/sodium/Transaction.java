@@ -26,7 +26,7 @@ public final class Transaction {
 		private final Node rank;
 		private final Handler<Transaction> action;
 		private static long nextSeq;
-		private long seq;
+		private final long seq;
 
 		public Entry(Node rank, Handler<Transaction> action) {
 			this.rank = rank;
@@ -46,9 +46,9 @@ public final class Transaction {
 
 	}
 
-	private final PriorityQueue<Entry> prioritizedQ = new PriorityQueue<Entry>();
-	private final Set<Entry> entries = new HashSet<Entry>();
-	private final List<Runnable> lastQ = new ArrayList<Runnable>();
+	private final PriorityQueue<Entry> prioritizedQ = new PriorityQueue<>();
+	private final Set<Entry> entries = new HashSet<>();
+	private final List<Runnable> lastQ = new ArrayList<>();
 	private Map<Integer, Handler<Transaction>> postQ;
 
 	Transaction() {
@@ -56,7 +56,7 @@ public final class Transaction {
 
 	private static Transaction currentTransaction;
     static int inCallback;
-    private static List<Runnable> onStartHooks = new ArrayList<Runnable>();
+    private static final List<Runnable> onStartHooks = new ArrayList<>();
     private static boolean runningOnStartHooks = false;
 
 	/**
@@ -212,17 +212,15 @@ public final class Transaction {
      */
 	void post_(int childIx, final Handler<Transaction> action) {
 	    if (postQ == null)
-	        postQ = new HashMap<Integer, Handler<Transaction>>();
+	        postQ = new HashMap<>();
 	    // If an entry exists already, combine the old one with the new one.
 	    final Handler<Transaction> existing = postQ.get(childIx);
 	    Handler<Transaction> neu =
 	        existing == null ? action
-	                         : new Handler<Transaction>() {
-                                   public void run(Transaction trans) {
-                                       existing.run(trans);
-                                       action.run(trans);
-                                   }
-                               };
+	                         : trans -> {
+								 existing.run(trans);
+								 action.run(trans);
+							 };
 	    postQ.put(childIx, neu);
 	}
 
@@ -231,17 +229,11 @@ public final class Transaction {
      * or immediately if there is no current transaction.
      */
 	public static void post(final Runnable action) {
-	    Transaction.run(new Handler<Transaction>() {
-            public void run(Transaction trans) {
-                // -1 will mean it runs before anything split/deferred, and will run
-                // outside a transaction context.
-                trans.post_(-1, new Handler<Transaction>() {
-                    public void run(Transaction trans) {
-                        action.run();
-                    }
-                });
-            }
-	    });
+	    Transaction.run(trans -> {
+			// -1 will mean it runs before anything split/deferred, and will run
+			// outside a transaction context.
+			trans.post_(-1, trans1 -> action.run());
+		});
 	}
 
 	/**
@@ -253,8 +245,7 @@ public final class Transaction {
 	    if (toRegen) {
 	        toRegen = false;
 	        prioritizedQ.clear();
-	        for (Entry e : entries)
-	            prioritizedQ.add(e);
+			prioritizedQ.addAll(entries);
 	    }
 	}
 

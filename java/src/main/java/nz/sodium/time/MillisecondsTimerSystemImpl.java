@@ -11,9 +11,9 @@ class MillisecondsTimerSystemImpl implements TimerSystemImpl<Long> {
             }
             this.callback = callback;
         }
-        private long t;
-        private long seq;
-        private Runnable callback;
+        private final long t;
+        private final long seq;
+        private final Runnable callback;
         public void cancel() {
             synchronized (lock) {
                 timers.remove(this);
@@ -23,14 +23,12 @@ class MillisecondsTimerSystemImpl implements TimerSystemImpl<Long> {
 		public int compareTo(SimpleTimer o) {
 		    if (t < o.t) return -1;
 		    if (t > o.t) return 1;
-		    if (seq < o.seq) return -1;
-		    if (seq > o.seq) return 1;
-		    return 0;
-		}
+            return Long.compare(seq, o.seq);
+        }
     }
-    private Object lock = new Object();
+    private final Object lock = new Object();
     private long nextSeq = 0;
-    private TreeSet<SimpleTimer> timers = new TreeSet<SimpleTimer>();
+    private final TreeSet<SimpleTimer> timers = new TreeSet<>();
 
     private long timeTillNext(long now) {
         while (true) {
@@ -57,20 +55,18 @@ class MillisecondsTimerSystemImpl implements TimerSystemImpl<Long> {
         }
     }
 
-    private Thread timerThread = new Thread() {
-        public void run() {
-            while (true) {
-                long tWait = timeTillNext(System.currentTimeMillis());
-                if (tWait > 0) {
-                    try {
-                        Thread.sleep(tWait);
-                    }
-                    catch (InterruptedException e) {
-                    }
+    private final Thread timerThread = new Thread(() -> {
+        while (true) {
+            long tWait = timeTillNext(System.currentTimeMillis());
+            if (tWait > 0) {
+                try {
+                    Thread.sleep(tWait);
+                }
+                catch (InterruptedException e) {
                 }
             }
         }
-    };
+    });
     public MillisecondsTimerSystemImpl() {
         timerThread.setDaemon(true);
         timerThread.start();

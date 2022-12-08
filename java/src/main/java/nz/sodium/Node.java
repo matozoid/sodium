@@ -15,7 +15,7 @@ class Node implements Comparable<Node> {
 
 	public static class Target {
 	    Target(TransactionHandler<Unit> action, Node node) {
-	        this.action = new WeakReference<TransactionHandler<Unit>>(action);
+	        this.action = new WeakReference<>(action);
 	        this.node = node;
 	    }
 	    final WeakReference<TransactionHandler<Unit>> action;
@@ -23,13 +23,13 @@ class Node implements Comparable<Node> {
     }
 
 	private long rank;
-    List<Target> listeners = new ArrayList<Target>();
+    List<Target> listeners = new ArrayList<>();
 
 	/**
 	 * @return true if any changes were made. 
 	 */
 	boolean linkTo(TransactionHandler<Unit> action, Node target, Target[] outTarget) {
-		boolean changed = target.ensureBiggerThan(rank, new HashSet<Node>());
+		boolean changed = target.ensureBiggerThan(rank, new HashSet<>());
 		Target t = new Target(action, target);
 		listeners.add(t);
 		outTarget[0] = t;
@@ -54,8 +54,6 @@ class Node implements Comparable<Node> {
 
 	@Override
 	public int compareTo(Node o) {
-		if (rank < o.rank) return -1;
-		if (rank > o.rank) return 1;
-		return 0;
+		return Long.compare(rank, o.rank);
 	}
 }

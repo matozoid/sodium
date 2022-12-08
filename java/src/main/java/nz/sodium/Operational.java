@@ -32,11 +32,7 @@ public class Operational {
      */
     public static <A> Stream<A> value(final Cell<A> c)
     {
-        return Transaction.apply(new Lambda1<Transaction, Stream<A>>() {
-        	public Stream<A> apply(Transaction trans) {
-        		return c.value(trans);
-        	}
-        });
+        return Transaction.apply(c::value);
     }
 
 	/**
@@ -45,12 +41,10 @@ public class Operational {
 	 */
 	public static <A> Stream<A> defer(Stream<A> s)
 	{
-	    return split(s.map(new Lambda1<A,Iterable<A>>() {
-	        public Iterable<A> apply(A a) {
-                LinkedList<A> l = new LinkedList<A>();
-                l.add(a);
-                return l;
-            }
+	    return split(s.map((Lambda1<A, Iterable<A>>) a -> {
+            LinkedList<A> l = new LinkedList<>();
+            l.add(a);
+            return l;
         }));
 	}
 
@@ -62,20 +56,14 @@ public class Operational {
 	 * events output by split() or {@link #defer(Stream)} invoked elsewhere in the code.
 	 */
     public static <A, C extends Iterable<A>> Stream<A> split(Stream<C> s) {
-	    final StreamWithSend<A> out = new StreamWithSend<A>();
-	    Listener l1 = s.listen_(out.node, new TransactionHandler<C>() {
-	        public void run(Transaction trans, C as) {
-	            int childIx = 0;
-                for (final A a : as) {
-                    trans.post_(childIx, new Handler<Transaction>() {
-                        public void run(Transaction trans) {
-                            out.send(trans, a);
-                        }
-                    });
-                    childIx++;
-                }
-	        }
-	    });
+	    final StreamWithSend<A> out = new StreamWithSend<>();
+	    Listener l1 = s.listen_(out.node, (trans, as) -> {
+            int childIx = 0;
+            for (final A a : as) {
+                trans.post_(childIx, trans1 -> out.send(trans1, a));
+                childIx++;
+            }
+        });
 	    return out.unsafeAddCleanup(l1);
     }
 }

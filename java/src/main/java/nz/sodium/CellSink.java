@@ -11,7 +11,7 @@ public final class CellSink<A> extends Cell<A> {
      * sent in the same transaction, the last one is used.
      */
     public CellSink(A initValue) {
-    	super(new StreamSink<A>(), initValue);
+    	super(new StreamSink<>(), initValue);
     }
 
     /**
@@ -19,7 +19,7 @@ public final class CellSink<A> extends Cell<A> {
      * sent in the same transaction, the specified function is used to combine them.
      */
     public CellSink(A initValue, Lambda2<A,A,A> f) {
-    	super(new StreamSink<A>(f), initValue);
+    	super(new StreamSink<>(f), initValue);
     }
 
     /**

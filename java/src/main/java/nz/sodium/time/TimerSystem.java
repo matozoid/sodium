@@ -1,37 +1,35 @@
 package nz.sodium.time;
 
 import nz.sodium.*;
+
 import java.util.LinkedList;
 import java.util.Optional;
 
-public class TimerSystem<T extends Comparable> {
+public class TimerSystem<T extends Comparable<T>> {
     public TimerSystem(final TimerSystemImpl<T> impl) {
         this.impl = impl;
-        final CellSink<T> timeSnk = new CellSink<T>(impl.now());
+        final CellSink<T> timeSnk = new CellSink<>(impl.now());
         time = timeSnk;
-        Transaction.onStart(new Runnable() {
-            public void run() {
-                T t = impl.now();
-                impl.runTimersTo(t);
-                while (true) {
-                    Event ev;
-                    // Pop all events earlier than t.
-                    synchronized (eventQueue) {
-                        ev = eventQueue.peekFirst();
-                        if (ev != null && ev.t.compareTo(t) <= 0)
-                            eventQueue.removeFirst();
-                        else
-                            ev = null;
-                    }
-                    if (ev != null) {
-                        timeSnk.send(ev.t);
-                        ev.sAlarm.send(ev.t);
-                    }
+        Transaction.onStart(() -> {
+            T t = impl.now();
+            impl.runTimersTo(t);
+            while (true) {
+                Event ev;
+                // Pop all events earlier than t.
+                synchronized (eventQueue) {
+                    ev = eventQueue.peekFirst();
+                    if (ev != null && ev.t.compareTo(t) <= 0)
+                        eventQueue.removeFirst();
                     else
-                        break;
+                        ev = null;
                 }
-                timeSnk.send(t);
+                if (ev != null) {
+                    timeSnk.send(ev.t);
+                    ev.sAlarm.send(ev.t);
+                } else
+                    break;
             }
+            timeSnk.send(t);
         });
     }
 
@@ -46,41 +44,34 @@ public class TimerSystem<T extends Comparable> {
             this.t = t;
             this.sAlarm = sAlarm;
         }
+
         T t;
         StreamSink<T> sAlarm;
-    };
-    private LinkedList<Event> eventQueue = new LinkedList<Event>();
+    }
+
+    private final LinkedList<Event> eventQueue = new LinkedList<>();
 
     private static class CurrentTimer {
         Optional<Timer> oTimer = Optional.empty();
-    };
+    }
 
     /**
      * A timer that fires at the specified time.
      */
     public Stream<T> at(Cell<Optional<T>> tAlarm) {
-        final StreamSink<T> sAlarm = new StreamSink<T>();
+        final StreamSink<T> sAlarm = new StreamSink<>();
         final CurrentTimer current = new CurrentTimer();
-        Listener l = tAlarm.listen(new Handler<Optional<T>>() {
-            public void run(final Optional<T> oAlarm) {
-                if (current.oTimer.isPresent())
-                    current.oTimer.get().cancel();
-                current.oTimer = oAlarm.isPresent()
-                    ? Optional.<Timer>of(
-                        impl.setTimer(oAlarm.get(), new Runnable() {
-                            public void run() {
-                                synchronized (eventQueue) {
-                                    eventQueue.add(new Event(oAlarm.get(), sAlarm));
-                                }
-                                // Open and close a transaction to trigger queued
-                                // events to run.
-                                Transaction.runVoid(new Runnable() {
-                                    public void run() { }
-                                });
-                            }
-                        }))
-                    : Optional.<Timer>empty();
-            }
+        Listener l = tAlarm.listen(oAlarm -> {
+            current.oTimer.ifPresent(Timer::cancel);
+            current.oTimer = oAlarm.map(t -> impl.setTimer(t, () -> {
+                synchronized (eventQueue) {
+                    eventQueue.add(new Event(t, sAlarm));
+                }
+                // Open and close a transaction to trigger queued
+                // events to run.
+                Transaction.runVoid(() -> {
+                });
+            }));
         });
         return sAlarm.addCleanup(l);
     }

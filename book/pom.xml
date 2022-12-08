@@ -1,0 +1,28 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>nz.sodium</groupId>
+        <artifactId>sodium-parent</artifactId>
+        <version>1.2.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>sodium-book</artifactId>
+    <packaging>pom</packaging>
+    
+    <modules>
+        <module>battle</module>
+        <module>continuous-time</module>
+        <module>fridgets</module>
+        <module>fridgets-examples</module>
+        <module>operational</module>
+        <module>patterns</module>
+        <module>petrol-pump</module>
+        <module>real-world</module>
+        <module>swidgets</module>
+        <module>swidgets-examples</module>
+        <module>writable-remote</module>
+        <module>zombicus</module>
+    </modules>
+</project>
