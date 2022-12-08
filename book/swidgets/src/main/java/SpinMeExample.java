@@ -1,9 +1,10 @@
 import nz.sodium.Transaction;
+import swidgets.SSpinner;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class spinme {
+public class SpinMeExample {
     public static void main(String[] args) {
         JFrame view = new JFrame("spinme");
         view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -7,7 +7,7 @@ import swidgets.STextField;
 import javax.swing.*;
 import java.awt.*;
 
-public class translate {
+public class TranslateExample {
     public static void main(String[] args) {
         JFrame view = new JFrame("Translate");
         view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

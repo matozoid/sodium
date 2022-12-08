@@ -7,7 +7,7 @@ import swidgets.SLabel;
 import javax.swing.*;
 import java.awt.*;
 
-public class nonegative {
+public class NoNegativeExample {
     public static void main(String[] args) {
         JFrame view = new JFrame("nonegative");
         view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -1,46 +1,19 @@
-import io.vavr.Function2;
 import nz.sodium.Cell;
 import swidgets.SButton;
 import swidgets.SDateField;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Calendar;
 
-class Rule {
-    public Rule(Function2<Calendar, Calendar, Boolean> f) {
-        this.f = f;
-    }
-
-    public final Function2<Calendar, Calendar, Boolean> f;
-
-    public Cell<Boolean> reify(Cell<Calendar> dep, Cell<Calendar> ret) {
-        return dep.lift(ret, f);
-    }
-
-    public Rule and(Rule other) {
-        return new Rule(
-                (d, r) -> this.f.apply(d, r) && other.f.apply(d, r)
-        );
-    }
-}
-
-public class airline2 {
-    private static boolean unlucky(Calendar dt) {
-        int day = dt.get(Calendar.DAY_OF_MONTH);
-        return day == 4 || day == 14 || day == 24;
-    }
-
+public class Airline1Example {
     public static void main(String[] args) {
-        JFrame view = new JFrame("airline2");
+        JFrame view = new JFrame("airline1");
         view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         SDateField dep = new SDateField();
         SDateField ret = new SDateField();
-        Rule r1 = new Rule((d, r) -> d.compareTo(r) <= 0);
-        Rule r2 = new Rule((d, r) -> !unlucky(d) && !unlucky(r));
-        Rule r = r1.and(r2);
-        Cell<Boolean> valid = r.reify(dep.date, ret.date);
+        Cell<Boolean> valid = dep.date.lift(ret.date,
+                (d, r) -> d.compareTo(r) <= 0);
         SButton ok = new SButton("OK", valid);
 
         GridBagLayout gridbag = new GridBagLayout();

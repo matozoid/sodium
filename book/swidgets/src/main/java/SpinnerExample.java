@@ -7,7 +7,7 @@ import swidgets.SLabel;
 import javax.swing.*;
 import java.awt.*;
 
-public class spinner {
+public class SpinnerExample {
     public static void main(String[] args) {
         JFrame view = new JFrame("spinner");
         view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

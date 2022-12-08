@@ -15,13 +15,11 @@
         <module>battle</module>
         <module>continuous-time</module>
         <module>fridgets</module>
-        <module>fridgets-examples</module>
         <module>operational</module>
         <module>patterns</module>
         <module>petrol-pump</module>
         <module>real-world</module>
         <module>swidgets</module>
-        <module>swidgets-examples</module>
         <module>writable-remote</module>
         <module>zombicus</module>
     </modules>

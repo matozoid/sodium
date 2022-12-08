@@ -5,15 +5,15 @@ import swidgets.STextField;
 import javax.swing.*;
 import java.awt.*;
 
-public class add {
+public class AddExample {
     public static void main(String[] args) {
         JFrame frame = new JFrame("add");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new FlowLayout());
         STextField txtA = new STextField("5");
         STextField txtB = new STextField("10");
-        Cell<Integer> a = txtA.text.map(add::parseInt);
-        Cell<Integer> b = txtB.text.map(add::parseInt);
+        Cell<Integer> a = txtA.text.map(AddExample::parseInt);
+        Cell<Integer> b = txtB.text.map(AddExample::parseInt);
         Cell<Integer> sum = a.lift(b, Integer::sum);
         SLabel lblSum = new SLabel(sum.map(i -> Integer.toString(i)));
         frame.add(txtA);

@@ -2,13 +2,14 @@ import nz.sodium.Cell;
 import nz.sodium.Transaction;
 import swidgets.SButton;
 import swidgets.SLabel;
+import swidgets.SSpinner;
 import swidgets.STextField;
 
 import javax.swing.*;
 import java.awt.*;
 import java.lang.reflect.Array;
 
-public class formvalidation {
+public class FormValidationExample {
     public static void main(String[] args) {
         JFrame view = new JFrame("formvalidation");
         view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

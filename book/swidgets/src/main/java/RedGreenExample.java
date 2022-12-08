@@ -6,7 +6,7 @@ import swidgets.SLabel;
 import javax.swing.*;
 import java.awt.*;
 
-public class redgreen {
+public class RedGreenExample {
     public static void main(String[] args) {
         JFrame frame = new JFrame("redgreen");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
