@@ -1,3 +1,5 @@
+package animate;
+
 import nz.sodium.Cell;
 
 import java.awt.*;

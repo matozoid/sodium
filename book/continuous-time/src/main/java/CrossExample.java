@@ -1,8 +1,12 @@
+import animate.Animate;
+import animate.Drawable;
+import animate.Point;
+import animate.Shapes;
 import nz.sodium.Cell;
 
 import java.awt.*;
 
-public class cross extends Shapes {
+public class CrossExample extends Shapes {
     public static void main(String[] args) {
         Animate.animate("cross", (sys, extents) -> {
             Cell<Double> time = sys.time;
@@ -15,7 +19,7 @@ public class cross extends Shapes {
             Cell<Double> fifty = new Cell<>(50.0);
             Cell<Drawable> greenBall = translate(
                     scale(circle(Color.green), fifty),
-                    offset.map(x -> new Point(x, 0.0)));
+                    offset.map(x -> new animate.Point(x, 0.0)));
             Cell<Drawable> blueBall = translate(
                     scale(circle(Color.blue), fifty),
                     offset.map(y -> new Point(0.0, y)));

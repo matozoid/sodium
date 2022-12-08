@@ -1,3 +1,5 @@
+package animate;
+
 import io.vavr.control.Option;
 import nz.sodium.Cell;
 import nz.sodium.Operational;

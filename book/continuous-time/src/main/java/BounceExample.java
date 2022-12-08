@@ -1,3 +1,7 @@
+import animate.Animate;
+import animate.Point;
+import animate.Shapes;
+import animate.Signal;
 import nz.sodium.Cell;
 import nz.sodium.Stream;
 import nz.sodium.StreamLoop;
@@ -5,7 +9,7 @@ import nz.sodium.time.TimerSystem;
 
 import java.awt.*;
 
-public class bounce extends Shapes {
+public class BounceExample extends Shapes {
     public static void main(String[] args) {
         Animate.animate("bounce", (sys, extents) -> {
             Cell<Double> time = sys.time;
@@ -35,8 +39,7 @@ public class bounce extends Shapes {
 
     static double restitution = 0.95;
 
-    public static Stream<Signal> bounceAt(TimerSystem<Double> sys,
-                                          Cell<Signal> vel, Cell<Signal> pos, double target) {
+    public static Stream<Signal> bounceAt(TimerSystem<Double> sys, Cell<Signal> vel, Cell<Signal> pos, double target) {
         return sys.at(pos.map(p -> p.when(target)))
                 .snapshot(vel, (t, v) ->
                         new Signal(t, v.a, v.b, -v.valueAt(t) * restitution));

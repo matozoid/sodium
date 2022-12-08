@@ -5,7 +5,7 @@ import nz.sodium.time.TimerSystem;
 
 import java.util.Optional;
 
-public class timers {
+public class TimersExample {
     static Stream<Long> periodic(TimerSystem<Long> sys, long period) {
         Cell<Long> time = sys.time;
         CellLoop<Option<Long>> oAlarm = new CellLoop<>();
