@@ -1,5 +1,7 @@
 package nz.sodium;
 
+import io.vavr.Function0;
+
 /**
  * A forward reference for a {@link Cell} equivalent to the Cell that is referenced.
  */

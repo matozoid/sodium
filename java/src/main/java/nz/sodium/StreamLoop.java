@@ -1,5 +1,7 @@
 package nz.sodium;
 
+import io.vavr.Function0;
+
 /**
  * A forward reference for a {@link Stream} equivalent to the Stream that is referenced.
  */
