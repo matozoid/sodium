@@ -5,7 +5,7 @@ import nz.sodium.StreamLoop;
 import nz.sodium.StreamSink;
 import nz.sodium.Transaction;
 
-public class repeated {
+public class RepeatedExample {
     public static void main(String[] args) {
         StreamSink<Integer> sA = Transaction.run(() -> {
             StreamSink<Integer> sA_ = new StreamSink<>();

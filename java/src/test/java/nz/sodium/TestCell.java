@@ -3,19 +3,23 @@ package nz.sodium;
 import io.vavr.Function1;
 import io.vavr.Tuple2;
 import io.vavr.control.Option;
-import junit.framework.TestCase;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class TestCell extends TestCase {
-    @Override
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class TestCell {
+    @BeforeEach
     protected void tearDown() throws Exception {
         System.gc();
         Thread.sleep(100);
     }
 
+    @Test
     public void testHold() {
         StreamSink<Integer> e = new StreamSink<>();
         Cell<Integer> b = e.hold(0);
@@ -27,6 +31,7 @@ public class TestCell extends TestCase {
         assertEquals(Arrays.asList(2, 9), out);
     }
 
+    @Test
     public void testSnapshot() {
         CellSink<Integer> b = new CellSink<>(0);
         StreamSink<Long> trigger = new StreamSink<>();
@@ -43,6 +48,7 @@ public class TestCell extends TestCase {
         assertEquals(Arrays.asList("100 0", "200 2", "300 1"), out);
     }
 
+    @Test
     public void testValues() {
         CellSink<Integer> b = new CellSink<>(9);
         List<Integer> out = new ArrayList<>();
@@ -53,6 +59,7 @@ public class TestCell extends TestCase {
         assertEquals(Arrays.asList(9, 2, 7), out);
     }
 
+    @Test
     public void testConstantBehavior() {
         Cell<Integer> b = new Cell<>(12);
         List<Integer> out = new ArrayList<>();
@@ -61,6 +68,7 @@ public class TestCell extends TestCase {
         assertEquals(List.of(12), out);
     }
 
+    @Test
     public void testMapC() {
         CellSink<Integer> b = new CellSink<>(6);
         List<String> out = new ArrayList<>();
@@ -71,6 +79,7 @@ public class TestCell extends TestCase {
         assertEquals(Arrays.asList("6", "8"), out);
     }
 
+    @Test
     public void testMapCLateListen() {
         CellSink<Integer> b = new CellSink<>(6);
         List<String> out = new ArrayList<>();
@@ -82,6 +91,7 @@ public class TestCell extends TestCase {
         assertEquals(Arrays.asList("2", "8"), out);
     }
 
+    @Test
     public void testApply() {
         CellSink<Function1<Long, String>> bf = new CellSink<>(
                 (Long b) -> "1 " + b);
@@ -94,6 +104,7 @@ public class TestCell extends TestCase {
         assertEquals(Arrays.asList("1 5", "12 5", "12 6"), out);
     }
 
+    @Test
     public void testLift() {
         CellSink<Integer> a = new CellSink<>(1);
         CellSink<Long> b = new CellSink<>(5L);
@@ -107,6 +118,7 @@ public class TestCell extends TestCase {
         assertEquals(Arrays.asList("1 5", "12 5", "12 6"), out);
     }
 
+    @Test
     public void testLiftGlitch() {
         CellSink<Integer> a = new CellSink<>(1);
         Cell<Integer> a3 = a.map((Integer x) -> x * 3);
@@ -119,6 +131,7 @@ public class TestCell extends TestCase {
         assertEquals(Arrays.asList("3 5", "6 10"), out);
     }
 
+    @Test
     public void testLiftFromSimultaneous() {
         Tuple2<CellSink<Integer>, CellSink<Integer>> t = Transaction.run(() -> {
             CellSink<Integer> b1 = new CellSink<>(3);
@@ -135,6 +148,7 @@ public class TestCell extends TestCase {
         assertEquals(List.of(10), out);
     }
 
+    @Test
     public void testHoldIsDelayed() {
         StreamSink<Integer> e = new StreamSink<>();
         Cell<Integer> h = e.hold(0);
@@ -159,6 +173,7 @@ public class TestCell extends TestCase {
         Option<Cell<Character>> sw;
     }
 
+    @Test
     public void testSwitchC() {
         StreamSink<SB> esb = new StreamSink<>();
         // Split each field out of SB so we can update multiple behaviours in a
@@ -195,6 +210,7 @@ public class TestCell extends TestCase {
         Option<Stream<Character>> sw;
     }
 
+    @Test
     public void testSwitchS() {
         StreamSink<SE> ese = new StreamSink<>();
         Stream<Character> ea = ese.map(s -> s.a);
@@ -223,6 +239,7 @@ public class TestCell extends TestCase {
         final StreamSink<Integer> s = new StreamSink<>();
     }
 
+    @Test
     public void testSwitchSSimultaneous() {
         SS2 ss1 = new SS2();
         CellSink<SS2> css = new CellSink<>(ss1);
@@ -255,6 +272,7 @@ public class TestCell extends TestCase {
         assertEquals(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9), out);
     }
 
+    @Test
     public void testLoopCell() {
         final StreamSink<Integer> sa = new StreamSink<>();
         Cell<Integer> sum_out = Transaction.run(() -> {
@@ -273,6 +291,7 @@ public class TestCell extends TestCase {
         assertEquals(6, (int) sum_out.sample());
     }
 
+    @Test
     public void testAccum() {
         StreamSink<Integer> sa = new StreamSink<>();
         List<Integer> out = new ArrayList<>();
@@ -287,6 +306,7 @@ public class TestCell extends TestCase {
         assertEquals(Arrays.asList(100, 105, 112, 113, 115, 118), out);
     }
 
+    @Test
     public void testLoopValueSnapshot() {
         List<String> out = new ArrayList<>();
         Listener l = Transaction.run(() -> {
@@ -300,6 +320,7 @@ public class TestCell extends TestCase {
         assertEquals(List.of("lettuce cheese"), out);
     }
 
+    @Test
     public void testLoopValueHold() {
         List<String> out = new ArrayList<>();
         Cell<String> value = Transaction.run(() -> {
@@ -315,6 +336,7 @@ public class TestCell extends TestCase {
         assertEquals(List.of("cheese"), out);
     }
 
+    @Test
     public void testLiftLoop() {
         List<String> out = new ArrayList<>();
         CellSink<String> b = new CellSink<>("kettle");
@@ -331,6 +353,7 @@ public class TestCell extends TestCase {
         assertEquals(Arrays.asList("tea kettle", "tea caddy"), out);
     }
 
+    @Test
     public void testSwitchAndDefer() {
         List<String> out = new ArrayList<>();
         StreamSink<Integer> si = new StreamSink<>();
