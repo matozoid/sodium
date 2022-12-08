@@ -19,9 +19,7 @@ public class TestCommon extends TestCase {
         });
         List<String> out = new ArrayList<>();
         Listener l = Transaction.run(() -> {
-            Listener l_ = s.listen((String a) -> {
-                out.add(a);
-            });
+            Listener l_ = s.listen(out::add);
             return l_;
         });
         Transaction.runVoid(() -> {
@@ -45,9 +43,7 @@ public class TestCommon extends TestCase {
         });
         List<String> b_0 = new ArrayList<>();
         Listener b_0_l = Transaction.run(() -> {
-            Listener b_0_l_ = b.listen((String val) -> {
-                b_0.add(val);
-            });
+            Listener b_0_l_ = b.listen(b_0::add);
             return b_0_l_;
         });
         Transaction.runVoid(() -> {
@@ -68,9 +64,7 @@ public class TestCommon extends TestCase {
         });
         List<String> b_0 = new ArrayList<>();
         Listener b_0_l = Transaction.run(() -> {
-            Listener b_0_l_ = b.listen((String val) -> {
-                b_0.add(val);
-            });
+            Listener b_0_l_ = b.listen(b_0::add);
             return b_0_l_;
         });
         Transaction.runVoid(() -> {
@@ -80,9 +74,7 @@ public class TestCommon extends TestCase {
         assertEquals(List.<String>of("a"), b_0);
         List<String> b_1 = new ArrayList<>();
         Listener b_1_l = Transaction.run(() -> {
-            Listener b_1_l_ = b.listen((String val) -> {
-                b_1.add(val);
-            });
+            Listener b_1_l_ = b.listen(b_1::add);
             return b_1_l_;
         });
         Transaction.runVoid(() -> {
@@ -107,9 +99,7 @@ public class TestCommon extends TestCase {
         });
         List<String> c_0 = new ArrayList<>();
         Listener c_0_l = Transaction.run(() -> {
-            Listener c_0_l_ = c.listen((String val) -> {
-                c_0.add(val);
-            });
+            Listener c_0_l_ = c.listen(c_0::add);
             return c_0_l_;
         });
         Transaction.runVoid(() -> {
@@ -119,9 +109,7 @@ public class TestCommon extends TestCase {
         assertEquals(List.<String>of("a"), c_0);
         List<String> c_1 = new ArrayList<>();
         Listener c_1_l = Transaction.run(() -> {
-            Listener c_1_l_ = c.listen((String val) -> {
-                c_1.add(val);
-            });
+            Listener c_1_l_ = c.listen(c_1::add);
             return c_1_l_;
         });
         Transaction.runVoid(() -> {
@@ -147,9 +135,7 @@ public class TestCommon extends TestCase {
         });
         List<Integer> c_0 = new ArrayList<>();
         Listener c_0_l = Transaction.run(() -> {
-            Listener c_0_l_ = c.listen((Integer val) -> {
-                c_0.add(val);
-            });
+            Listener c_0_l_ = c.listen(c_0::add);
             return c_0_l_;
         });
         Transaction.runVoid(() -> {
@@ -159,9 +145,7 @@ public class TestCommon extends TestCase {
         assertEquals(List.<Integer>of(0), c_0);
         List<Integer> c_1 = new ArrayList<>();
         Listener c_1_l = Transaction.run(() -> {
-            Listener c_1_l_ = c.listen((Integer val) -> {
-                c_1.add(val);
-            });
+            Listener c_1_l_ = c.listen(c_1::add);
             return c_1_l_;
         });
         Transaction.runVoid(() -> {
@@ -171,9 +155,7 @@ public class TestCommon extends TestCase {
         assertEquals(List.<Integer>of(10), c_1);
         List<Integer> c_2 = new ArrayList<>();
         Listener c_2_l = Transaction.run(() -> {
-            Listener c_2_l_ = c.listen((Integer val) -> {
-                c_2.add(val);
-            });
+            Listener c_2_l_ = c.listen(c_2::add);
             return c_2_l_;
         });
         Transaction.runVoid(() -> {
@@ -184,9 +166,7 @@ public class TestCommon extends TestCase {
         assertEquals(List.<Integer>of(2), c_2);
         List<Integer> c_3 = new ArrayList<>();
         Listener c_3_l = Transaction.run(() -> {
-            Listener c_3_l_ = c.listen((Integer val) -> {
-                c_3.add(val);
-            });
+            Listener c_3_l_ = c.listen(c_3::add);
             return c_3_l_;
         });
         Transaction.runVoid(() -> {
@@ -211,9 +191,7 @@ public class TestCommon extends TestCase {
         });
         List<String> c_0 = new ArrayList<>();
         Listener c_0_l = Transaction.run(() -> {
-            Listener c_0_l_ = c.listen((String val) -> {
-                c_0.add(val);
-            });
+            Listener c_0_l_ = c.listen(c_0::add);
             return c_0_l_;
         });
         Transaction.runVoid(() -> {
@@ -223,9 +201,7 @@ public class TestCommon extends TestCase {
         assertEquals(List.<String>of("A"), c_0);
         List<String> c_1 = new ArrayList<>();
         Listener c_1_l = Transaction.run(() -> {
-            Listener c_1_l_ = c.listen((String val) -> {
-                c_1.add(val);
-            });
+            Listener c_1_l_ = c.listen(c_1::add);
             return c_1_l_;
         });
         Transaction.runVoid(() -> {

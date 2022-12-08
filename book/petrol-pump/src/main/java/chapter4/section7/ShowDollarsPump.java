@@ -23,9 +23,9 @@ public class ShowDollarsPump implements Pump {
                                                 of.equals(Option.some(Fuel.THREE)) ? Delivery.FAST3 :
                                                         Delivery.OFF))
                 .setSaleCostLCD(fi.dollarsDelivered.map(
-                        q -> Formatters.formatSaleCost(q)))
+                        Formatters::formatSaleCost))
                 .setSaleQuantityLCD(fi.litersDelivered.map(
-                        q -> Formatters.formatSaleQuantity(q)))
+                        Formatters::formatSaleQuantity))
                 .setPriceLCD1(priceLCD(lc.fillActive, fi.price, Fuel.ONE,
                         inputs))
                 .setPriceLCD2(priceLCD(lc.fillActive, fi.price, Fuel.TWO,

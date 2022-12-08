@@ -8,7 +8,7 @@ import nz.sodium.*;
 public class PromiseWithoutUpdates<A> {
     public PromiseWithoutUpdates(Stream<A> sDeliver) {
         this.sDeliver = sDeliver.once();
-        this.oValue = this.sDeliver.map(a -> Option.some(a))
+        this.oValue = this.sDeliver.map(Option::some)
                 .hold(Option.none());
     }
 

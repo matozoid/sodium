@@ -25,7 +25,7 @@ public class AccumulatePulsesPump implements Pump {
                                                 of.equals(Option.some(Fuel.THREE)) ? Delivery.FAST3 :
                                                         Delivery.OFF))
                 .setSaleQuantityLCD(litersDelivered.map(
-                        q -> Formatters.formatSaleQuantity(q)));
+                        Formatters::formatSaleQuantity));
     }
 
     public static Cell<Double> accumulate(
@@ -35,8 +35,7 @@ public class AccumulatePulsesPump implements Pump {
         CellLoop<Integer> total = new CellLoop<>();
         total.loop(sClearAccumulator.map(u -> 0)
                 .orElse(
-                        sPulses.snapshot(total, (pulses_, total_) ->
-                                pulses_ + total_)
+                        sPulses.snapshot(total, Integer::sum)
                 )
                 .hold(0));
         return total.lift(calibration,

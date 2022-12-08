@@ -20,8 +20,8 @@ public abstract class Junction<ContainerA, A> {
         clients = sUpdate
                 .<Map<Integer, ContainerA>>accum(
                         new HashMap<>(),
-                        (f, m) -> f.apply(m))
-                .map(m -> m.values());
+                        Function1::apply)
+                .map(Map::values);
     }
 
     public Listener add(ContainerA c) {

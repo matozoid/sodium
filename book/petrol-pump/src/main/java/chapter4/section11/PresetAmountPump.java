@@ -5,6 +5,7 @@ import chapter4.section7.Fill;
 import chapter4.section7.ShowDollarsPump;
 import chapter4.section8.NotifyPointOfSale;
 import chapter4.section9.Keypad;
+import io.vavr.control.Option;
 import nz.sodium.CellLoop;
 import nz.sodium.StreamLoop;
 import nz.sodium.Unit;
@@ -31,14 +32,14 @@ public class PresetAmountPump implements Pump {
         Preset pr = new Preset(ke.value,
                 fi,
                 np.fuelFlowing,
-                np.fillActive.map(o -> o.isDefined()));
+                np.fillActive.map(Option::isDefined));
         keypadActive.loop(pr.keypadActive);
         return new Outputs()
                 .setDelivery(pr.delivery)
                 .setSaleCostLCD(fi.dollarsDelivered.map(
-                        q -> Formatters.formatSaleCost(q)))
+                        Formatters::formatSaleCost))
                 .setSaleQuantityLCD(fi.litersDelivered.map(
-                        q -> Formatters.formatSaleQuantity(q)))
+                        Formatters::formatSaleQuantity))
                 .setPriceLCD1(ShowDollarsPump.priceLCD(np.fillActive, fi.price,
                         Fuel.ONE, inputs))
                 .setPriceLCD2(ShowDollarsPump.priceLCD(np.fillActive, fi.price,

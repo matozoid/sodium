@@ -1,3 +1,4 @@
+import io.vavr.control.Option;
 import junction.BackEnd;
 import junction.Bijection;
 import junction.Value;
@@ -53,7 +54,7 @@ class VTextField extends STextField {
                 Stream.filterOptional(Operational.value(outRemote.value)),
                 "",
                 width,
-                outRemote.value.map(oV -> oV.isDefined())
+                outRemote.value.map(Option::isDefined)
         );
         sRemoteWrite.loop(sUserChanges);
         this.cleanup = outRemote.cleanup;

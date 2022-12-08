@@ -25,7 +25,7 @@ public class SpinnerExample {
             Stream<Integer> sMinusDelta = minus.sClicked.map(u -> -1);
             Stream<Integer> sDelta = sPlusDelta.orElse(sMinusDelta);
             Stream<Integer> sUpdate = sDelta.snapshot(value,
-                    (delta, value_) -> delta + value_
+                    Integer::sum
             );
             value.loop(sUpdate.hold(0));
         });

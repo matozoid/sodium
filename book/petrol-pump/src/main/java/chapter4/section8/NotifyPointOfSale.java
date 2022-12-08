@@ -34,10 +34,10 @@ public class NotifyPointOfSale {
                         .orElse(sClearSale.map(u -> Phase.IDLE))
                         .hold(Phase.IDLE));
         fuelFlowing =
-                sStart.map(f -> Option.some(f)).orElse(
+                sStart.map(Option::some).orElse(
                         sEnd.map(f -> Option.none())).hold(Option.none());
         fillActive =
-                sStart.map(f -> Option.some(f)).orElse(
+                sStart.map(Option::some).orElse(
                         sClearSale.map(f -> Option.none())).hold(Option.none());
         sBeep = sClearSale;
         sSaleComplete = Stream.filterOptional(sEnd.snapshot(

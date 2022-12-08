@@ -210,7 +210,7 @@ class FRP1 implements Paradigm {
                     sStartDrag.orElse(sEndDrag).hold(sIdle)
             );
             doc.loop(sDocUpdate.hold(initDoc));
-            return sDocUpdate.listen(doc_ -> dl.documentUpdated(doc_));
+            return sDocUpdate.listen(dl::documentUpdated);
         });
     }
 
@@ -260,7 +260,7 @@ class FRP2 implements Paradigm {
                                                 .map(me -> me.pt);
                                 Cell<Point> move = sMove.hold(me1.pt);
                                 Stream<Pair> sPair = sMove.snapshot(axisLock,
-                                                (m, l) -> new Pair(m, l))
+                                                Pair::new)
                                         .orElse(sAxisLock.snapshot(move,
                                                 (l, m) -> new Pair(m, l)));
                                 Stream<Document> sMoves = sPair.snapshot(doc,
@@ -279,7 +279,7 @@ class FRP2 implements Paradigm {
                     sStartDrag.orElse(sEndDrag).hold(sIdle)
             );
             doc.loop(sDocUpdate.hold(initDoc));
-            return sDocUpdate.listen(doc_ -> dl.documentUpdated(doc_));
+            return sDocUpdate.listen(dl::documentUpdated);
         });
     }
 
@@ -499,28 +499,28 @@ public class ShiftOfTheParadigms2 {
         c.gridx = 0;
         c.gridy = 1;
         view.add(new ParadigmView(doc, frame,
-                (initDoc, dl) -> new Classic(initDoc, dl)), c);
+                Classic::new), c);
         c.gridx = 0;
         c.gridy = 2;
         view.add(new JLabel("classic state machine"), c);
         c.gridx = 1;
         c.gridy = 1;
         view.add(new ParadigmView(doc, frame,
-                (initDoc, dl) -> new FRP1(initDoc, dl)), c);
+                FRP1::new), c);
         c.gridx = 1;
         c.gridy = 2;
         view.add(new JLabel("FRP1"), c);
         c.gridx = 2;
         c.gridy = 1;
         view.add(new ParadigmView(doc, frame,
-                (initDoc, dl) -> new FRP2(initDoc, dl)), c);
+                FRP2::new), c);
         c.gridx = 2;
         c.gridy = 2;
         view.add(new JLabel("FRP2"), c);
         c.gridx = 3;
         c.gridy = 1;
         view.add(new ParadigmView(doc, frame,
-                (initDoc, dl) -> new Actor(initDoc, dl)), c);
+                Actor::new), c);
         c.gridx = 3;
         c.gridy = 2;
         view.add(new JLabel("actor model"), c);
