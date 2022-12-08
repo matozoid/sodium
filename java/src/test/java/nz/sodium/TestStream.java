@@ -20,8 +20,8 @@ public class TestStream {
 
     @Test
     public void testSendStream() {
-        StreamSink<Integer> e = new StreamSink();
-        List<Integer> out = new ArrayList();
+        StreamSink<Integer> e = new StreamSink<>();
+        List<Integer> out = new ArrayList<>();
         Listener l = e.listen(out::add);
         e.send(5);
         l.unlisten();
@@ -32,9 +32,9 @@ public class TestStream {
 
     @Test
     public void testMap() {
-        StreamSink<Integer> e = new StreamSink();
+        StreamSink<Integer> e = new StreamSink<>();
         Stream<String> m = e.map(x -> Integer.toString(x));
-        List<String> out = new ArrayList();
+        List<String> out = new ArrayList<>();
         Listener l = m.listen(out::add);
         e.send(5);
         l.unlisten();
@@ -43,9 +43,9 @@ public class TestStream {
 
     @Test
     public void testMapTo() {
-        StreamSink<Integer> e = new StreamSink();
+        StreamSink<Integer> e = new StreamSink<>();
         Stream<String> m = e.mapTo("fusebox");
-        List<String> out = new ArrayList();
+        List<String> out = new ArrayList<>();
         Listener l = m.listen(out::add);
         e.send(5);
         e.send(6);
@@ -55,9 +55,9 @@ public class TestStream {
 
     @Test
     public void testMergeNonSimultaneous() {
-        StreamSink<Integer> e1 = new StreamSink();
-        StreamSink<Integer> e2 = new StreamSink();
-        List<Integer> out = new ArrayList();
+        StreamSink<Integer> e1 = new StreamSink<>();
+        StreamSink<Integer> e2 = new StreamSink<>();
+        List<Integer> out = new ArrayList<>();
         Listener l = e2.orElse(e1).listen(out::add);
         e1.send(7);
         e2.send(9);
@@ -68,9 +68,9 @@ public class TestStream {
 
     @Test
     public void testMergeSimultaneous() {
-        StreamSink<Integer> s1 = new StreamSink((l, r) -> r);
-        StreamSink<Integer> s2 = new StreamSink((l, r) -> r);
-        List<Integer> out = new ArrayList();
+        StreamSink<Integer> s1 = new StreamSink<>((l, r) -> r);
+        StreamSink<Integer> s2 = new StreamSink<>((l, r) -> r);
+        List<Integer> out = new ArrayList<>();
         Listener l = s2.orElse(s1).listen(out::add);
         Transaction.runVoid(() -> {
             s1.send(7);
@@ -104,7 +104,7 @@ public class TestStream {
     @Test
     public void testCoalesce() {
         StreamSink<Integer> s = new StreamSink<>(Integer::sum);
-        List<Integer> out = new ArrayList();
+        List<Integer> out = new ArrayList<>();
         Listener l = s
                 .listen(out::add);
         Transaction.runVoid(() -> {
@@ -120,8 +120,8 @@ public class TestStream {
 
     @Test
     public void testFilter() {
-        StreamSink<Character> e = new StreamSink();
-        List<Character> out = new ArrayList();
+        StreamSink<Character> e = new StreamSink<>();
+        List<Character> out = new ArrayList<>();
         Listener l = e.filter(Character::isUpperCase).listen(out::add);
         e.send('H');
         e.send('o');
@@ -132,8 +132,8 @@ public class TestStream {
 
     @Test
     public void testFilterOptional() {
-        StreamSink<Option<String>> e = new StreamSink();
-        List<String> out = new ArrayList();
+        StreamSink<Option<String>> e = new StreamSink<>();
+        List<String> out = new ArrayList<>();
         Listener l = Stream.filterOptional(e).listen(out::add);
         e.send(Option.some("tomato"));
         e.send(Option.none());
@@ -144,7 +144,7 @@ public class TestStream {
 
     @Test
     public void testLoopStream() {
-        final StreamSink<Integer> ea = new StreamSink();
+        final StreamSink<Integer> ea = new StreamSink<>();
         Stream<Integer> ec = Transaction.run(() -> {
             StreamLoop<Integer> eb = new StreamLoop<>();
             Stream<Integer> ec_ = ea.map(x -> x % 10).merge(eb, Integer::sum);
@@ -152,7 +152,7 @@ public class TestStream {
             eb.loop(eb_out);
             return ec_;
         });
-        List<Integer> out = new ArrayList();
+        List<Integer> out = new ArrayList<>();
         Listener l = ec.listen(out::add);
         ea.send(2);
         ea.send(52);
@@ -162,9 +162,9 @@ public class TestStream {
 
     @Test
     public void testGate() {
-        StreamSink<Character> ec = new StreamSink();
-        CellSink<Boolean> epred = new CellSink(true);
-        List<Character> out = new ArrayList();
+        StreamSink<Character> ec = new StreamSink<>();
+        CellSink<Boolean> epred = new CellSink<>(true);
+        List<Character> out = new ArrayList<>();
         Listener l = ec.gate(epred).listen(out::add);
         ec.send('H');
         epred.send(false);
@@ -177,10 +177,10 @@ public class TestStream {
 
     @Test
     public void testCollect() {
-        StreamSink<Integer> ea = new StreamSink();
-        List<Integer> out = new ArrayList();
+        StreamSink<Integer> ea = new StreamSink<>();
+        List<Integer> out = new ArrayList<>();
         Stream<Integer> sum = ea.collect(0,
-                (a, s) -> new Tuple2(a + s + 100, a + s)
+                (a, s) -> new Tuple2<>(a + s + 100, a + s)
         );
         Listener l = sum.listen(out::add);
         ea.send(5);
@@ -194,8 +194,8 @@ public class TestStream {
 
     @Test
     public void testAccum() {
-        StreamSink<Integer> ea = new StreamSink();
-        List<Integer> out = new ArrayList();
+        StreamSink<Integer> ea = new StreamSink<>();
+        List<Integer> out = new ArrayList<>();
         Cell<Integer> sum = ea.accum(100, Integer::sum);
         Listener l = sum.listen(out::add);
         ea.send(5);
@@ -209,8 +209,8 @@ public class TestStream {
 
     @Test
     public void testOnce() {
-        StreamSink<Character> e = new StreamSink();
-        List<Character> out = new ArrayList();
+        StreamSink<Character> e = new StreamSink<>();
+        List<Character> out = new ArrayList<>();
         Listener l = e.once().listen(out::add);
         e.send('A');
         e.send('B');
@@ -221,9 +221,9 @@ public class TestStream {
 
     @Test
     public void testDefer() {
-        StreamSink<Character> e = new StreamSink();
+        StreamSink<Character> e = new StreamSink<>();
         Cell<Character> b = e.hold(' ');
-        List<Character> out = new ArrayList();
+        List<Character> out = new ArrayList<>();
         Listener l = Operational.defer(e).snapshot(b).listen(out::add);
         e.send('C');
         e.send('B');
