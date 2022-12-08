@@ -16,7 +16,7 @@ public abstract class Value<A> {
         return new Value<>() {
             public ValueOutput<B> construct(Stream<B> sWriteB) {
                 ValueOutput<A> out = va.construct(sWriteB.map(bij.fInv));
-                return new ValueOutput<B>(
+                return new ValueOutput<>(
                         out.value.map(oa ->
                                 oa.isDefined() ? Option.some(bij.f.apply(oa.get()))
                                         : Option.none()),
@@ -42,7 +42,7 @@ public abstract class Value<A> {
                                             : Option.none()
                             )
                     ));
-                    return new ValueOutput<B>(
+                    return new ValueOutput<>(
                             oa.map(oa_ ->
                                     oa_.isDefined()
                                             ? Option.some(getter.apply(oa_.get()))

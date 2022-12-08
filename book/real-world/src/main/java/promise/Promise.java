@@ -32,7 +32,7 @@ public class Promise<A> {
 
     public <B, C> Promise<C> lift(Promise<B> pb,
                                   final Function2<A, B, C> f) {
-        return Transaction.run(() -> new Promise<C>(
+        return Transaction.run(() -> new Promise<>(
                 this.oValue.lift(pb.oValue,
                         (oa, ob) ->
                                 oa.isDefined() && ob.isDefined()

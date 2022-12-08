@@ -11,6 +11,8 @@ import nz.sodium.StreamLoop;
 import nz.sodium.Unit;
 import pump.*;
 
+import java.util.Optional;
+
 public class PresetAmountPump implements Pump {
     public Outputs create(Inputs inputs) {
         StreamLoop<Fuel> sStart = new StreamLoop<>();

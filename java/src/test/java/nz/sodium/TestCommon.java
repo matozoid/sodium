@@ -71,7 +71,7 @@ public class TestCommon extends TestCase {
             a.send("a");
         });
         b_0_l.unlisten();
-        assertEquals(List.<String>of("a"), b_0);
+        assertEquals(List.of("a"), b_0);
         List<String> b_1 = new ArrayList<>();
         Listener b_1_l = Transaction.run(() -> {
             Listener b_1_l_ = b.listen(b_1::add);
@@ -81,7 +81,7 @@ public class TestCommon extends TestCase {
             a.send("b");
         });
         b_1_l.unlisten();
-        assertEquals(List.<String>of("b"), b_1);
+        assertEquals(List.of("b"), b_1);
     }
 
     public void test_Operational_defer2() {
@@ -106,7 +106,7 @@ public class TestCommon extends TestCase {
             a.send("a");
         });
         c_0_l.unlisten();
-        assertEquals(List.<String>of("a"), c_0);
+        assertEquals(List.of("a"), c_0);
         List<String> c_1 = new ArrayList<>();
         Listener c_1_l = Transaction.run(() -> {
             Listener c_1_l_ = c.listen(c_1::add);
@@ -142,7 +142,7 @@ public class TestCommon extends TestCase {
             a.send(0);
         });
         c_0_l.unlisten();
-        assertEquals(List.<Integer>of(0), c_0);
+        assertEquals(List.of(0), c_0);
         List<Integer> c_1 = new ArrayList<>();
         Listener c_1_l = Transaction.run(() -> {
             Listener c_1_l_ = c.listen(c_1::add);
@@ -152,7 +152,7 @@ public class TestCommon extends TestCase {
             b.send(10);
         });
         c_1_l.unlisten();
-        assertEquals(List.<Integer>of(10), c_1);
+        assertEquals(List.of(10), c_1);
         List<Integer> c_2 = new ArrayList<>();
         Listener c_2_l = Transaction.run(() -> {
             Listener c_2_l_ = c.listen(c_2::add);
@@ -163,7 +163,7 @@ public class TestCommon extends TestCase {
             b.send(20);
         });
         c_2_l.unlisten();
-        assertEquals(List.<Integer>of(2), c_2);
+        assertEquals(List.of(2), c_2);
         List<Integer> c_3 = new ArrayList<>();
         Listener c_3_l = Transaction.run(() -> {
             Listener c_3_l_ = c.listen(c_3::add);
@@ -173,7 +173,7 @@ public class TestCommon extends TestCase {
             b.send(30);
         });
         c_3_l.unlisten();
-        assertEquals(List.<Integer>of(30), c_3);
+        assertEquals(List.of(30), c_3);
     }
 
     public void test_Operational_deferSimultaneous() {
@@ -198,7 +198,7 @@ public class TestCommon extends TestCase {
             b.send("A");
         });
         c_0_l.unlisten();
-        assertEquals(List.<String>of("A"), c_0);
+        assertEquals(List.of("A"), c_0);
         List<String> c_1 = new ArrayList<>();
         Listener c_1_l = Transaction.run(() -> {
             Listener c_1_l_ = c.listen(c_1::add);
@@ -209,6 +209,6 @@ public class TestCommon extends TestCase {
             b.send("B");
         });
         c_1_l.unlisten();
-        assertEquals(List.<String>of("b"), c_1);
+        assertEquals(List.of("b"), c_1);
     }
 }
