@@ -34,7 +34,7 @@ class PumpFace extends Component {
     private final Cell<List<Integer>> priceLCD2;
     private final Cell<List<Integer>> priceLCD3;
     @SuppressWarnings("unchecked")
-    private final Cell<UpDown> nozzles[] = new Cell[3];
+    private final Cell<UpDown>[] nozzles = new Cell[3];
     @SuppressWarnings("unchecked")
     public final Cell<Rectangle>[] nozzleRects = new Cell[3];
 
@@ -230,7 +230,7 @@ public class PetrolPump extends JFrame {
                 }
                 j--;
             }
-            return Arrays.<Integer>asList(segs);
+            return Arrays.asList(segs);
         });
     }
 
@@ -393,8 +393,8 @@ public class PetrolPump extends JFrame {
                 for (int i = 0; i < 3; i++) {
                     final Cell<Tuple2<Rectangle, UpDown>> rect_state =
                             face.nozzleRects[i].lift(nozzles[i], Tuple2::new);
-                    ((CellLoop<UpDown>) nozzles[i]).loop(
-                            Stream.<UpDown>filterOptional(
+                    nozzles[i].loop(
+                            Stream.filterOptional(
                                     sClick.snapshot(rect_state,
                                             (pt, rs) -> rs._1.contains(pt) ? Option.some(invert(rs._2))
                                                     : Option.none()
@@ -471,7 +471,7 @@ public class PetrolPump extends JFrame {
         super.removeNotify();
     }
 
-    public static void main(String[] args) throws MalformedURLException, IOException {
+    public static void main(String[] args) throws IOException {
         PetrolPump view = new PetrolPump();
         view.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {

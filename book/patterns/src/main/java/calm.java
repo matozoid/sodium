@@ -8,7 +8,7 @@ public class calm {
     public static <A> Stream<A> calm(Stream<A> sA,
                                      Lazy<Option<A>> oInit) {
         return Stream.filterOptional(
-                sA.<Option<A>, Option<A>>collectLazy(
+                sA.collectLazy(
                         oInit,
                         (A a, Option<A> oLastA) -> {
                             Option<A> oa = Option.some(a);

@@ -31,7 +31,7 @@ public class TestCommon extends TestCase {
             s.send("b");
         });
         l.unlisten();
-        assertEquals(Arrays.<String>asList("a", "b"), out);
+        assertEquals(Arrays.asList("a", "b"), out);
     }
 
     public void test_Operational_split() {
@@ -51,10 +51,10 @@ public class TestCommon extends TestCase {
             return b_0_l_;
         });
         Transaction.runVoid(() -> {
-            a.send(Arrays.<String>asList("a", "b"));
+            a.send(Arrays.asList("a", "b"));
         });
         b_0_l.unlisten();
-        assertEquals(Arrays.<String>asList("a", "b"), b_0);
+        assertEquals(Arrays.asList("a", "b"), b_0);
     }
 
     public void test_Operational_defer1() {
@@ -77,7 +77,7 @@ public class TestCommon extends TestCase {
             a.send("a");
         });
         b_0_l.unlisten();
-        assertEquals(Arrays.<String>asList("a"), b_0);
+        assertEquals(List.<String>of("a"), b_0);
         List<String> b_1 = new ArrayList<>();
         Listener b_1_l = Transaction.run(() -> {
             Listener b_1_l_ = b.listen((String val) -> {
@@ -89,7 +89,7 @@ public class TestCommon extends TestCase {
             a.send("b");
         });
         b_1_l.unlisten();
-        assertEquals(Arrays.<String>asList("b"), b_1);
+        assertEquals(List.<String>of("b"), b_1);
     }
 
     public void test_Operational_defer2() {
@@ -116,7 +116,7 @@ public class TestCommon extends TestCase {
             a.send("a");
         });
         c_0_l.unlisten();
-        assertEquals(Arrays.<String>asList("a"), c_0);
+        assertEquals(List.<String>of("a"), c_0);
         List<String> c_1 = new ArrayList<>();
         Listener c_1_l = Transaction.run(() -> {
             Listener c_1_l_ = c.listen((String val) -> {
@@ -129,7 +129,7 @@ public class TestCommon extends TestCase {
             b.send("B");
         });
         c_1_l.unlisten();
-        assertEquals(Arrays.<String>asList("B", "b"), c_1);
+        assertEquals(Arrays.asList("B", "b"), c_1);
     }
 
     public void test_Stream_orElse1() {
@@ -156,7 +156,7 @@ public class TestCommon extends TestCase {
             a.send(0);
         });
         c_0_l.unlisten();
-        assertEquals(Arrays.<Integer>asList(0), c_0);
+        assertEquals(List.<Integer>of(0), c_0);
         List<Integer> c_1 = new ArrayList<>();
         Listener c_1_l = Transaction.run(() -> {
             Listener c_1_l_ = c.listen((Integer val) -> {
@@ -168,7 +168,7 @@ public class TestCommon extends TestCase {
             b.send(10);
         });
         c_1_l.unlisten();
-        assertEquals(Arrays.<Integer>asList(10), c_1);
+        assertEquals(List.<Integer>of(10), c_1);
         List<Integer> c_2 = new ArrayList<>();
         Listener c_2_l = Transaction.run(() -> {
             Listener c_2_l_ = c.listen((Integer val) -> {
@@ -181,7 +181,7 @@ public class TestCommon extends TestCase {
             b.send(20);
         });
         c_2_l.unlisten();
-        assertEquals(Arrays.<Integer>asList(2), c_2);
+        assertEquals(List.<Integer>of(2), c_2);
         List<Integer> c_3 = new ArrayList<>();
         Listener c_3_l = Transaction.run(() -> {
             Listener c_3_l_ = c.listen((Integer val) -> {
@@ -193,7 +193,7 @@ public class TestCommon extends TestCase {
             b.send(30);
         });
         c_3_l.unlisten();
-        assertEquals(Arrays.<Integer>asList(30), c_3);
+        assertEquals(List.<Integer>of(30), c_3);
     }
 
     public void test_Operational_deferSimultaneous() {
@@ -220,7 +220,7 @@ public class TestCommon extends TestCase {
             b.send("A");
         });
         c_0_l.unlisten();
-        assertEquals(Arrays.<String>asList("A"), c_0);
+        assertEquals(List.<String>of("A"), c_0);
         List<String> c_1 = new ArrayList<>();
         Listener c_1_l = Transaction.run(() -> {
             Listener c_1_l_ = c.listen((String val) -> {
@@ -233,6 +233,6 @@ public class TestCommon extends TestCase {
             b.send("B");
         });
         c_1_l.unlisten();
-        assertEquals(Arrays.<String>asList("b"), c_1);
+        assertEquals(List.<String>of("b"), c_1);
     }
 }

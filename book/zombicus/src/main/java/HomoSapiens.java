@@ -33,9 +33,9 @@ public class HomoSapiens {
                 }
             }
 
-            double t0;
-            Point orig;
-            double period;
+            final double t0;
+            final Point orig;
+            final double period;
             Vector velocity;
 
             Point positionAt(double t) {

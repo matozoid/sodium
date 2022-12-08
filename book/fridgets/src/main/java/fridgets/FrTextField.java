@@ -17,7 +17,7 @@ class TextUpdate {
 
     String txt;
     int newX;
-};
+}
 
 public class FrTextField extends Fridget {
     public FrTextField(String initText) {

@@ -6,7 +6,6 @@ import nz.sodium.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Optional;
 
 public class FrView extends JPanel {
     public FrView(JFrame frame, Fridget fr) {

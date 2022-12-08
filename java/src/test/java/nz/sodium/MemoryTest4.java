@@ -10,14 +10,14 @@ public class MemoryTest4 {
                         Thread.sleep(5000);
                     }
                 } catch (InterruptedException e) {
-                    System.out.println(e.toString());
+                    System.out.println(e);
                 }
             }
         }.start();
 
         StreamSink<Integer> et = new StreamSink<>();
         StreamSink<Integer> eChange = new StreamSink<>();
-        Cell<Stream<Integer>> oout = eChange.map(x -> (Stream<Integer>) et).hold((Stream<Integer>) et);
+        Cell<Stream<Integer>> oout = eChange.map(x -> (Stream<Integer>) et).hold(et);
         Stream<Integer> out = Cell.switchS(oout);
         Listener l = out.listen(tt -> {
             System.out.println(tt);

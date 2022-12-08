@@ -85,7 +85,7 @@ class Document {
     }
 }
 
-enum Type {DOWN, MOVE, UP};
+enum Type {DOWN, MOVE, UP}
 
 class MouseEvt {
     MouseEvt(Type type, Point pt) {
@@ -253,8 +253,8 @@ class FRP2 implements Paradigm {
                                         this.lock = lock;
                                     }
 
-                                    Point move;
-                                    boolean lock;
+                                    final Point move;
+                                    final boolean lock;
                                 }
                                 Stream<Point> sMove =
                                         sMouse.filter(me -> me.type == Type.MOVE)
@@ -436,7 +436,7 @@ class ParadigmView extends JPanel implements Paradigm.DocumentListener {
     }
 
     private Document doc;
-    private Paradigm paradigm;
+    private final Paradigm paradigm;
 
     public Dimension getPreferredSize() {
         return new Dimension(250, 300);

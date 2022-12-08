@@ -10,7 +10,7 @@ public class split {
         StreamSink<List<Integer>> as = new StreamSink<>();
         Listener l = Operational.updates(
                 Operational.split(as)
-                        .<Integer>accum(0, (a, b) -> a + b)
+                        .accum(0, (a, b) -> a + b)
         ).listen(total -> {
             System.out.println(total);
         });

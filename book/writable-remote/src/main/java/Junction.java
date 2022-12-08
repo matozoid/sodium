@@ -9,7 +9,7 @@ import java.util.Map;
 
 public abstract class Junction<ContainerA, A> {
     private int nextID;
-    private StreamSink<Function1<Map<Integer, ContainerA>,
+    private final StreamSink<Function1<Map<Integer, ContainerA>,
                 Map<Integer, ContainerA>>> sUpdate
             = new StreamSink<>((f1, f2) -> a -> f1.apply(f2.apply(a)));
     protected Cell<Collection<ContainerA>> clients;

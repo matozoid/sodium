@@ -40,10 +40,9 @@ public class PromiseWithoutUpdates<A> {
                     this.ob = ob;
                 }
 
-                Option<A> oa;
-                Option<B> ob;
+                final Option<A> oa;
+                final Option<B> ob;
             }
-            ;
             Function2<Tuple, Tuple, Tuple> combine = (l, r) -> new Tuple(l.oa.isDefined() ? l.oa : r.oa, l.ob.isDefined() ? l.ob : r.ob);
             Function1<Tuple, Option<C>> result = t -> t.oa.isDefined() && t.ob.isDefined()
                     ? Option.some(f.apply(t.oa.get(), t.ob.get()))

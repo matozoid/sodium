@@ -23,8 +23,6 @@ public class NotifyPointOfSale {
 
     private enum Phase {IDLE, FILLING, POS}
 
-    ;
-
     public NotifyPointOfSale(
             LifeCycle lc,
             Stream<Unit> sClearSale,

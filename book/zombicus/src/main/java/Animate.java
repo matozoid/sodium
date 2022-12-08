@@ -23,13 +23,13 @@ public class Animate extends JPanel {
     private StreamSink<Unit> sTick;
 
     public interface Animation {
-        public Cell<List<Character>> create(
+        Cell<List<Character>> create(
                 Cell<Double> time, Stream<Unit> sTick,
                 Dimension screenSize);
     }
 
     public Animate(Animation animation, List<Polygon> obstacles)
-            throws MalformedURLException, IOException {
+            throws IOException {
         sapienImgL = ImageIO.read(getClass().getResourceAsStream("/images/homo-sapien-left.png"));
         sapienImgR = ImageIO.read(getClass().getResourceAsStream("/images/homo-sapien-right.png"));
         zombicusImgL = ImageIO.read(getClass().getResourceAsStream("/images/homo-zombicus-left.png"));
