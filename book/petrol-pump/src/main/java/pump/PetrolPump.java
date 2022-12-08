@@ -1,5 +1,6 @@
 package pump;
 
+import io.vavr.Function1;
 import io.vavr.Tuple2;
 import nz.sodium.*;
 

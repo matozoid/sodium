@@ -1,5 +1,5 @@
+import io.vavr.Function2;
 import nz.sodium.Cell;
-import nz.sodium.Function2;
 import swidgets.SButton;
 import swidgets.SDateField;
 

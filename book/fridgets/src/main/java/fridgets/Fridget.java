@@ -1,7 +1,7 @@
 package fridgets;
 
+import io.vavr.Function5;
 import nz.sodium.Cell;
-import nz.sodium.Function5;
 import nz.sodium.Stream;
 
 import java.awt.*;
@@ -26,8 +26,8 @@ public abstract class Fridget {
     }
 
     public Fridget(Function5<
-            Cell<Optional<Dimension>>, Stream<MouseEvent>,
-            Stream<KeyEvent>, Cell<Long>, Supply, Output> reify_) {
+                Cell<Optional<Dimension>>, Stream<MouseEvent>,
+                Stream<KeyEvent>, Cell<Long>, Supply, Output> reify_) {
         this.reify_ = reify_;
     }
 

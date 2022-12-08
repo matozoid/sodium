@@ -59,37 +59,5 @@ public class Lazy<A> {
     public final <B, C, D, E> Lazy<E> lift(final Lazy<B> b, final Lazy<C> c, final Lazy<D> d, final Function4<A, B, C, D, E> f) {
         return new Lazy<>(() -> f.apply(Lazy.this.get(), b.get(), c.get(), d.get()));
     }
-
-    /**
-     * Lift a binary function into lazy values, so the returned Lazy reflects
-     * the value of the function applied to the input Lazys' values.
-     *
-     * @deprecated As of release 1.1.2, replaced by {@link #lift(Lazy, Function2)}
-     */
-    @Deprecated
-    public static <A, B, C> Lazy<C> lift(final Function2<A, B, C> f, final Lazy<A> a, final Lazy<B> b) {
-        return new Lazy<>(() -> f.apply(a.get(), b.get()));
-    }
-
-    /**
-     * Lift a ternary function into lazy values, so the returned Lazy reflects
-     * the value of the function applied to the input Lazys' values.
-     *
-     * @deprecated As of release 1.1.2, replaced by {@link #lift(Lazy, Lazy, Function3)}
-     */
-    @Deprecated
-    public static <A, B, C, D> Lazy<D> lift(final Function3<A, B, C, D> f, final Lazy<A> a, final Lazy<B> b, final Lazy<C> c) {
-        return new Lazy<>(() -> f.apply(a.get(), b.get(), c.get()));
-    }
-
-    /**
-     * Lift a quaternary function into lazy values, so the returned Lazy reflects
-     * the value of the function applied to the input Lazys' values.
-     *
-     * @deprecated As of release 1.1.2, replaced by {@link #lift(Lazy, Lazy, Lazy, Function4)}
-     */
-    public static <A, B, C, D, E> Lazy<E> lift(final Function4<A, B, C, D, E> f, final Lazy<A> a, final Lazy<B> b, final Lazy<C> c, final Lazy<D> d) {
-        return new Lazy<>(() -> f.apply(a.get(), b.get(), c.get(), d.get()));
-    }
 }
 

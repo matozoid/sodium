@@ -1,4 +1,4 @@
-import nz.sodium.Function1;
+import io.vavr.Function1;
 
 public class Bijection<A, B> {
     public Bijection(Function1<A, B> f, Function1<B, A> fInv) {

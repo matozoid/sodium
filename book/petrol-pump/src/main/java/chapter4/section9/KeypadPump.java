@@ -1,7 +1,6 @@
 package chapter4.section9;
 
 import nz.sodium.Stream;
-import nz.sodium.Unit;
 import pump.Formatters;
 import pump.Inputs;
 import pump.Outputs;

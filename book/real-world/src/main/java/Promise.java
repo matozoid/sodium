@@ -1,3 +1,4 @@
+import io.vavr.Function2;
 import nz.sodium.*;
 
 import java.util.Optional;

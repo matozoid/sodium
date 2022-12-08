@@ -1,5 +1,5 @@
+import io.vavr.Function2;
 import nz.sodium.Cell;
-import nz.sodium.Function2;
 import nz.sodium.Stream;
 
 public class StreamJunction<A> extends Junction<Stream<A>, A> {

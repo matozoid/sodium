@@ -1,5 +1,6 @@
 package lookup;
 
+import io.vavr.Function1;
 import nz.sodium.*;
 import swidgets.SButton;
 import swidgets.STextArea;
