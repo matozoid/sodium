@@ -17,7 +17,7 @@ public class TestCommon {
     @Test
     public void test_Base_send1() {
         StreamSink<String> s = Transaction.run(() -> {
-            StreamSink<String> s_ = new StreamSink();
+            StreamSink<String> s_ = new StreamSink<>();
             return s_;
         });
         List<String> out = new ArrayList<>();
@@ -38,7 +38,7 @@ public class TestCommon {
     @Test
     public void test_Operational_split() {
         StreamSink<List<String>> a = Transaction.run(() -> {
-            StreamSink<List<String>> a_ = new StreamSink();
+            StreamSink<List<String>> a_ = new StreamSink<>();
             return a_;
         });
         Stream<String> b = Transaction.run(() -> {
@@ -60,7 +60,7 @@ public class TestCommon {
     @Test
     public void test_Operational_defer1() {
         StreamSink<String> a = Transaction.run(() -> {
-            StreamSink<String> a_ = new StreamSink();
+            StreamSink<String> a_ = new StreamSink<>();
             return a_;
         });
         Stream<String> b = Transaction.run(() -> {
@@ -92,11 +92,11 @@ public class TestCommon {
     @Test
     public void test_Operational_defer2() {
         StreamSink<String> a = Transaction.run(() -> {
-            StreamSink<String> a_ = new StreamSink();
+            StreamSink<String> a_ = new StreamSink<>();
             return a_;
         });
         StreamSink<String> b = Transaction.run(() -> {
-            StreamSink<String> b_ = new StreamSink();
+            StreamSink<String> b_ = new StreamSink<>();
             return b_;
         });
         Stream<String> c = Transaction.run(() -> {
@@ -129,11 +129,11 @@ public class TestCommon {
     @Test
     public void test_Stream_orElse1() {
         StreamSink<Integer> a = Transaction.run(() -> {
-            StreamSink<Integer> a_ = new StreamSink();
+            StreamSink<Integer> a_ = new StreamSink<>();
             return a_;
         });
         StreamSink<Integer> b = Transaction.run(() -> {
-            StreamSink<Integer> b_ = new StreamSink();
+            StreamSink<Integer> b_ = new StreamSink<>();
             return b_;
         });
         Stream<Integer> c = Transaction.run(() -> {
@@ -186,11 +186,11 @@ public class TestCommon {
     @Test
     public void test_Operational_deferSimultaneous() {
         StreamSink<String> a = Transaction.run(() -> {
-            StreamSink<String> a_ = new StreamSink();
+            StreamSink<String> a_ = new StreamSink<>();
             return a_;
         });
         StreamSink<String> b = Transaction.run(() -> {
-            StreamSink<String> b_ = new StreamSink();
+            StreamSink<String> b_ = new StreamSink<>();
             return b_;
         });
         Stream<String> c = Transaction.run(() -> {

@@ -60,7 +60,7 @@ public class TestCell {
     @Test
     public void testConstantBehavior() {
         Cell<Integer> b = new Cell<>(12);
-        List<Integer> out = new ArrayList();
+        List<Integer> out = new ArrayList<>();
         Listener l = b.listen(out::add);
         l.unlisten();
         assertEquals(List.of(12), out);
@@ -173,7 +173,7 @@ public class TestCell {
 
     @Test
     public void testSwitchC() {
-        StreamSink<SB> esb = new StreamSink();
+        StreamSink<SB> esb = new StreamSink<>();
         // Split each field out of SB so we can update multiple behaviours in a
         // single transaction.
         Cell<Character> ba = Stream.filterOptional(esb.map(s -> s.a)).hold('A');
@@ -210,11 +210,11 @@ public class TestCell {
 
     @Test
     public void testSwitchS() {
-        StreamSink<SE> ese = new StreamSink();
+        StreamSink<SE> ese = new StreamSink<>();
         Stream<Character> ea = ese.map(s -> s.a);
         Stream<Character> eb = ese.map(s -> s.b);
         Cell<Stream<Character>> bsw = Stream.filterOptional(ese.map(s -> s.sw)).hold(ea);
-        List<Character> out = new ArrayList();
+        List<Character> out = new ArrayList<>();
         Stream<Character> eo = Cell.switchS(bsw);
         Listener l = eo.listen(out::add);
         ese.send(new SE('A', 'a', Optional.empty()));
@@ -242,7 +242,7 @@ public class TestCell {
         SS2 ss1 = new SS2();
         CellSink<SS2> css = new CellSink<>(ss1);
         Stream<Integer> so = Cell.switchS(css.map(b -> b.s));
-        List<Integer> out = new ArrayList();
+        List<Integer> out = new ArrayList<>();
         Listener l = so.listen(out::add);
         SS2 ss3 = new SS2();
         SS2 ss4 = new SS2();
@@ -272,14 +272,14 @@ public class TestCell {
 
     @Test
     public void testLoopCell() {
-        final StreamSink<Integer> sa = new StreamSink();
+        final StreamSink<Integer> sa = new StreamSink<>();
         Cell<Integer> sum_out = Transaction.run(() -> {
             CellLoop<Integer> sum = new CellLoop<>();
             Cell<Integer> sum_out_ = sa.snapshot(sum, Integer::sum).hold(0);
             sum.loop(sum_out_);
             return sum_out_;
         });
-        List<Integer> out = new ArrayList();
+        List<Integer> out = new ArrayList<>();
         Listener l = sum_out.listen(out::add);
         sa.send(2);
         sa.send(3);
@@ -291,8 +291,8 @@ public class TestCell {
 
     @Test
     public void testAccum() {
-        StreamSink<Integer> sa = new StreamSink();
-        List<Integer> out = new ArrayList();
+        StreamSink<Integer> sa = new StreamSink<>();
+        List<Integer> out = new ArrayList<>();
         Cell<Integer> sum = sa.accum(100, Integer::sum);
         Listener l = sum.listen(out::add);
         sa.send(5);
@@ -306,10 +306,10 @@ public class TestCell {
 
     @Test
     public void testLoopValueSnapshot() {
-        List<String> out = new ArrayList();
+        List<String> out = new ArrayList<>();
         Listener l = Transaction.run(() -> {
-            Cell<String> a = new Cell("lettuce");
-            CellLoop<String> b = new CellLoop();
+            Cell<String> a = new Cell<>("lettuce");
+            CellLoop<String> b = new CellLoop<>();
             Stream<String> eSnap = Operational.value(a).snapshot(b, (String aa, String bb) -> aa + " " + bb);
             b.loop(new Cell<>("cheese"));
             return eSnap.listen(out::add);
@@ -320,14 +320,14 @@ public class TestCell {
 
     @Test
     public void testLoopValueHold() {
-        List<String> out = new ArrayList();
+        List<String> out = new ArrayList<>();
         Cell<String> value = Transaction.run(() -> {
-            CellLoop<String> a = new CellLoop();
+            CellLoop<String> a = new CellLoop<>();
             Cell<String> value_ = Operational.value(a).hold("onion");
             a.loop(new Cell<>("cheese"));
             return value_;
         });
-        StreamSink<Unit> eTick = new StreamSink();
+        StreamSink<Unit> eTick = new StreamSink<>();
         Listener l = eTick.snapshot(value).listen(out::add);
         eTick.send(Unit.UNIT);
         l.unlisten();
@@ -336,10 +336,10 @@ public class TestCell {
 
     @Test
     public void testLiftLoop() {
-        List<String> out = new ArrayList();
-        CellSink<String> b = new CellSink("kettle");
+        List<String> out = new ArrayList<>();
+        CellSink<String> b = new CellSink<>("kettle");
         Cell<String> c = Transaction.run(() -> {
-            CellLoop<String> a = new CellLoop();
+            CellLoop<String> a = new CellLoop<>();
             Cell<String> c_ = a.lift(b,
                     (aa, bb) -> aa + " " + bb);
             a.loop(new Cell<>("tea"));
@@ -353,8 +353,8 @@ public class TestCell {
 
     @Test
     public void testSwitchAndDefer() {
-        List<String> out = new ArrayList();
-        StreamSink<Integer> si = new StreamSink();
+        List<String> out = new ArrayList<>();
+        StreamSink<Integer> si = new StreamSink<>();
         Listener l = Cell.switchS(si.map(i -> {
             Cell<String> c = new Cell<>("A" + i);
             return Operational.defer(Operational.value(c));

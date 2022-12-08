@@ -30,7 +30,7 @@ public abstract class Junction<ContainerA, A> {
             id = nextID++;
         }
         sUpdate.send(m0 -> {
-            java.util.HashMap<Integer, ContainerA> m = new HashMap(m0);
+            java.util.HashMap<Integer, ContainerA> m = new HashMap<>(m0);
             m.put(id, c);
             return m;
         });
@@ -38,7 +38,7 @@ public abstract class Junction<ContainerA, A> {
             public void unlisten() {
                 sUpdate.send(m0 -> {
                     java.util.HashMap<Integer, ContainerA> m
-                            = new HashMap(m0);
+                            = new HashMap<>(m0);
                     m.remove(id);
                     return m;
                 });
