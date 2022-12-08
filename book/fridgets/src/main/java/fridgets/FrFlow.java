@@ -12,8 +12,6 @@ import java.util.Optional;
 public class FrFlow extends Fridget {
     public enum Direction {HORIZONTAL, VERTICAL}
 
-    ;
-
     public FrFlow(Direction dir, Collection<Fridget> fridgets) {
         super((size, sMouse, sKey, focus, idSupply) -> {
             Cell<Dimension> desiredSize = new Cell<>(new Dimension(0, 0));
@@ -43,14 +41,11 @@ public class FrFlow extends Fridget {
                         dir == Direction.HORIZONTAL
                                 ? (dsz, foDsz) -> new Dimension(
                                 dsz.width + foDsz.width,
-                                dsz.height > foDsz.height ? dsz.height
-                                        : foDsz.height)
+                                Math.max(dsz.height, foDsz.height))
                                 : (dsz, foDsz) -> new Dimension(
-                                dsz.width > foDsz.width ? dsz.width
-                                        : foDsz.width,
+                                Math.max(dsz.width, foDsz.width),
                                 dsz.height + foDsz.height));
-                drawable = drawable.lift(fo.drawable,
-                        (drA, drB) -> drA.append(drB));
+                drawable = drawable.lift(fo.drawable, Drawable::append);
                 sChangeFocus = sChangeFocus.orElse(fo.sChangeFocus);
             }
             return new Fridget.Output(drawable, desiredSize, sChangeFocus);

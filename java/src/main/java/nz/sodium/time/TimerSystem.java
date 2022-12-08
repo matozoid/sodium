@@ -4,7 +4,6 @@ import io.vavr.control.Option;
 import nz.sodium.*;
 
 import java.util.LinkedList;
-import java.util.Optional;
 
 public class TimerSystem<T extends Comparable<T>> {
     public TimerSystem(final TimerSystemImpl<T> impl) {

@@ -2,8 +2,6 @@ package fridgets;
 
 import io.vavr.control.Option;
 
-import java.util.Optional;
-
 public class Supply {
     private static class Impl {
         private long nextID = 0;

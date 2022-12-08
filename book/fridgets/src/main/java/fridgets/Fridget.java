@@ -8,7 +8,6 @@ import nz.sodium.Stream;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.util.Optional;
 
 public abstract class Fridget {
     public static class Output {
@@ -26,20 +25,13 @@ public abstract class Fridget {
         public Stream<Long> sChangeFocus;
     }
 
-    public Fridget(Function5<
-                Cell<Option<Dimension>>, Stream<MouseEvent>,
-                Stream<KeyEvent>, Cell<Long>, Supply, Output> reify_) {
+    public Fridget(Function5<Cell<Option<Dimension>>, Stream<MouseEvent>, Stream<KeyEvent>, Cell<Long>, Supply, Output> reify_) {
         this.reify_ = reify_;
     }
 
-    private final Function5<
-            Cell<Option<Dimension>>, Stream<MouseEvent>,
-            Stream<KeyEvent>, Cell<Long>, Supply, Output> reify_;
+    private final Function5<Cell<Option<Dimension>>, Stream<MouseEvent>, Stream<KeyEvent>, Cell<Long>, Supply, Output> reify_;
 
-    public final Output reify(
-            Cell<Option<Dimension>> size,
-            Stream<MouseEvent> sMouse, Stream<KeyEvent> sKey,
-            Cell<Long> focus, Supply idSupply) {
+    public final Output reify(Cell<Option<Dimension>> size, Stream<MouseEvent> sMouse, Stream<KeyEvent> sKey, Cell<Long> focus, Supply idSupply) {
         return reify_.apply(size, sMouse, sKey, focus, idSupply);
     }
 }

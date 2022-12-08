@@ -1,7 +1,4 @@
-import fridgets.FrButton;
-import fridgets.FrFlow;
-import fridgets.FrView;
-import fridgets.Fridget;
+import fridgets.*;
 import nz.sodium.Cell;
 import nz.sodium.Listener;
 import nz.sodium.Transaction;
@@ -9,21 +6,31 @@ import nz.sodium.Transaction;
 import javax.swing.*;
 import java.util.ArrayList;
 
-public class flow {
+public class TextFieldExample {
     public static void main(String[] args) {
-        JFrame frame = new JFrame("flow");
+        JFrame frame = new JFrame("button");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(Transaction.run(() -> {
+            FrTextField firstName = new FrTextField("Joe");
+            FrTextField lastName = new FrTextField("Bloggs");
             FrButton ok = new FrButton(new Cell<>("OK"));
             FrButton cancel = new FrButton(new Cell<>("Cancel"));
             ArrayList<Fridget> fridgets = new ArrayList<>();
             fridgets.add(ok);
             fridgets.add(cancel);
-            Fridget dialog = new FrFlow(FrFlow.Direction.HORIZONTAL,
+            Fridget buttons = new FrFlow(FrFlow.Direction.HORIZONTAL,
                     fridgets);
+            fridgets = new ArrayList<>();
+            fridgets.add(firstName);
+            fridgets.add(lastName);
+            fridgets.add(buttons);
+            Fridget dialog =
+                    new FrFlow(FrFlow.Direction.VERTICAL, fridgets);
             Listener l =
-                    ok.sClicked.listen(
-                                    u -> System.out.println("OK"))
+                    ok.sClicked
+                            .map(u -> firstName.text.sample() + " " +
+                                    lastName.text.sample())
+                            .listen(name -> System.out.println("OK: " + name))
                             .append(
                                     cancel.sClicked.listen(
                                             u -> System.out.println("Cancel")
