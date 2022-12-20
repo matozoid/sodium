@@ -1,6 +1,9 @@
 package pump;
 
 import nz.sodium.*;
+import swidgets.SButton;
+import swidgets.SComboBox;
+import swidgets.STextField;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -12,7 +15,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -179,52 +181,51 @@ public class PetrolPump extends JFrame {
             while (j >= 0 && i >= 0) {
                 char ch = text_.charAt(j);
                 switch (ch) {
-                    case '-':
+                    case '-' -> {
                         segs[i] |= 0x08;
                         i--;
-                        break;
-                    case '0':
+                    }
+                    case '0' -> {
                         segs[i] |= 0x77;
                         i--;
-                        break;
-                    case '1':
+                    }
+                    case '1' -> {
                         segs[i] |= 0x24;
                         i--;
-                        break;
-                    case '2':
+                    }
+                    case '2' -> {
                         segs[i] |= 0x6b;
                         i--;
-                        break;
-                    case '3':
+                    }
+                    case '3' -> {
                         segs[i] |= 0x6d;
                         i--;
-                        break;
-                    case '4':
+                    }
+                    case '4' -> {
                         segs[i] |= 0x3c;
                         i--;
-                        break;
-                    case '5':
+                    }
+                    case '5' -> {
                         segs[i] |= 0x5d;
                         i--;
-                        break;
-                    case '6':
+                    }
+                    case '6' -> {
                         segs[i] |= 0x5f;
                         i--;
-                        break;
-                    case '7':
+                    }
+                    case '7' -> {
                         segs[i] |= 0x64;
                         i--;
-                        break;
-                    case '8':
+                    }
+                    case '8' -> {
                         segs[i] |= 0x7f;
                         i--;
-                        break;
-                    case '9':
+                    }
+                    case '9' -> {
                         segs[i] |= 0x7c;
                         i--;
-                        break;
-                    case '.':
-                        segs[i] |= 0x80;
+                    }
+                    case '.' -> segs[i] |= 0x80;
                 }
                 j--;
             }
@@ -239,7 +240,7 @@ public class PetrolPump extends JFrame {
     }
 
     @SuppressWarnings("unchecked")
-    public PetrolPump() throws IOException {
+    public PetrolPump() {
         super("Functional Reactive Petrol Pump");
 
         Transaction.runVoid(() -> {
@@ -319,7 +320,7 @@ public class PetrolPump extends JFrame {
                 Stream<Unit> sClearSale = Cell.switchS(csClearSale);
 
                 Cell<Outputs> outputs = logic.selectedItem.map(
-                        pump -> pump.create(
+                        pump -> pump.get().create(
                                 new Inputs(
                                         Operational.updates(nozzles[0]),
                                         Operational.updates(nozzles[1]),
@@ -356,22 +357,12 @@ public class PetrolPump extends JFrame {
 
                 l = l.append(changes(delivery).listen(d -> {
                     switch (d) {
-                        case FAST1:
-                        case FAST2:
-                        case FAST3:
-                            fastRumble.loop();
-                            break;
-                        default:
-                            fastRumble.stop();
+                        case FAST1, FAST2, FAST3 -> fastRumble.loop();
+                        default -> fastRumble.stop();
                     }
                     switch (d) {
-                        case SLOW1:
-                        case SLOW2:
-                        case SLOW3:
-                            slowRumble.loop();
-                            break;
-                        default:
-                            slowRumble.stop();
+                        case SLOW1, SLOW2, SLOW3 -> slowRumble.loop();
+                        default -> slowRumble.stop();
                     }
                 }));
 
@@ -419,13 +410,9 @@ public class PetrolPump extends JFrame {
                         dialog.pack();
                         dialog.setVisible(true);
                         csClearSale.send(ok.sClicked);
-                        this.l = l.append(ok.sClicked.listen(u -> {
-                            dialog.dispose();
-                        }));
+                        this.l = l.append(ok.sClicked.listen(u -> dialog.dispose()));
                     });
                 }));
-            } catch (MalformedURLException e) {
-                System.err.println("Unexpected exception: " + e);
             } catch (IOException e) {
                 System.err.println("Unexpected exception: " + e);
             }
@@ -470,7 +457,7 @@ public class PetrolPump extends JFrame {
         super.removeNotify();
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         PetrolPump view = new PetrolPump();
         view.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -483,15 +470,8 @@ public class PetrolPump extends JFrame {
         while (true) {
             Transaction.runVoid(() -> {
                 switch (view.delivery.sample()) {
-                    case FAST1:
-                    case FAST2:
-                    case FAST3:
-                        view.sFuelPulses.send(40);
-                        break;
-                    case SLOW1:
-                    case SLOW2:
-                    case SLOW3:
-                        view.sFuelPulses.send(2);
+                    case FAST1, FAST2, FAST3 -> view.sFuelPulses.send(40);
+                    case SLOW1, SLOW2, SLOW3 -> view.sFuelPulses.send(2);
                 }
             });
             try {
