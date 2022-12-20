@@ -24,8 +24,7 @@ public class TextFieldExample {
             fridgets.add(firstName);
             fridgets.add(lastName);
             fridgets.add(buttons);
-            Fridget dialog =
-                    new FrFlow(FrFlow.Direction.VERTICAL, fridgets);
+            Fridget dialog = new FrFlow(FrFlow.Direction.VERTICAL, fridgets);
             Listener l =
                     ok.sClicked
                             .map(u -> firstName.text.sample() + " " +

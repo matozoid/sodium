@@ -10,13 +10,8 @@ import pump.*;
 
 public class AccumulatePulsesPump implements Pump {
     public Outputs create(Inputs inputs) {
-        LifeCycle lc = new LifeCycle(inputs.sNozzle1,
-                inputs.sNozzle2,
-                inputs.sNozzle3);
-        Cell<Double> litersDelivered =
-                accumulate(lc.sStart.map(u -> Unit.UNIT),
-                        inputs.sFuelPulses,
-                        inputs.calibration);
+        LifeCycle lc = new LifeCycle(inputs.sNozzle1, inputs.sNozzle2, inputs.sNozzle3);
+        Cell<Double> litersDelivered = accumulate(lc.sStart.map(u -> Unit.UNIT), inputs.sFuelPulses, inputs.calibration);
         return new Outputs()
                 .setDelivery(lc.fillActive.map(
                         of ->
@@ -24,8 +19,7 @@ public class AccumulatePulsesPump implements Pump {
                                         of.equals(Option.some(Fuel.TWO)) ? Delivery.FAST2 :
                                                 of.equals(Option.some(Fuel.THREE)) ? Delivery.FAST3 :
                                                         Delivery.OFF))
-                .setSaleQuantityLCD(litersDelivered.map(
-                        Formatters::formatSaleQuantity));
+                .setSaleQuantityLCD(litersDelivered.map(Formatters::formatSaleQuantity));
     }
 
     public static Cell<Double> accumulate(
@@ -34,9 +28,7 @@ public class AccumulatePulsesPump implements Pump {
             Cell<Double> calibration) {
         CellLoop<Integer> total = new CellLoop<>();
         total.loop(sClearAccumulator.map(u -> 0)
-                .orElse(
-                        sPulses.snapshot(total, Integer::sum)
-                )
+                .orElse(sPulses.snapshot(total, Integer::sum))
                 .hold(0));
         return total.lift(calibration,
                 (total_, calibration_) -> total_ * calibration_);

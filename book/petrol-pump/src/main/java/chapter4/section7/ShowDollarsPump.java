@@ -8,13 +8,8 @@ import pump.*;
 
 public class ShowDollarsPump implements Pump {
     public Outputs create(Inputs inputs) {
-        LifeCycle lc = new LifeCycle(inputs.sNozzle1,
-                inputs.sNozzle2,
-                inputs.sNozzle3);
-        Fill fi = new Fill(lc.sStart.map(u -> Unit.UNIT),
-                inputs.sFuelPulses, inputs.calibration,
-                inputs.price1, inputs.price2, inputs.price3,
-                lc.sStart);
+        LifeCycle lc = new LifeCycle(inputs.sNozzle1, inputs.sNozzle2, inputs.sNozzle3);
+        Fill fi = new Fill(lc.sStart.map(u -> Unit.UNIT), inputs.sFuelPulses, inputs.calibration, inputs.price1, inputs.price2, inputs.price3, lc.sStart);
         return new Outputs()
                 .setDelivery(lc.fillActive.map(
                         of ->
@@ -22,16 +17,11 @@ public class ShowDollarsPump implements Pump {
                                         of.equals(Option.some(Fuel.TWO)) ? Delivery.FAST2 :
                                                 of.equals(Option.some(Fuel.THREE)) ? Delivery.FAST3 :
                                                         Delivery.OFF))
-                .setSaleCostLCD(fi.dollarsDelivered.map(
-                        Formatters::formatSaleCost))
-                .setSaleQuantityLCD(fi.litersDelivered.map(
-                        Formatters::formatSaleQuantity))
-                .setPriceLCD1(priceLCD(lc.fillActive, fi.price, Fuel.ONE,
-                        inputs))
-                .setPriceLCD2(priceLCD(lc.fillActive, fi.price, Fuel.TWO,
-                        inputs))
-                .setPriceLCD3(priceLCD(lc.fillActive, fi.price, Fuel.THREE,
-                        inputs));
+                .setSaleCostLCD(fi.dollarsDelivered.map(Formatters::formatSaleCost))
+                .setSaleQuantityLCD(fi.litersDelivered.map(Formatters::formatSaleQuantity))
+                .setPriceLCD1(priceLCD(lc.fillActive, fi.price, Fuel.ONE, inputs))
+                .setPriceLCD2(priceLCD(lc.fillActive, fi.price, Fuel.TWO, inputs))
+                .setPriceLCD3(priceLCD(lc.fillActive, fi.price, Fuel.THREE, inputs));
     }
 
     public static Cell<String> priceLCD(
@@ -39,20 +29,11 @@ public class ShowDollarsPump implements Pump {
             Cell<Double> fillPrice,
             Fuel fuel,
             Inputs inputs) {
-        Cell<Double> idlePrice;
-        switch (fuel) {
-            case ONE:
-                idlePrice = inputs.price1;
-                break;
-            case TWO:
-                idlePrice = inputs.price2;
-                break;
-            case THREE:
-                idlePrice = inputs.price3;
-                break;
-            default:
-                idlePrice = null;
-        }
+        Cell<Double> idlePrice = switch (fuel) {
+            case ONE -> inputs.price1;
+            case TWO -> inputs.price2;
+            case THREE -> inputs.price3;
+        };
         return fillActive.lift(fillPrice, idlePrice,
                 (oFuelSelected, fillPrice_, idlePrice_) ->
                         oFuelSelected.isDefined()

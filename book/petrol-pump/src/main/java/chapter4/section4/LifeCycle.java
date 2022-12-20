@@ -14,15 +14,12 @@ public class LifeCycle {
 
     public enum End {END}
 
-    private static Stream<Fuel> whenLifted(Stream<UpDown> sNozzle,
-                                           Fuel nozzleFuel) {
+    private static Stream<Fuel> whenLifted(Stream<UpDown> sNozzle, Fuel nozzleFuel) {
         return sNozzle.filter(u -> u == UpDown.UP)
                 .map(u -> nozzleFuel);
     }
 
-    private static Stream<End> whenSetDown(Stream<UpDown> sNozzle,
-                                           Fuel nozzleFuel,
-                                           Cell<Option<Fuel>> fillActive) {
+    private static Stream<End> whenSetDown(Stream<UpDown> sNozzle, Fuel nozzleFuel, Cell<Option<Fuel>> fillActive) {
         return Stream.filterOptional(
                 sNozzle.snapshot(fillActive,
                         (u, f) -> u == UpDown.DOWN &&
@@ -31,9 +28,7 @@ public class LifeCycle {
                                 : Option.none()));
     }
 
-    public LifeCycle(Stream<UpDown> sNozzle1,
-                     Stream<UpDown> sNozzle2,
-                     Stream<UpDown> sNozzle3) {
+    public LifeCycle(Stream<UpDown> sNozzle1, Stream<UpDown> sNozzle2, Stream<UpDown> sNozzle3) {
         Stream<Fuel> sLiftNozzle =
                 whenLifted(sNozzle1, Fuel.ONE).orElse(
                         whenLifted(sNozzle2, Fuel.TWO).orElse(

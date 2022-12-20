@@ -39,7 +39,6 @@ public class FormValidationExample {
                             : "");
             row++;
 
-            STextField[] emails = new STextField[maxEmails];
             for (int i = 0; i < maxEmails; i++, row++) {
                 labels[row] = new JLabel("Email #" + (i + 1));
                 final int ii = i;

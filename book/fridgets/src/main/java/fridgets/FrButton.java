@@ -49,8 +49,7 @@ public class FrButton extends Fridget {
                                     if (osz.isDefined()) {
                                         Dimension sz = osz.get();
                                         int w = fm.stringWidth(label_);
-                                        g.setColor(pressed_ ? Color.darkGray
-                                                : Color.lightGray);
+                                        g.setColor(pressed_ ? Color.darkGray : Color.lightGray);
                                         g.fillRect(3, 3, sz.width - 6, sz.height - 6);
                                         g.setColor(Color.black);
                                         g.drawRect(2, 2, sz.width - 5, sz.height - 5);

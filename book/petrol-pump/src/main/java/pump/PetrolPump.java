@@ -4,6 +4,9 @@ import io.vavr.Function1;
 import io.vavr.Tuple2;
 import io.vavr.control.Option;
 import nz.sodium.*;
+import swidgets.SButton;
+import swidgets.SComboBox;
+import swidgets.STextField;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -321,7 +324,7 @@ public class PetrolPump extends JFrame {
                 Stream<Unit> sClearSale = Cell.switchS(csClearSale);
 
                 Cell<Outputs> outputs = logic.selectedItem.map(
-                        pump -> pump.create(
+                        pump -> pump.get().create(
                                 new Inputs(
                                         Operational.updates(nozzles[0]),
                                         Operational.updates(nozzles[1]),
