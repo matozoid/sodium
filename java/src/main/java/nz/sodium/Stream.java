@@ -1,10 +1,9 @@
 package nz.sodium;
 
 import io.vavr.*;
-import io.vavr.collection.HashSet;
-import io.vavr.collection.List;
-import io.vavr.collection.Seq;
 import io.vavr.control.Option;
+
+import java.util.*;
 
 /**
  * Represents a stream of discrete events/firings containing values of type A.
@@ -42,16 +41,16 @@ public class Stream<A> {
     }
 
     final Node node;
-    List<Listener> finalizers;
-    List<A> firings;
+    final List<Listener> finalizers;
+    final List<A> firings;
 
     /**
      * A stream that never fires.
      */
     public Stream() {
         this.node = new Node(0L);
-        this.finalizers = List.empty();
-        this.firings = List.empty();
+        this.finalizers = new ArrayList<>();
+        this.firings = new ArrayList<>();
     }
 
     private Stream(Node node, List<Listener> finalizers, List<A> firings) {
@@ -60,7 +59,7 @@ public class Stream<A> {
         this.firings = firings;
     }
 
-    static HashSet<Listener> keepListenersAlive = HashSet.empty();
+    static final HashSet<Listener> keepListenersAlive = new HashSet<>();
 
     /**
      * Listen for events/firings on this stream. This is the observer pattern. The
@@ -81,12 +80,12 @@ public class Stream<A> {
             public void unlisten() {
                 l0.unlisten();
                 synchronized (keepListenersAlive) {
-                    keepListenersAlive = keepListenersAlive.remove(this);
+                     keepListenersAlive.remove(this);
                 }
             }
         };
         synchronized (keepListenersAlive) {
-            keepListenersAlive = keepListenersAlive.add(l);
+             keepListenersAlive.add(l);
         }
         return l;
     }
@@ -129,7 +128,7 @@ public class Stream<A> {
                 trans.toRegen = true;
         }
         Node.Target node_target = node_target_[0];
-        final List<A> firings = this.firings;
+        final List<A> firings = new ArrayList<>(this.firings);
         if (!suppressEarlierFirings && !firings.isEmpty())
             trans.prioritized(target, trans2 -> {
                 // Anything sent already in this transaction must be sent now so that
@@ -316,11 +315,13 @@ public class Stream<A> {
      * Variant of {@link #merge(Stream, Function2)} that merges a collection of streams.
      */
     public static <A> Stream<A> merge(Iterable<Stream<A>> ss, final Function2<A, A, A> f) {
-        List<Stream<A>> v = List.ofAll(ss);
+        Vector<Stream<A>> v = new Vector<>();
+        for (Stream<A> s : ss)
+            v.add(s);
         return merge(v, 0, v.size(), f);
     }
 
-    private static <A> Stream<A> merge(Seq<Stream<A>> sas, int start, int end, final Function2<A, A, A> f) {
+    private static <A> Stream<A> merge(Vector<Stream<A>> sas, int start, int end, final Function2<A, A, A> f) {
         int len = end - start;
         if (len == 0) return new Stream<>();
         else if (len == 1) return sas.get(start);
@@ -460,7 +461,7 @@ public class Stream<A> {
      * be shared between threads.
      */
     Stream<A> unsafeAddCleanup(Listener cleanup) {
-        finalizers = finalizers.append(cleanup);
+        finalizers.add(cleanup);
         return this;
     }
 
@@ -473,6 +474,10 @@ public class Stream<A> {
      * things don't get kept alive when they shouldn't.
      */
     public Stream<A> addCleanup(final Listener cleanup) {
-        return Transaction.run(() -> new Stream<>(node, finalizers.append(cleanup), firings));
+        return Transaction.run(() -> {
+            List<Listener> fsNew = new ArrayList<>(finalizers);
+            fsNew.add(cleanup);
+            return new Stream<>(node, fsNew, firings);
+        });
     }
 }

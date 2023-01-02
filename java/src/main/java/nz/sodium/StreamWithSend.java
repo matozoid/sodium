@@ -1,15 +1,13 @@
 package nz.sodium;
 
-import io.vavr.collection.List;
-
 import java.util.HashSet;
 
 class StreamWithSend<A> extends Stream<A> {
 
     protected void send(Transaction trans, final A a) {
         if (firings.isEmpty())
-            trans.last(() -> firings = List.empty());
-        firings = firings.append(a);
+            trans.last(firings::clear);
+        firings.add(a);
 
         HashSet<Node.Target> listeners;
         synchronized (Transaction.listenersLock) {
